@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "12e6051b575a8913868ee229b80508dd",
+    "content-hash": "9088157670d355541458d4836620dfc0",
     "packages": [
         {
             "name": "anourvalar/eloquent-serialize",
@@ -10452,15 +10452,22 @@
         },
         {
             "name": "liberusoftware/module-manager",
-            "version": "1.4.2",
+            "version": "1.9.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/liberusoftware/module-module-manager.git",
+                "reference": "b06e3aec4bb45d74c0ecf0bdfb52964d07e714ce"
+            },
             "dist": {
-                "type": "path",
-                "url": "modules/module-manager",
-                "reference": "70736e664152377e341c0e2dbfc2438d26b39b69"
+                "type": "zip",
+                "url": "https://api.github.com/repos/liberusoftware/module-module-manager/zipball/b06e3aec4bb45d74c0ecf0bdfb52964d07e714ce",
+                "reference": "b06e3aec4bb45d74c0ecf0bdfb52964d07e714ce",
+                "shasum": ""
             },
             "require": {
                 "composer/semver": "^3.5.2",
                 "illuminate/contracts": "^13.38.0",
+                "illuminate/database": "^13.38.0",
                 "illuminate/support": "^13.38.0",
                 "php": "^8.5"
             },
@@ -10479,41 +10486,40 @@
                     "Liberu\\Foundation\\ModuleManager\\": "src/"
                 }
             },
-            "autoload-dev": {
-                "psr-4": {
-                    "Liberu\\Foundation\\ModuleManager\\Tests\\": "tests/"
-                }
-            },
-            "scripts": {
-                "test": [
-                    "pest"
-                ]
-            },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
             "description": "Deterministic manifest discovery and runtime enablement for Liberu modules.",
-            "transport-options": {
-                "symlink": true,
-                "relative": true
-            }
+            "support": {
+                "issues": "https://github.com/liberusoftware/module-module-manager/issues",
+                "source": "https://github.com/liberusoftware/module-module-manager/tree/1.9.1"
+            },
+            "time": "2026-11-12T23:08:09+00:00",
+            "published-time": "2026-11-12T23:23:33+00:00"
         },
         {
             "name": "liberusoftware/module-manager-filament",
-            "version": "1.4.1",
+            "version": "1.11.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/liberusoftware/module-module-manager-filament.git",
+                "reference": "7501de66f5c5d55c9efa7643727a6b880335158b"
+            },
             "dist": {
-                "type": "path",
-                "url": "modules/module-manager-filament",
-                "reference": "d54059610bd154268158ff038829a6ac21137ba4"
+                "type": "zip",
+                "url": "https://api.github.com/repos/liberusoftware/module-module-manager-filament/zipball/7501de66f5c5d55c9efa7643727a6b880335158b",
+                "reference": "7501de66f5c5d55c9efa7643727a6b880335158b",
+                "shasum": ""
             },
             "require": {
                 "filament/filament": "^5.11.0",
-                "liberusoftware/module-manager": "^1.0",
-                "liberusoftware/observability": "^1.0",
+                "liberusoftware/module-manager": "^1.9",
                 "php": "^8.5"
             },
             "require-dev": {
                 "liberusoftware/package-testbench": "^1.5",
+                "livewire/livewire": "^4.0",
                 "pestphp/pest": "^5.3.3"
             },
             "type": "liberu-module",
@@ -10527,24 +10533,17 @@
                     "Liberu\\Foundation\\ModuleManagerFilament\\": "src/"
                 }
             },
-            "autoload-dev": {
-                "psr-4": {
-                    "Liberu\\Foundation\\ModuleManagerFilament\\Tests\\": "tests/"
-                }
-            },
-            "scripts": {
-                "test": [
-                    "pest"
-                ]
-            },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
-            "description": "Filament operations presentation adapter for the Liberu Module Manager.",
-            "transport-options": {
-                "symlink": true,
-                "relative": true
-            }
+            "description": "Filament page for enabling and disabling Liberu feature modules.",
+            "support": {
+                "issues": "https://github.com/liberusoftware/module-module-manager-filament/issues",
+                "source": "https://github.com/liberusoftware/module-module-manager-filament/tree/1.11.0"
+            },
+            "time": "2026-11-12T22:05:17+00:00",
+            "published-time": "2026-11-12T22:05:31+00:00"
         },
         {
             "name": "liberusoftware/notifications",
@@ -13584,16 +13583,16 @@
         },
         {
             "name": "phpseclib/phpseclib",
-            "version": "4.0.2",
+            "version": "4.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpseclib/phpseclib.git",
-                "reference": "1fe20b9acb08ce810cec24d8a9d02e7c13426e4c"
+                "reference": "6077cecfed9e371993d3aa339b0afeb23f7bf636"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpseclib/phpseclib/zipball/1fe20b9acb08ce810cec24d8a9d02e7c13426e4c",
-                "reference": "1fe20b9acb08ce810cec24d8a9d02e7c13426e4c",
+                "url": "https://api.github.com/repos/phpseclib/phpseclib/zipball/6077cecfed9e371993d3aa339b0afeb23f7bf636",
+                "reference": "6077cecfed9e371993d3aa339b0afeb23f7bf636",
                 "shasum": ""
             },
             "require": {
@@ -13617,9 +13616,6 @@
             },
             "type": "library",
             "autoload": {
-                "files": [
-                    "phpseclib/bootstrap.php"
-                ],
                 "psr-4": {
                     "phpseclib4\\": "phpseclib/"
                 }
@@ -13656,8 +13652,7 @@
                 },
                 {
                     "name": "Jack Worman",
-                    "email": "jack.worman@gmail.com",
-                    "homepage": "https://jackworman.com",
+                    "email": "jack.worman@proton.me",
                     "role": "Developer"
                 }
             ],
@@ -13684,7 +13679,7 @@
             ],
             "support": {
                 "issues": "https://github.com/phpseclib/phpseclib/issues",
-                "source": "https://github.com/phpseclib/phpseclib/tree/4.0.2"
+                "source": "https://github.com/phpseclib/phpseclib/tree/4.0.3"
             },
             "funding": [
                 {
@@ -13700,7 +13695,8 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-10-07T19:55:38+00:00"
+            "time": "2026-11-02T10:46:03+00:00",
+            "published-time": "2026-11-02T10:50:47+00:00"
         },
         {
             "name": "phpstan/phpdoc-parser",
@@ -25898,5 +25894,5 @@
     "platform-overrides": {
         "php": "8.5"
     },
-    "plugin-api-version": "2.9.0"
+    "plugin-api-version": "2.11.0"
 }
