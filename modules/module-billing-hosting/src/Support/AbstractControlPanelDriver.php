@@ -92,7 +92,7 @@ abstract class AbstractControlPanelDriver
     protected function requestJson(string $method, string $uri, array $server, array $options = []): array
     {
         try {
-            $response = $this->client->request($method, $this->baseUrl($server).'/'.ltrim($uri, '/'), array_replace_recursive([
+            $response = $this->client->request(strtoupper($method), $this->baseUrl($server).'/'.ltrim($uri, '/'), array_replace_recursive([
                 'http_errors' => false,
                 'timeout' => (float) ($server['timeout'] ?? 30),
                 'verify' => (bool) ($server['verify'] ?? true),
@@ -119,7 +119,7 @@ abstract class AbstractControlPanelDriver
     protected function requestForm(string $method, string $uri, array $server, array $options = []): array
     {
         try {
-            $response = $this->client->request($method, $this->baseUrl($server).'/'.ltrim($uri, '/'), array_replace_recursive([
+            $response = $this->client->request(strtoupper($method), $this->baseUrl($server).'/'.ltrim($uri, '/'), array_replace_recursive([
                 'http_errors' => false,
                 'timeout' => (float) ($server['timeout'] ?? 30),
                 'verify' => (bool) ($server['verify'] ?? true),
@@ -142,7 +142,7 @@ abstract class AbstractControlPanelDriver
     protected function requestXml(string $method, string $uri, array $server, string $body, array $headers = []): string
     {
         try {
-            $response = $this->client->request($method, $this->baseUrl($server).'/'.ltrim($uri, '/'), [
+            $response = $this->client->request(strtoupper($method), $this->baseUrl($server).'/'.ltrim($uri, '/'), [
                 'body' => $body,
                 'headers' => array_merge(['Accept' => 'application/xml', 'Content-Type' => 'text/xml'], $headers),
                 'http_errors' => false,

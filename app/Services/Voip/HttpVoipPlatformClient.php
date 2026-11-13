@@ -53,7 +53,7 @@ class HttpVoipPlatformClient implements VoipPlatformClient
     private function send(string $method, string $path, array $payload): void
     {
         try {
-            $this->request()->send($method, $path, ['json' => $payload])->throw();
+            $this->request()->send(strtoupper($method), $path, ['json' => $payload])->throw();
         } catch (Throwable $exception) {
             report($exception);
 

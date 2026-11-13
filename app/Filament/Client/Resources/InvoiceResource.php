@@ -18,6 +18,7 @@ use Filament\Schemas\Schema;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
+use Illuminate\Auth\Access\Response;
 use Illuminate\Database\Eloquent\Builder;
 use Override;
 
@@ -37,14 +38,33 @@ class InvoiceResource extends Resource
         return auth()->check();
     }
 
+    public static function getViewAnyAuthorizationResponse(): Response
+    {
+        return static::canViewAny()
+            ? parent::getViewAnyAuthorizationResponse()
+            : Response::deny();
+    }
+
     public static function canView($record): bool
     {
         return auth()->check() && $record->customer?->user_id === auth()->id();
     }
 
+    public static function getViewAuthorizationResponse($record): Response
+    {
+        return static::canView($record)
+            ? parent::getViewAuthorizationResponse($record)
+            : Response::deny();
+    }
+
     public static function canCreate(): bool
     {
         return false;
+    }
+
+    public static function getCreateAuthorizationResponse(): Response
+    {
+        return Response::deny();
     }
 
     #[Override]

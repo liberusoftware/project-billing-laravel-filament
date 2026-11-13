@@ -13,6 +13,7 @@ use Filament\Actions\ViewAction;
 use Filament\Resources\Resource;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Illuminate\Auth\Access\Response;
 use Illuminate\Database\Eloquent\Builder;
 use Override;
 
@@ -31,6 +32,12 @@ class ProjectResource extends Resource
     public static function canCreate(): bool
     {
         return false;
+    }
+
+    #[Override]
+    public static function getCreateAuthorizationResponse(): Response
+    {
+        return Response::deny();
     }
 
     #[Override]

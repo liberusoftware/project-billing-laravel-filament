@@ -12,7 +12,10 @@ final class StripeServiceProvider extends ServiceProvider
 {
     public function register(): void
     {
-        $this->app->singleton(StripeClient::class, fn (): StripeClient => new StripeClient((string) config('services.stripe.secret')));
+        $this->app->singleton(StripeClient::class, fn (): StripeClient => new StripeClient([
+            'api_key' => (string) config('services.stripe.secret'),
+            'stripe_version' => config('services.stripe.api_version'),
+        ]));
     }
 
     public function boot(GatewayManager $gateways): void
