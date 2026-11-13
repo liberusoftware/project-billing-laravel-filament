@@ -1054,20 +1054,6 @@
         },
         {
             "type": "path",
-            "url": "modules/module-manager-filament",
-            "options": {
-                "symlink": true
-            }
-        },
-        {
-            "type": "path",
-            "url": "modules/module-manager",
-            "options": {
-                "symlink": true
-            }
-        },
-        {
-            "type": "path",
             "url": "modules/notifications",
             "options": {
                 "symlink": true
@@ -1307,11 +1293,9 @@
                     "liberusoftware/module-billing-usage-livewire": "0.1.0",
                     "liberusoftware/module-billing-usage": "0.1.0",
                     "liberusoftware/billing-virtualmin": "0.1.0",
-                    "liberusoftware/module-manager": "1.4.2",
                     "liberusoftware/organizations-teams": "1.5.0",
                     "liberusoftware/roles-permissions": "1.4.1",
                     "liberusoftware/observability": "1.4.1",
-                    "liberusoftware/module-manager-filament": "1.4.1",
                     "liberusoftware/notifications": "1.4.1",
                     "liberusoftware/organizations-teams-filament": "1.4.1",
                     "liberusoftware/profiles": "1.4.1",
@@ -1330,6 +1314,8 @@
                 }
             },
             "exclude": [
+                "liberusoftware/module-manager",
+                "liberusoftware/module-manager-filament",
                 "liberusoftware/tenancy"
             ]
         },
@@ -1488,8 +1474,8 @@
         "liberusoftware/module-liberu-revenue-and-care-orchestration-api": "^1.0",
         "liberusoftware/module-liberu-revenue-and-care-orchestration-filament": "^1.0",
         "liberusoftware/module-liberu-revenue-and-care-orchestration-livewire": "^1.0",
-        "liberusoftware/module-manager": "^1.0",
-        "liberusoftware/module-manager-filament": "^1.1",
+        "liberusoftware/module-manager": "^1.9",
+        "liberusoftware/module-manager-filament": "^1.11",
         "liberusoftware/notifications": "^1.0",
         "liberusoftware/observability": "^1.0",
         "liberusoftware/organizations-teams": "^1.0",

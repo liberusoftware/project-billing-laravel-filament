@@ -59,3 +59,6 @@ docs/superpowers
 .cursor/skills/
 .github/skills/
 .junie/skills/
+# Installed from Packagist, not carried here.
+/modules/module-manager/
+/modules/module-manager-filament/
