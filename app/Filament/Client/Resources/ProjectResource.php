@@ -37,9 +37,7 @@ class ProjectResource extends Resource
     #[Override]
     public static function getCreateAuthorizationResponse(): Response
     {
-        return static::canCreate()
-            ? parent::getCreateAuthorizationResponse()
-            : Response::deny();
+        return Response::deny();
     }
 
     #[Override]

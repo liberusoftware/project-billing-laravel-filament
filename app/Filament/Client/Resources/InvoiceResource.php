@@ -64,9 +64,7 @@ class InvoiceResource extends Resource
 
     public static function getCreateAuthorizationResponse(): Response
     {
-        return static::canCreate()
-            ? parent::getCreateAuthorizationResponse()
-            : Response::deny();
+        return Response::deny();
     }
 
     #[Override]
