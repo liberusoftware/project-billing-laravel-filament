@@ -57,19 +57,19 @@
   },
   "liberusoftware/billing-cpanel": {
     "path": "modules/module-billing-cpanel",
-    "reference": "bc1cac650500e5161547e38b56a1a7810fa2cfe9",
+    "reference": "58229bbf2a6f7a9de81e597e72e552298bd8d119",
     "repository": "https://github.com/liberusoftware/module-module-billing-cpanel",
-    "source_signature": "122f1e648d77d2dab8fe1341d79b3f7f798ced0e02395d15bb27bb04031cb431",
-    "source_tree": "8022d954a7812f41973c95a6512d89ba1f5e18ef",
-    "version": "0.1.0"
+    "source_signature": "bfabc839d7c847db430f954a81df3f552360d486a56740505bbf0b2a914190d4",
+    "source_tree": "3c69cbd7351f3f1aeae8767d8044a5462fb88b16",
+    "version": "0.1.1"
   },
   "liberusoftware/billing-directadmin": {
     "path": "modules/module-billing-directadmin",
-    "reference": "a07479fe8fee8a0ed46d61b72915ddfb69294333",
+    "reference": "c23bb8b989cc1c7b5a127dda9ecb87da7a5b7638",
     "repository": "https://github.com/liberusoftware/module-module-billing-directadmin",
-    "source_signature": "516f881e7e8f257d17041bd9b7bdf5c9f7f52b282392f911fcae201fe976a329",
-    "source_tree": "14d3733914bbf236092b7bba8c5d4a1a09072b3e",
-    "version": "0.1.0"
+    "source_signature": "2d235d021e0fe93881c3519040fba447acd587a2096271e04176adb48c62b736",
+    "source_tree": "0a18f326d6c4561de9b1314fc45024fb3e55c572",
+    "version": "0.1.1"
   },
   "liberusoftware/billing-enom": {
     "path": "modules/module-billing-enom",
@@ -81,11 +81,11 @@
   },
   "liberusoftware/billing-liberu-control-panel": {
     "path": "modules/module-billing-liberu-control-panel",
-    "reference": "0a02d8efe796d9afd05e0c63199c370bff75de45",
+    "reference": "8dc44a38287de07ba2235a858bd97aff0f1b13f4",
     "repository": "https://github.com/liberusoftware/module-module-billing-liberu-control-panel",
-    "source_signature": "d089681c89880ad2b9ef6c86ef1be6b53f8580d78fcb2965ca6de87338e426ba",
-    "source_tree": "a9d9972b15acc095af1c578bb7bf69a898bd5b06",
-    "version": "0.1.0"
+    "source_signature": "d66313e5b907314abc8ce44ba5314a8b519466e609a17be32d057d120f975518",
+    "source_tree": "ba671a4e9bdbe7c2235250e27f32ab3de08c8e7f",
+    "version": "0.1.1"
   },
   "liberusoftware/billing-paddle": {
     "path": "modules/module-billing-paddle",
@@ -97,11 +97,11 @@
   },
   "liberusoftware/billing-plesk": {
     "path": "modules/module-billing-plesk",
-    "reference": "9adafa610c34aff41b94c4c62126cc240d254cc8",
+    "reference": "fe924dd6988b5e691c6b91e4f71cf1b43e7e9b55",
     "repository": "https://github.com/liberusoftware/module-billing-plesk",
-    "source_signature": "dadf73ee0e3f6317713738653c0c262f726340bd21ea9070b3afa7867f60076b",
-    "source_tree": "f4d296559f8d754d4a73a33499919e899b689a7a",
-    "version": "0.1.0"
+    "source_signature": "1e698de48b235dfdec09dd0fe40b4ab98ee11758e09052562fab3f22188ff12f",
+    "source_tree": "25e8bd7e8255b568bb892903a76183b2564b0a44",
+    "version": "0.1.1"
   },
   "liberusoftware/billing-resellerclub": {
     "path": "modules/module-billing-resellerclub",
@@ -113,19 +113,19 @@
   },
   "liberusoftware/billing-stripe": {
     "path": "modules/module-billing-stripe",
-    "reference": "579b2d47e45f34ea6f425ee91001683f6f44246a",
+    "reference": "de06bbf0847469047de78027e84056d8e621bd80",
     "repository": "https://github.com/liberusoftware/module-billing-stripe",
-    "source_signature": "449301a05c7294dbff5109f1927a77fa41640e8162a0020743f2b40db8e82dc8",
-    "source_tree": "b9abaa0c28e66ff2b261d85524695c90572d9386",
-    "version": "0.1.1"
+    "source_signature": "379d25c098847ecf1ed9c99164a67df6a01f0bab8b233c8ec70d7260def030f5",
+    "source_tree": "b27fb63626e964468ef511140273956893a17dca",
+    "version": "0.1.2"
   },
   "liberusoftware/billing-virtualmin": {
     "path": "modules/module-billing-virtualmin",
-    "reference": "a5189df51f561a815fc27690de6f11884fde3e62",
+    "reference": "b663a6d9bbd60de5e8a5eca51c1ee1d0ff1aa15c",
     "repository": "https://github.com/liberusoftware/module-billing-virtualmin",
-    "source_signature": "8f37c58ce9b33092134962a9860df0838647ee7e1f38d237e0ba209c200603bf",
-    "source_tree": "40db7837635b1619f4c1f452882eafb5ddb7ec67",
-    "version": "0.1.0"
+    "source_signature": "c8b0b841c19689b5f0f8b8337c1cf5a11b954dfa5e519e386ae21eb7132af220",
+    "source_tree": "778528e76ca51974bd1fb45d63e3e7d74f0e5be1",
+    "version": "0.1.1"
   },
   "liberusoftware/currency-context": {
     "path": "modules/currency-context",
@@ -425,11 +425,11 @@
   },
   "liberusoftware/module-billing-hosting": {
     "path": "modules/module-billing-hosting",
-    "reference": "c944eab99ab2cd06176977b544926c5d4e3b0e02",
+    "reference": "486f819f3b6c01ea99c3f53aa364681d9ea5fcbe",
     "repository": "https://github.com/liberusoftware/module-module-billing-hosting",
-    "source_signature": "cc58c791a8aad0e55f7cf154ff179d6ec3aa22032e66877ecaa6ce90a441eda1",
-    "source_tree": "ecbc0f22c7533a2fb93e82921a55747b2eca7e1c",
-    "version": "0.1.0"
+    "source_signature": "10c9023ac22ff8a6bb2b5be40ca90e7f48d7496ef23809ee9821c0e25900fdef",
+    "source_tree": "958aec73cd08ee2e633e6aa4282fdfb181cea8cf",
+    "version": "0.1.1"
   },
   "liberusoftware/module-billing-hosting-api": {
     "path": "modules/module-billing-hosting-api",
@@ -1001,11 +1001,11 @@
   },
   "liberusoftware/tenancy": {
     "path": "modules/tenancy",
-    "reference": "32cdb9096690f29205255f2eafee4b2b2847fcaa",
+    "reference": "5c079502cf9c82c304f37eab141c8c7d5a77b2b7",
     "repository": "https://github.com/liberusoftware/module-tenancy",
-    "source_signature": "ee0fe468adef9cab22c285b554e35807cceb4a6e2e0dcf81a23a69ed39dcfe74",
-    "source_tree": "c9c9a1bb887b98e67db718633f7c50f40638bb54",
-    "version": "1.0.1"
+    "source_signature": "d469d350ee02b7822a5fa89a3d1bcf1bbd06fa4f8e46fc06e6644ffc88c0b8e5",
+    "source_tree": "04f69949afdcdb6c12817d536fee1706df06aa5d",
+    "version": "1.2.2"
   },
   "liberusoftware/theme-base": {
     "path": "themes/base",
