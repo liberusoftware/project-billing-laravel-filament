@@ -175,6 +175,7 @@ class PaymentGatewayService
 
         // Set up Stripe API key
         Stripe::setApiKey($gateway->secret_key);
+        Stripe::setApiVersion(config('services.stripe.api_version'));
 
         try {
             // Create a charge using the Stripe token
@@ -425,6 +426,7 @@ class PaymentGatewayService
     private function processStripeRefund(Payment $payment, float $amount): array
     {
         Stripe::setApiKey($payment->paymentGateway->secret_key);
+        Stripe::setApiVersion(config('services.stripe.api_version'));
 
         try {
             $refund = Refund::create(

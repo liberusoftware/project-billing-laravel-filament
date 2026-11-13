@@ -101,7 +101,7 @@ class HttpBusinessConnector implements BusinessConnector
 
             return $method === 'get'
                 ? $request->get($path)->throw()
-                : $request->withBody($json, 'application/json')->send($method, $path)->throw();
+                : $request->withBody($json, 'application/json')->send(strtoupper($method), $path)->throw();
         } catch (Throwable $exception) {
             report($exception);
 

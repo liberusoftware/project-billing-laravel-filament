@@ -12,6 +12,7 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\Filter;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
+use Illuminate\Auth\Access\Response;
 use Override;
 use UnitEnum;
 
@@ -37,6 +38,14 @@ class AuditLogResource extends Resource
     public static function canViewAny(): bool
     {
         return auth()->user()?->hasRole('super_admin') ?? false;
+    }
+
+    #[Override]
+    public static function getViewAnyAuthorizationResponse(): Response
+    {
+        return static::canViewAny()
+            ? parent::getViewAnyAuthorizationResponse()
+            : Response::deny();
     }
 
     #[Override]

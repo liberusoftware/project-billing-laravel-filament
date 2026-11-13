@@ -214,7 +214,7 @@ class HttpGitPlatformClient implements GitPlatformClient
     private function send(string $method, string $path, array $payload = []): Response
     {
         try {
-            return $this->request()->send($method, $path, $payload === [] ? [] : ['json' => $payload])->throw();
+            return $this->request()->send(strtoupper($method), $path, $payload === [] ? [] : ['json' => $payload])->throw();
         } catch (Throwable $exception) {
             report($exception);
 
