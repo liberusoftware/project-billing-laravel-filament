@@ -3,7 +3,7 @@
   "name": "module-billing-subscriptions-filament",
   "display_name": "Billing Subscriptions Filament",
   "description": "Filament 5 adapter for Billing Subscriptions.",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "category": "presentation",
   "provider": "Liberu\\Billing\\Subscriptions\\Filament\\SubscriptionsFilamentServiceProvider",
   "requires": {
@@ -15,8 +15,19 @@
     }
   },
   "suggests": [],
-  "presentation": {"filament": {"admin": ["Liberu\\Billing\\Subscriptions\\Filament\\SubscriptionsFilamentPlugin"]}},
-  "capabilities": ["billing.subscriptions.filament"],
+  "presentation": {
+    "filament": {
+      "admin": [
+        "Liberu\\Billing\\Subscriptions\\Filament\\SubscriptionsFilamentPlugin"
+      ]
+    }
+  },
+  "capabilities": [
+    "billing.subscriptions.filament"
+  ],
   "default_enabled": true,
-  "features": ["Subscription resource", "Lifecycle state display"]
+  "features": [
+    "Subscription resource",
+    "Lifecycle state display"
+  ]
 }

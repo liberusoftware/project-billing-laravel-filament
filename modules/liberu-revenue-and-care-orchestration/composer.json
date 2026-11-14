@@ -1,12 +1,13 @@
 {
   "name": "liberusoftware/module-liberu-revenue-and-care-orchestration",
-  "version": "1.0.0",
+  "version": "1.3.0",
   "type": "liberu-module",
   "description": "Liberu liberu-revenue-and-care-orchestration module.",
   "license": "MIT",
   "require": {
     "php": "^8.5",
     "illuminate/database": "^13.38.0",
+    "illuminate/events": "^13.38.0",
     "illuminate/support": "^13.38.0"
   },
   "autoload": {

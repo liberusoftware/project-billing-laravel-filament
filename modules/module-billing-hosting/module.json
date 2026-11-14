@@ -3,7 +3,7 @@
   "name": "module-billing-hosting",
   "display_name": "Billing Hosting",
   "description": "Provider-neutral Billing Hosting domain module.",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "category": "capability",
   "provider": "Liberu\\Billing\\Hosting\\HostingServiceProvider",
   "requires": {
@@ -27,4 +27,3 @@
     "lifecycle-operations"
   ]
 }
-

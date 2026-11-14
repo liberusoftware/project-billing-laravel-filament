@@ -10,14 +10,13 @@ return new class() extends Migration
     {
         Schema::table('teams', function (Blueprint $table): void {
             $table->text('setup_configuration')->nullable()->after('branding');
-            $table->timestamp('setup_completed_at')->nullable()->after('setup_configuration');
         });
     }
 
     public function down(): void
     {
         Schema::table('teams', function (Blueprint $table): void {
-            $table->dropColumn(['setup_configuration', 'setup_completed_at']);
+            $table->dropColumn('setup_configuration');
         });
     }
 };

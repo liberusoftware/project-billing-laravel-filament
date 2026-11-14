@@ -27,6 +27,8 @@ class CannedResponseService
                         ->orWhereNull('team_id'); // Include global responses
                 }
             );
+        } else {
+            $query->whereNull('team_id');
         }
 
         if ($category) {
@@ -63,6 +65,8 @@ class CannedResponseService
                         ->orWhereNull('team_id');
                 }
             );
+        } else {
+            $query->whereNull('team_id');
         }
 
         return $query->first();
@@ -117,6 +121,8 @@ class CannedResponseService
                         ->orWhereNull('team_id');
                 }
             );
+        } else {
+            $queryBuilder->whereNull('team_id');
         }
 
         return $queryBuilder->orderBy(
@@ -142,6 +148,8 @@ class CannedResponseService
                         ->orWhereNull('team_id');
                 }
             );
+        } else {
+            $query->whereNull('team_id');
         }
 
         return $query->distinct('category')
@@ -171,6 +179,8 @@ class CannedResponseService
                         ->orWhereNull('team_id');
                 }
             );
+        } else {
+            $query->whereNull('team_id');
         }
 
         return $query->limit($limit)->get();

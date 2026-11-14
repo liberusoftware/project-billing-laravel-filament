@@ -62,18 +62,32 @@ class ThemeServiceProvider extends ServiceProvider
         $themeManager = $this->app->make(ThemeManager::class);
 
         $user = auth()->user();
-        $userTheme = $user instanceof Authenticatable ? ($user->getAttributes()['theme_preference'] ?? null) : null;
-        if (is_string($userTheme) && $userTheme !== '' && $themeManager->themeExists($userTheme)) {
-            return $userTheme;
+        $preference = $user instanceof Authenticatable
+            ? $this->resolvePreference(data_get($user, 'theme_preference'), $themeManager)
+            : null;
+        if ($preference !== null) {
+            return $preference;
         }
 
-        $session = session('theme_preference');
-        if (is_string($session) && $session !== '' && $themeManager->themeExists($session)) {
+        $session = $this->resolvePreference(session('theme_preference'), $themeManager);
+        if ($session !== null) {
             return $session;
         }
 
         // Admin-selected site-wide theme (validated; safe fallback to config default).
         return $themeManager->getSiteTheme();
+    }
+
+    protected function resolvePreference(mixed $preference, ThemeManager $themeManager): ?string
+    {
+        if (! is_string($preference) || $preference === '') {
+            return null;
+        }
+
+        $aliases = config('theme.preference_aliases', []);
+        $resolved = is_array($aliases) ? ($aliases[$preference] ?? $preference) : $preference;
+
+        return is_string($resolved) && $resolved !== '' && $themeManager->themeExists($resolved) ? $resolved : null;
     }
 
     /**

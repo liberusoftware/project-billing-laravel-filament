@@ -171,6 +171,8 @@ class QuoteService
                 'team_id',
                 $teamId
             );
+        } else {
+            $query->whereNull('team_id');
         }
 
         $counts = $query->selectRaw('status, count(*) as count, sum(total) as total_value')

@@ -3,12 +3,27 @@
   "name": "module-billing-pricing",
   "display_name": "Billing Pricing",
   "description": "Recurring, one-time, usage, tiered pricing, contracts, discounts, proration, and snapshots.",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "category": "capability",
   "provider": "Liberu\\Billing\\Pricing\\PricingServiceProvider",
-  "requires": {"php": "^8.5", "laravel": "^13.0", "packages": {"liberusoftware/module-manager": "^1.0"}},
+  "requires": {
+    "php": "^8.5",
+    "laravel": "^13.0",
+    "packages": {
+      "liberusoftware/module-manager": "^1.0"
+    }
+  },
   "suggests": [],
-  "capabilities": ["billing.pricing"],
+  "capabilities": [
+    "billing.pricing"
+  ],
   "default_enabled": true,
-  "features": ["Pricing plans", "Contracts", "Discounts", "Proration", "Usage-based price calculation", "Price snapshots"]
+  "features": [
+    "Pricing plans",
+    "Contracts",
+    "Discounts",
+    "Proration",
+    "Usage-based price calculation",
+    "Price snapshots"
+  ]
 }

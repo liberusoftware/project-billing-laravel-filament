@@ -1,19 +1,10 @@
 # Changelog
 
-## 1.5.0 - 2026-08-09
+## 1.10.3 - 2026-11-14
 
-- Release metadata only: `composer.json` and `module.json` move to `1.5.0`. **No source, schema or
-  CI change** — `1.4.1` and this tag point at the same tree.
-- Backfill the `1.4.0` and `1.4.1` entries below, which were tagged without one.
-
-## 1.4.1 - 2026-08-07
-
-- Run static analysis in CI.
-- Set the PHPStan baseline to the measured level rather than an asserted one.
-
-## 1.4.0 - 2026-08-07
-
-- Set the coverage ratchet from a measured baseline.
+- Discover tenant models from the running host application so team backups and imports retain model records when the package is linked or lives outside the host tree.
+- Preserve package-relative discovery before Laravel binds its base path.
+- Test concrete and inherited tenant models, duplicate paths, unscoped and abstract models, missing classes and invalid host bindings.
 
 ## 1.2.2 - 2026-08-06
 

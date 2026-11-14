@@ -17,7 +17,6 @@ return new class() extends Migration
             $table->string('custom_domain')->nullable()->unique()->after('slug');
             $table->string('database_mode')->default('shared')->after('custom_domain');
             $table->json('branding')->nullable()->after('database_mode');
-            $table->timestamp('archived_at')->nullable()->after('branding');
             $table->index(['parent_team_id', 'organisation_type']);
         });
 
@@ -101,7 +100,7 @@ return new class() extends Migration
             $table->dropUnique(['custom_domain']);
             $table->dropColumn([
                 'parent_team_id', 'organisation_type', 'slug', 'custom_domain',
-                'database_mode', 'branding', 'archived_at',
+                'database_mode', 'branding',
             ]);
         });
     }

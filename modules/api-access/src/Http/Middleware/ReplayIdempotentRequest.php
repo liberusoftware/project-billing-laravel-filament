@@ -20,7 +20,11 @@ final class ReplayIdempotentRequest
             return $next($request);
         }
 
-        $identity = (string) ($request->user()?->getAuthIdentifier() ?? 'guest:none');
+        $actor = $request->user();
+        $identity = implode(':', [
+            (string) ($actor?->getAuthIdentifier() ?? 'guest'),
+            (string) data_get($actor, 'current_team_id', 'none'),
+        ]);
         $existing = $this->store->begin($identity, $key, (string) $request->getContent());
         if ($existing !== null) {
             if ($existing->response_body === null) {
@@ -32,9 +36,19 @@ final class ReplayIdempotentRequest
                 ->header('Idempotent-Replayed', 'true');
         }
 
-        $response = $next($request);
-        if ($response instanceof SymfonyResponse && $response->isSuccessful()) {
-            $this->store->complete($identity, $key, $response->getStatusCode(), $response->getContent());
+        try {
+            $response = $next($request);
+        } catch (\Throwable $exception) {
+            $this->store->forget($identity, $key);
+
+            throw $exception;
+        }
+
+        $body = $response->getContent();
+        if ($response->isSuccessful() && $body !== false) {
+            $this->store->complete($identity, $key, $response->getStatusCode(), $body);
+        } else {
+            $this->store->forget($identity, $key);
         }
 
         return $response;

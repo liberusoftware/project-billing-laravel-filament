@@ -89,10 +89,7 @@ class CannedResponseController extends Controller
 
         $content = $this->cannedResponseService->use(
             $response,
-            $request->get(
-                'variables',
-                []
-            )
+            $request->input('variables') ?? []
         );
 
         return response()->json(
