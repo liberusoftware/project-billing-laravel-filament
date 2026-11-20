@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.11.0 - 2026-11-20
+
+- Drop indexes and unique constraints before dropping columns in the organization memberships rollback migration for SQLite compatibility.
+
 ## 1.10.3 - 2026-11-14
 
 - Discover tenant models from the running host application so team backups and imports retain model records when the package is linked or lives outside the host tree.
