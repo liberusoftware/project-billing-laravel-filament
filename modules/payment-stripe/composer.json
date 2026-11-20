@@ -1,0 +1,27 @@
+{
+  "name": "liberusoftware/payment-stripe",
+  "description": "Unified Stripe merchant payment adapter implementing liberusoftware/payment-contracts on stripe/stripe-php ^23.0.",
+  "type": "liberu-module",
+  "license": "MIT",
+  "require": {
+    "php": "^8.5",
+    "illuminate/support": "^13.0",
+    "liberusoftware/payment-contracts": "^1.0",
+    "stripe/stripe-php": "^23.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "Liberu\\Payment\\Stripe\\": "src/"
+    }
+  },
+  "extra": {
+    "liberu": {
+      "name": "payment-stripe"
+    },
+    "laravel": {
+      "providers": [
+        "Liberu\\Payment\\Stripe\\StripePaymentServiceProvider"
+      ]
+    }
+  }
+}

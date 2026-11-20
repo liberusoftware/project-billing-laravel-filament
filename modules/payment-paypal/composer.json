@@ -1,0 +1,27 @@
+{
+  "name": "liberusoftware/payment-paypal",
+  "description": "Unified PayPal merchant payment adapter implementing liberusoftware/payment-contracts.",
+  "type": "liberu-module",
+  "license": "MIT",
+  "require": {
+    "php": "^8.5",
+    "illuminate/http": "^13.0",
+    "illuminate/support": "^13.0",
+    "liberusoftware/payment-contracts": "^1.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "Liberu\\Payment\\PayPal\\": "src/"
+    }
+  },
+  "extra": {
+    "liberu": {
+      "name": "payment-paypal"
+    },
+    "laravel": {
+      "providers": [
+        "Liberu\\Payment\\PayPal\\PayPalPaymentServiceProvider"
+      ]
+    }
+  }
+}

@@ -30,7 +30,7 @@ return new class() extends Migration
 
             $table->index(['category_id', 'is_published']);
             $table->index(['is_featured', 'is_published']);
-            if (config('database.default') !== 'sqlite') {
+            if (Schema::connection($this->getConnection())->getConnection()->getDriverName() !== 'sqlite') {
                 $table->fullText(['title', 'content']);
             }
         });

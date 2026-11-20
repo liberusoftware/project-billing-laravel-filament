@@ -22,7 +22,7 @@ it('keeps external exchange-rate requests disabled when not opted in', function 
     Http::fake();
     $registry = app(CurrencyRegistry::class);
 
-    expect((new OpenExchangeRateApiProvider())->rate($registry->get('USD'), $registry->get('EUR'), new DateTimeImmutable()))->toBeNull();
+    expect((new OpenExchangeRateApiProvider)->rate($registry->get('USD'), $registry->get('EUR'), new DateTimeImmutable))->toBeNull();
     Http::assertNothingSent();
 });
 
@@ -33,7 +33,7 @@ it('uses provider timestamps and caches quotes by their base URL', function () {
         ]),
     ]);
     $registry = app(CurrencyRegistry::class);
-    $provider = new OpenExchangeRateApiProvider();
+    $provider = new OpenExchangeRateApiProvider;
     $effectiveAt = new DateTimeImmutable('2026-01-01T00:00:00+00:00');
     $euro = $provider->rate($registry->get('USD'), $registry->get('EUR'), $effectiveAt);
     $pound = $provider->rate($registry->get('USD'), $registry->get('GBP'), $effectiveAt);
@@ -41,7 +41,7 @@ it('uses provider timestamps and caches quotes by their base URL', function () {
     expect($euro->rate)->toBe('0.9')
         ->and($euro->base->code)->toBe('USD')
         ->and($euro->quote->code)->toBe('EUR')
-        ->and($euro->source)->toBe('open.er-api.com')
+        ->and($euro->source)->toBe('rates.example.test')
         ->and($euro->type)->toBe('market')
         ->and($euro->precision)->toBe(6)
         ->and($euro->effectiveAt->getTimestamp())->toBe(1700000000)
@@ -60,8 +60,8 @@ it('refreshes cached quotes after the configured lifetime', function () {
         ->push(['result' => 'success', 'rates' => ['EUR' => 0.9]])
         ->push(['result' => 'success', 'rates' => ['EUR' => 0.95]]);
     $registry = app(CurrencyRegistry::class);
-    $provider = new OpenExchangeRateApiProvider();
-    $at = new DateTimeImmutable();
+    $provider = new OpenExchangeRateApiProvider;
+    $at = new DateTimeImmutable;
 
     expect($provider->rate($registry->get('USD'), $registry->get('EUR'), $at)->rate)->toBe('0.9');
     $this->travel(599)->seconds();
@@ -77,7 +77,7 @@ it('returns no quote for missing or invalid upstream rates', function (array $ra
     Http::fake(['https://rates.example.test/USD' => Http::response(['result' => 'success', 'rates' => $rates])]);
     $registry = app(CurrencyRegistry::class);
 
-    expect((new OpenExchangeRateApiProvider())->rate($registry->get('USD'), $registry->get('EUR'), new DateTimeImmutable()))->toBeNull();
+    expect((new OpenExchangeRateApiProvider)->rate($registry->get('USD'), $registry->get('EUR'), new DateTimeImmutable))->toBeNull();
     Http::assertSentCount(1);
 })->with([
     'missing currency' => [['GBP' => 0.8]],
@@ -92,8 +92,8 @@ it('caches upstream failures briefly and permits recovery', function (int $statu
         ->push(['result' => $result, 'rates' => ['EUR' => 0.9]], $status)
         ->push(['result' => 'success', 'rates' => ['EUR' => 0.95]]);
     $registry = app(CurrencyRegistry::class);
-    $provider = new OpenExchangeRateApiProvider();
-    $at = new DateTimeImmutable();
+    $provider = new OpenExchangeRateApiProvider;
+    $at = new DateTimeImmutable;
 
     expect($provider->rate($registry->get('USD'), $registry->get('EUR'), $at))->toBeNull()
         ->and($provider->rate($registry->get('USD'), $registry->get('EUR'), $at))->toBeNull();
@@ -112,8 +112,8 @@ it('treats connection failures as an unavailable rate without sending repeated r
         throw new ConnectionException('unavailable');
     });
     $registry = app(CurrencyRegistry::class);
-    $provider = new OpenExchangeRateApiProvider();
-    $at = new DateTimeImmutable();
+    $provider = new OpenExchangeRateApiProvider;
+    $at = new DateTimeImmutable;
 
     expect($provider->rate($registry->get('USD'), $registry->get('EUR'), $at))->toBeNull()
         ->and($provider->rate($registry->get('USD'), $registry->get('EUR'), $at))->toBeNull()

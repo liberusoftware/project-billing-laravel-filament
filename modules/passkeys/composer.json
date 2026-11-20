@@ -1,0 +1,27 @@
+{
+  "name": "liberusoftware/passkeys",
+  "description": "WebAuthn / FIDO2 passkey registration, discoverable passwordless sign-in, step-up authentication, and clone detection for Liberu.",
+  "type": "liberu-module",
+  "license": "MIT",
+  "require": {
+    "php": "^8.5",
+    "illuminate/contracts": "^13.0",
+    "illuminate/database": "^13.0",
+    "illuminate/support": "^13.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "Liberu\\Passkeys\\": "src/"
+    }
+  },
+  "extra": {
+    "liberu": {
+      "name": "passkeys"
+    },
+    "laravel": {
+      "providers": [
+        "Liberu\\Passkeys\\PasskeysServiceProvider"
+      ]
+    }
+  }
+}

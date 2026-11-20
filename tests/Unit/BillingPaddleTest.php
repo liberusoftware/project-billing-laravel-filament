@@ -1,78 +1,110 @@
 <?php
 
-use Illuminate\Http\Client\Request;
-use Illuminate\Support\Facades\Http;
-use Liberu\Billing\Paddle\PaddleGatewayDriver;
 use Liberu\Billing\Payments\Contracts\GatewayDriver;
 use Liberu\Billing\Payments\Models\Payment;
 use Liberu\Billing\Payments\Services\GatewayManager;
+use Liberu\Payment\Contracts\DTOs\CapturePaymentCommand;
+use Liberu\Payment\Contracts\DTOs\CreatePaymentIntentCommand;
+use Liberu\Payment\Contracts\DTOs\MerchantAccountContextDto;
+use Liberu\Payment\Contracts\DTOs\MoneyAmount;
+use Liberu\Payment\Contracts\DTOs\RawWebhookPayloadDto;
+use Liberu\Payment\Contracts\DTOs\RefundPaymentCommand;
+use Liberu\Payment\Contracts\Enums\PaymentLifecycleState;
+use Liberu\Payment\Paddle\PaddlePaymentAdapter;
 
-it('captures a Paddle transaction through the provider-neutral gateway contract', function (): void {
-    config()->set('services.paddle.token', 'pdl_test_token');
-    config()->set('services.paddle.base_url', 'https://paddle.test');
-    Http::fake(['https://paddle.test/transactions' => Http::response([
-        'data' => ['id' => 'txn_123', 'status' => 'completed'],
-    ])]);
+it('captures a Paddle payment through the provider-neutral payment contract', function (): void {
+    $adapter = app(PaddlePaymentAdapter::class);
+    $account = new MerchantAccountContextDto(
+        tenantId: 'team-1',
+        providerKey: 'paddle',
+        credentials: ['token' => 'pdl_test_token'],
+        sandbox: true,
+    );
 
-    $payment = new Payment(['metadata' => [
-        'paddle_price_id' => 'pri_123abc',
-        'paddle_quantity' => 2,
-        'paddle_customer_id' => 'ctm_123',
-    ]]);
-    $payment->id = 42;
+    $intent = $adapter->createIntent(new CreatePaymentIntentCommand(
+        account: $account,
+        amount: new MoneyAmount(1000, 'USD'),
+        idempotencyKey: 'idem_create_123',
+        returnUrl: 'https://billing.test/return',
+    ));
 
-    expect(app(PaddleGatewayDriver::class)->capture($payment))->toBe(['reference' => 'txn_123']);
+    $capture = $adapter->capture(new CapturePaymentCommand(
+        account: $account,
+        providerIntentId: $intent->providerIntentId,
+        idempotencyKey: 'idem_cap_123',
+        amount: new MoneyAmount(1000, 'USD'),
+    ));
 
-    Http::assertSent(function (Request $request): bool {
-        return $request->hasHeader('Authorization', 'Bearer pdl_test_token')
-            && $request->url() === 'https://paddle.test/transactions'
-            && $request['items'] === [['price_id' => 'pri_123abc', 'quantity' => 2]]
-            && $request['custom_data'] === ['billing_payment_id' => '42'];
-    });
+    expect($intent->providerKey)->toBe('paddle')
+        ->and($intent->providerIntentId)->toBe('paddle_idem_create_123')
+        ->and($intent->state)->toBe(PaymentLifecycleState::RequiresCustomerAction)
+        ->and($capture->providerCaptureId)->toBe('paddle_cap_idem_cap_123')
+        ->and($capture->state)->toBe(PaymentLifecycleState::Captured)
+        ->and($capture->capturedAmount->amountMinor)->toBe(1000);
 });
 
 it('supports full and partial Paddle refunds', function (): void {
-    config()->set('services.paddle.token', 'pdl_test_token');
-    Http::fake(['https://api.paddle.com/adjustments' => Http::sequence()
-        ->push(['data' => ['id' => 'adj_full']])
-        ->push(['data' => ['id' => 'adj_partial']])]);
+    $adapter = app(PaddlePaymentAdapter::class);
+    $account = new MerchantAccountContextDto(
+        tenantId: 'team-1',
+        providerKey: 'paddle',
+        credentials: ['token' => 'pdl_test_token'],
+    );
 
-    $driver = app(PaddleGatewayDriver::class);
-    $payment = new Payment([
-        'amount_minor' => 1000,
-        'provider_reference' => 'txn_123',
-        'metadata' => ['paddle_transaction_item_id' => 'item_123'],
-    ]);
+    $full = $adapter->refund(new RefundPaymentCommand(
+        account: $account,
+        providerReference: 'txn_123',
+        amount: new MoneyAmount(1000, 'USD'),
+        idempotencyKey: 'full_1',
+    ));
 
-    expect($driver->refund($payment, 1000))->toBe(['reference' => 'adj_full'])
-        ->and($driver->refund($payment, 400))->toBe(['reference' => 'adj_partial']);
+    $partial = $adapter->refund(new RefundPaymentCommand(
+        account: $account,
+        providerReference: 'txn_123',
+        amount: new MoneyAmount(400, 'USD'),
+        idempotencyKey: 'partial_1',
+    ));
 
-    Http::assertSentCount(2);
-    Http::assertSent(function (Request $request): bool {
-        return $request['type'] === 'partial'
-            && $request['items'] === [['item_id' => 'item_123', 'type' => 'partial', 'amount' => '400']];
-    });
+    expect($full->providerRefundId)->toBe('paddle_ref_full_1')
+        ->and($full->state)->toBe(PaymentLifecycleState::Refunded)
+        ->and($full->refundedAmount->amountMinor)->toBe(1000)
+        ->and($partial->providerRefundId)->toBe('paddle_ref_partial_1')
+        ->and($partial->refundedAmount->amountMinor)->toBe(400);
 });
 
-it('rejects invalid Paddle metadata and incomplete provider responses', function (): void {
-    Http::fake(['https://api.paddle.com/transactions' => Http::response([
-        'data' => ['status' => 'completed'],
-    ])]);
-    $driver = app(PaddleGatewayDriver::class);
-    $payment = new Payment(['metadata' => ['paddle_price_id' => 'invalid']]);
+it('reports connection health based on configured Paddle credentials', function (): void {
+    $adapter = app(PaddlePaymentAdapter::class);
 
-    expect(fn () => $driver->capture($payment))->toThrow(InvalidArgumentException::class)
-        ->and(fn () => $driver->capture(new Payment(['metadata' => ['paddle_price_id' => 'pri_valid']])))->toThrow(RuntimeException::class);
+    $healthy = $adapter->testConnection(new MerchantAccountContextDto('team-1', 'paddle', ['token' => 'pdl_test']));
+    $unhealthy = $adapter->testConnection(new MerchantAccountContextDto('team-1', 'paddle', []));
+
+    expect($healthy->healthy)->toBeTrue()
+        ->and($unhealthy->healthy)->toBeFalse();
 });
 
-it('does not treat a checkout-ready Paddle transaction as captured', function (): void {
-    Http::fake(['https://api.paddle.com/transactions' => Http::response([
-        'data' => ['id' => 'txn_ready', 'status' => 'ready'],
-    ])]);
+it('verifies Paddle webhook signatures and rejects invalid ones', function (): void {
+    $adapter = app(PaddlePaymentAdapter::class);
+    $body = json_encode(['id' => 'evt_123', 'event_type' => 'transaction.completed', 'resource_id' => 'txn_123'], JSON_THROW_ON_ERROR);
+    $secret = 'whsec_test_paddle';
+    $validSig = hash_hmac('sha256', $body, $secret);
 
-    expect(fn () => app(PaddleGatewayDriver::class)->capture(new Payment([
-        'metadata' => ['paddle_price_id' => 'pri_valid'],
-    ])))->toThrow(RuntimeException::class, 'Paddle transaction is not complete: ready');
+    $event = $adapter->verifyAndParse(new RawWebhookPayloadDto(
+        providerKey: 'paddle',
+        rawBody: $body,
+        headers: ['Paddle-Signature' => $validSig],
+        signingSecret: $secret,
+    ));
+
+    expect($event->providerEventId)->toBe('evt_123')
+        ->and($event->eventType)->toBe('transaction.completed')
+        ->and($event->providerReference)->toBe('txn_123');
+
+    expect(fn () => $adapter->verifyAndParse(new RawWebhookPayloadDto(
+        providerKey: 'paddle',
+        rawBody: $body,
+        headers: ['Paddle-Signature' => 'invalid_signature'],
+        signingSecret: $secret,
+    )))->toThrow(RuntimeException::class, 'Invalid Paddle Billing webhook signature.');
 });
 
 it('resolves the Paddle gateway without case-sensitive aliases', function (): void {

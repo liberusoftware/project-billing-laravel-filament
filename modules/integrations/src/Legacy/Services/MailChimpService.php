@@ -4,13 +4,20 @@ namespace App\Services;
 
 use Log;
 use MailchimpMarketing\ApiClient;
+use UnexpectedValueException;
 
 class MailChimpService
 {
     protected ApiClient $client;
 
-    public function __construct()
+    public function __construct(?ApiClient $client = null)
     {
+        if ($client !== null) {
+            $this->client = $client;
+
+            return;
+        }
+
         $this->client = new ApiClient();
         $this->client->setConfig([
             'apiKey' => config('services.mailchimp.api_key'),
@@ -98,7 +105,12 @@ class MailChimpService
             ],
         ]);
 
-        $this->client->campaigns->setContent($campaign['id'], [
+        $campaignId = data_get($campaign, 'id');
+        if (! is_string($campaignId) || $campaignId === '') {
+            throw new UnexpectedValueException('Mailchimp campaign creation did not return an identifier.');
+        }
+
+        $this->client->campaigns->setContent($campaignId, [
             'html' => $html_content,
         ]);
 

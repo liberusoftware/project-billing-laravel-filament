@@ -1,0 +1,28 @@
+{
+  "name": "liberusoftware/payment-core",
+  "description": "Provider-neutral merchant payment orchestration, gateway registry, idempotency, webhook inbox, and reconciliation core.",
+  "type": "liberu-module",
+  "license": "MIT",
+  "require": {
+    "php": "^8.5",
+    "illuminate/database": "^13.0",
+    "illuminate/events": "^13.0",
+    "illuminate/support": "^13.0",
+    "liberusoftware/payment-contracts": "^1.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "Liberu\\Payment\\Core\\": "src/"
+    }
+  },
+  "extra": {
+    "liberu": {
+      "name": "payment-core"
+    },
+    "laravel": {
+      "providers": [
+        "Liberu\\Payment\\Core\\PaymentCoreServiceProvider"
+      ]
+    }
+  }
+}

@@ -19,6 +19,12 @@ return new class() extends Migration
 
     public function down(): void
     {
-        Schema::table('activity_log', fn (Blueprint $t) => $t->dropColumn(['previous_hash', 'record_hash', 'tenant_ref', 'correlation_id', 'retain_until']));
+        Schema::table('activity_log', function (Blueprint $t): void {
+            $t->dropUnique(['record_hash']);
+            $t->dropIndex(['tenant_ref']);
+            $t->dropIndex(['correlation_id']);
+            $t->dropIndex(['retain_until']);
+            $t->dropColumn(['previous_hash', 'record_hash', 'tenant_ref', 'correlation_id', 'retain_until']);
+        });
     }
 };

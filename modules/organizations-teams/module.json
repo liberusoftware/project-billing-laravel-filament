@@ -3,7 +3,7 @@
   "name": "organizations-teams",
   "display_name": "Organizations and Teams",
   "description": "Teams, memberships, invitations, ownership, switching, and current-context boundaries.",
-  "version": "1.10.3",
+  "version": "1.10.5",
   "category": "foundation",
   "provider": "Liberu\\Foundation\\Organizations\\OrganizationsServiceProvider",
   "requires": {
@@ -28,6 +28,7 @@
     "Invitations",
     "Ownership",
     "Switching",
-    "Current-context boundaries"
+    "Current-context boundaries",
+    "Encrypted workspace settings excluded from serialization and mass assignment"
   ]
 }

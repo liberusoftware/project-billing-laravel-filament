@@ -1,0 +1,31 @@
+{
+  "name": "liberusoftware/payment-contracts",
+  "description": "Provider-neutral merchant payment gateway contracts, DTOs, and lifecycle state machine for Liberu.",
+  "type": "liberu-module",
+  "license": "MIT",
+  "require": {
+    "php": "^8.5",
+    "illuminate/contracts": "^13.0",
+    "illuminate/support": "^13.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "Liberu\\Payment\\Contracts\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Liberu\\Payment\\Contracts\\Tests\\": "tests/"
+    }
+  },
+  "extra": {
+    "liberu": {
+      "name": "payment-contracts"
+    },
+    "laravel": {
+      "providers": [
+        "Liberu\\Payment\\Contracts\\PaymentContractsServiceProvider"
+      ]
+    }
+  }
+}

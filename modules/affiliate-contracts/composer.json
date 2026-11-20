@@ -1,0 +1,25 @@
+{
+  "name": "liberusoftware/affiliate-contracts",
+  "description": "Product-neutral affiliate management and referral attribution contracts and DTOs for Liberu.",
+  "type": "liberu-module",
+  "license": "MIT",
+  "require": {
+    "php": "^8.5",
+    "illuminate/support": "^13.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "Liberu\\Affiliate\\Contracts\\": "src/"
+    }
+  },
+  "extra": {
+    "liberu": {
+      "name": "affiliate-contracts"
+    },
+    "laravel": {
+      "providers": [
+        "Liberu\\Affiliate\\Contracts\\AffiliateContractsServiceProvider"
+      ]
+    }
+  }
+}
