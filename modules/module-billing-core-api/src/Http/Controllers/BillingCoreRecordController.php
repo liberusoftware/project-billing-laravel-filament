@@ -113,7 +113,6 @@ final class BillingCoreRecordController extends Controller
             'sequences' => ['name' => [$name, 'string', 'max:100'], 'prefix' => ['nullable', 'string', 'max:30'], 'next_number' => ['sometimes', 'integer', 'min:1']],
             'terms' => ['name' => [$name, 'string', 'max:100'], 'due_days' => ['sometimes', 'integer', 'min:0', 'max:3650'], 'default' => ['sometimes', 'boolean']],
             'settings' => ['values' => [$required ? 'required' : 'sometimes', 'array']],
-            default => [],
         };
     }
 
@@ -172,7 +171,6 @@ final class BillingCoreRecordController extends Controller
             'settings' => [
                 'values' => $record->getAttribute('values') ?? [],
             ],
-            default => [],
         };
 
         return [

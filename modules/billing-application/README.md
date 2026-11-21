@@ -46,7 +46,14 @@ Capabilities place their application classes in `src/` and accompanying migratio
 factories, seeders, views and tests under `database/`, `resources/` and `tests/` as
 needed. Capability-specific Filament classes live with their owners. Panel providers
 discover those classes and compose the published plugins. The existing extension
-loader remains available in `app/Modules`. Run Artisan, Vite and Pest from the root.
+loader remains available in `app/Modules`.
+
+The Composer package `liberusoftware/module-manager` loads the registered Billing
+packages. Its `php artisan module:list` and `module:validate` commands inspect
+that registry. The separate `php artisan module …` commands still use
+`app/Modules/` to manage the existing extension format, including `BlogModule`.
+
+Run Artisan, Vite and Pest from the root.
 
 ```sh
 vendor/bin/pest --testsuite=Unit,Feature,Architecture

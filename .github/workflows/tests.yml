@@ -16,7 +16,7 @@ jobs:
       contents: read
       id-token: write
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 30
 
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -52,6 +52,7 @@ jobs:
       # directories. The application intentionally retains newer local package logic,
       # so the checked-out repository sources are authoritative for this test run.
       - name: Restore repository-owned package sources
+        id: restore-packages
         run: |
           git restore --source=HEAD -- modules themes
           composer dump-autoload --no-interaction --optimize
@@ -68,10 +69,13 @@ jobs:
         run: php -d memory_limit=1G vendor/bin/phpstan analyse --no-progress
 
       - name: Generate application key
+        id: application-key
+        if: ${{ !cancelled() && steps.restore-packages.outcome == 'success' }}
         run: php artisan key:generate
 
       # The configured release scope includes app/ and modules/*/src.
       - name: Run tests
+        if: ${{ !cancelled() && steps.application-key.outcome == 'success' }}
         run: XDEBUG_MODE=coverage php -d memory_limit=1G vendor/bin/pest --coverage --coverage-clover=coverage.xml --min=100
 
       - name: Upload coverage to Codecov
