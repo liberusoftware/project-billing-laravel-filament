@@ -4,13 +4,41 @@ includes:
 
 parameters:
 
-    # app/ only. modules/ and themes/ are Composer output — analysing them from
+    # Analyse host-owned source. Published modules and themes are Composer output — analysing them from
     # here uses the host's resolution rather than the package's own, and the
     # package is the only place its source can be analysed against the tree a
     # consumer actually installs. Each package carries its own measured level in
     # its tests.yml, as the reusable workflow's phpstan-level input.
     paths:
         - app/
+        - modules/billing-application/src/
+        - modules/billing-audit/src/
+        - modules/billing-catalog/src/
+        - modules/billing-collections/src/
+        - modules/billing-communications/src/
+        - modules/billing-customer-portal/src/
+        - modules/billing-domains/src/
+        - modules/billing-filament/src/
+        - modules/billing-files/src/
+        - modules/billing-hosting/src/
+        - modules/billing-identity/src/
+        - modules/billing-integrations/src/
+        - modules/billing-invoicing/src/
+        - modules/billing-isp/src/
+        - modules/billing-licensing/src/
+        - modules/billing-money/src/
+        - modules/billing-orders/src/
+        - modules/billing-payments/src/
+        - modules/billing-pricing/src/
+        - modules/billing-projects/src/
+        - modules/billing-provisioning/src/
+        - modules/billing-referrals/src/
+        - modules/billing-reporting/src/
+        - modules/billing-search/src/
+        - modules/billing-settings/src/
+        - modules/billing-subscriptions/src/
+        - modules/billing-support/src/
+        - modules/billing-usage/src/
 
     # Measured, not aspired to. This was 9 while CI ran phpstan never; app/ has
     # 5 errors at 9, 2 at 6, and none at 5. Level 5 is the first level this code

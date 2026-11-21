@@ -113,6 +113,8 @@ Themes contain `composer.json`, `theme.json`, source assets, compatibility metad
 
 ## Testing and quality
 
+Project code and its tests are grouped by capability under [modules/](modules/billing-application/README.md). The root Pest configuration runs the project tests and reusable package suites.
+
 ```bash
 composer validate --strict
 vendor/bin/pest

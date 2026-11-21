@@ -249,7 +249,7 @@ abstract class BaseModule implements ModuleInterface
             return;
         }
 
-        $expectedPath = app_path('Modules/'.$this->name);
+        $expectedPath = base_path('app/Modules/'.$this->name);
         $resolved = realpath($this->getModulePath());
         $resolvedExpected = realpath($expectedPath);
 

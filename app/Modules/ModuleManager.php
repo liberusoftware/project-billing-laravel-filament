@@ -303,7 +303,7 @@ class ModuleManager
         $paths = [
             config(
                 'modules.path',
-                app_path('Modules')
+                base_path('app/Modules')
             ) => config(
                 'modules.namespace',
                 'App\\Modules'

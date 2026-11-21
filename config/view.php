@@ -15,9 +15,7 @@ return [
     |
     */
 
-    'paths' => [
-        resource_path('views'),
-    ],
+    'paths' => glob(base_path('modules/billing-*/resources/views'), GLOB_ONLYDIR) ?: [],
 
     /*
     |--------------------------------------------------------------------------

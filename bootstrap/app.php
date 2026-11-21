@@ -1,5 +1,17 @@
 <?php
 
+use App\Console\Commands\DispatchHostingFulfillments;
+use App\Console\Commands\EscalateTickets;
+use App\Console\Commands\ImportUsage;
+use App\Console\Commands\ProcessDomainRenewals;
+use App\Console\Commands\ProcessInvoiceReminders;
+use App\Console\Commands\ProcessSubscriptionChanges;
+use App\Console\Commands\ProcessWebhooks;
+use App\Console\Commands\PruneAuditLogs;
+use App\Console\Commands\SendInvoiceReminders;
+use App\Console\Commands\SuspendOverdueServices;
+use App\Console\Commands\SyncDomains;
+use App\Console\Commands\SyncEnomDomains;
 use App\Http\Middleware\SecurityHeaders;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -13,14 +25,32 @@ use Spatie\Permission\Middleware\PermissionMiddleware;
 use Spatie\Permission\Middleware\RoleMiddleware;
 use Spatie\Permission\Middleware\RoleOrPermissionMiddleware;
 
-return Application::configure(basePath: dirname(__DIR__))
+$basePath = dirname(__DIR__);
+$billingPath = $basePath.'/modules/billing-application';
+
+return Application::configure(basePath: $basePath)
     ->withRouting(
-        web: __DIR__.'/../routes/web.php',
-        api: __DIR__.'/../routes/api.php',
-        commands: __DIR__.'/../routes/console.php',
-        channels: __DIR__.'/../routes/channels.php',
+        web: $billingPath.'/routes/web.php',
+        api: $billingPath.'/routes/api.php',
+        commands: $billingPath.'/routes/console.php',
+        channels: $billingPath.'/routes/channels.php',
         health: '/up',
     )
+    ->withCommands([
+        $billingPath.'/src/Console/Commands',
+        DispatchHostingFulfillments::class,
+        EscalateTickets::class,
+        ImportUsage::class,
+        ProcessDomainRenewals::class,
+        ProcessInvoiceReminders::class,
+        ProcessSubscriptionChanges::class,
+        ProcessWebhooks::class,
+        PruneAuditLogs::class,
+        SendInvoiceReminders::class,
+        SuspendOverdueServices::class,
+        SyncDomains::class,
+        SyncEnomDomains::class,
+    ])
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->appendToGroup('web', [SetLocale::class, SecurityHeaders::class]);
         $middleware->appendToGroup('api', [SecurityHeaders::class]);
@@ -37,4 +67,6 @@ return Application::configure(basePath: dirname(__DIR__))
         $exceptions->shouldRenderJsonWhen(
             fn (Request $request) => $request->is('api/*') || $request->expectsJson(),
         );
-    })->create();
+    })
+    ->create()
+    ->useAppPath($billingPath.'/src');

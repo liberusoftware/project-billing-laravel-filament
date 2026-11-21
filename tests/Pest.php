@@ -18,12 +18,12 @@ require_once __DIR__.'/../modules/theme-support/tests/Helpers.php';
 
 pest()->extend(TestCase::class)
     ->use(RefreshDatabase::class)
-    ->in('Feature');
+    ->in('../modules/billing-*/tests/Feature');
 
-pest()->extend(TestCase::class)->in('Unit');
+pest()->extend(TestCase::class)->in('../modules/billing-*/tests/Unit');
 
 // The runtime-selection rule reads config('modules.*'), which needs a booted container.
-pest()->extend(TestCase::class)->in('Architecture');
+pest()->extend(TestCase::class)->in('../modules/billing-application/tests/Architecture');
 
 pest()->extend(ModulePackageTestCase::class)->in(
     '../modules/activity-comments/tests',
@@ -71,7 +71,6 @@ pest()->extend(SettingsFilamentFeatureTestCase::class)->in('../modules/settings-
 pest()->extend(TestCase::class)
     ->use(RefreshDatabase::class)
     ->in(
-        '../modules/billing-core/tests',
         '../modules/module-billing-*/tests',
         '../modules/module-liberu-*/tests',
         '../modules/liberu-*/tests',

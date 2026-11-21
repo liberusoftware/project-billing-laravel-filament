@@ -70,12 +70,12 @@ jobs:
       - name: Generate application key
         run: php artisan key:generate
 
-      # The threshold measures app/ alone — the host's five composition classes. Package
-      # coverage is each package's own gate, against its own phpunit.xml (§3.10).
+      # The configured release scope includes app/ and modules/*/src.
       - name: Run tests
-        run: XDEBUG_MODE=coverage php -d memory_limit=1G vendor/bin/pest --coverage-clover=coverage.xml --min=100
+        run: XDEBUG_MODE=coverage php -d memory_limit=1G vendor/bin/pest --coverage --coverage-clover=coverage.xml --min=100
 
       - name: Upload coverage to Codecov
+        if: ${{ always() && hashFiles('coverage.xml') != '' }}
         uses: codecov/codecov-action@303a32d7a59b442fa8d48b6a1cc6825c09c847a5 # v7.1.1
         with:
           use_oidc: true
