@@ -138,7 +138,7 @@
         "liberusoftware/module-liberu-revenue-and-care-orchestration-filament": "^1.0",
         "liberusoftware/module-liberu-revenue-and-care-orchestration-livewire": "^1.0",
         "liberusoftware/module-manager": "^1.9.2",
-        "liberusoftware/module-manager-filament": "^1.11.2",
+        "liberusoftware/module-manager-filament": "^1.12",
         "liberusoftware/notifications": "^1.0",
         "liberusoftware/observability": "^1.0",
         "liberusoftware/organizations-teams": "^1.10.3",

@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\Models\Module;
+use App\Modules\BaseModule;
 use App\Modules\BlogModule\BlogModule;
 use App\Modules\Events\ModuleDisabled;
 use App\Modules\Events\ModuleEnabled;
@@ -11,6 +12,7 @@ use App\Modules\Events\ModuleUninstalled;
 use App\Modules\ModuleManager;
 use App\Modules\ModuleServiceProvider;
 use App\Modules\Support\ExternalModuleLoader;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Storage;
 
@@ -169,4 +171,57 @@ it('checks dependencies before enabling or disabling extensions', function (): v
         ->toContain('Module is enabled but has unmet dependencies.')
         ->and(fn () => $manager->disable('BlogModule'))->toThrow(Exception::class, 'other modules depend')
         ->and(fn () => $manager->uninstall('BlogModule'))->toThrow(Exception::class, 'other modules depend');
+});
+
+it('reuses the configured extension cache until it is cleared', function (): void {
+    config()->set('modules.cache', true);
+    config()->set('modules.cache_key', 'billing.extension.compatibility');
+
+    $firstDiscovery = new ModuleManager();
+    expect($firstDiscovery->has('BlogModule'))->toBeTrue()
+        ->and($firstDiscovery->getAllModulesInfo())->toHaveKey('BlogModule');
+
+    config()->set('modules.path', base_path('app/Modules/missing'));
+    expect((new ModuleManager())->has('BlogModule'))->toBeTrue();
+
+    $firstDiscovery->clearCache();
+
+    expect((new ModuleManager())->has('BlogModule'))->toBeFalse();
+});
+
+it('keeps extension migration and asset commands on their original paths', function (): void {
+    $workspace = Storage::fake('compatibility-module-workspace');
+    $workspace->put('app/Modules/FixtureExtension/module.json', '{"name":"FixtureExtension"}');
+    $workspace->makeDirectory('app/Modules/FixtureExtension/database/migrations');
+    $workspace->put('public/modules/FixtureExtension/fixture.css', 'body {}');
+    $extension = new class($workspace->path('app/Modules/FixtureExtension')) extends BaseModule
+    {
+        public function __construct(private readonly string $extensionPath)
+        {
+            parent::__construct();
+        }
+
+        protected function getModulePath(): string
+        {
+            return $this->extensionPath;
+        }
+    };
+    $application = app();
+    $originalPath = base_path();
+    $originalAppPath = app_path();
+    $migrationOptions = ['--path' => 'app/Modules/FixtureExtension/database/migrations', '--force' => true];
+
+    Artisan::shouldReceive('call')->once()->with('migrate', $migrationOptions);
+    Artisan::shouldReceive('call')->once()->with('vendor:publish', ['--tag' => 'fixtureextension-assets', '--force' => true]);
+    Artisan::shouldReceive('call')->once()->with('migrate:rollback', $migrationOptions);
+
+    try {
+        $application->setBasePath($workspace->path(''));
+        $extension->install();
+        $extension->uninstall();
+
+        expect($workspace->exists('public/modules/FixtureExtension/fixture.css'))->toBeFalse();
+    } finally {
+        $application->setBasePath($originalPath)->useAppPath($originalAppPath);
+    }
 });

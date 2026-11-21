@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3b77e3131b5211afdae531a677c9c256",
+    "content-hash": "4b4fe16c03ac71527ef5aff41253df59",
     "packages": [
         {
             "name": "anourvalar/eloquent-serialize",
@@ -10999,11 +10999,11 @@
         },
         {
             "name": "liberusoftware/module-manager-filament",
-            "version": "1.11.3",
+            "version": "1.12.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/liberusoftware/module-module-manager-filament.git",
-                "reference": "7218a51254b2156c3c3af7f9b04f41d87e7f68de"
+                "reference": "121dfe6083aab29b9639169fb1fada47593b257a"
             },
             "require": {
                 "filament/filament": "^5.11.0",
@@ -11040,7 +11040,7 @@
                 "MIT"
             ],
             "description": "Filament page for enabling and disabling Liberu feature modules.",
-            "time": "2026-11-18T14:47:13+00:00"
+            "time": "2026-11-20T19:25:29+00:00"
         },
         {
             "name": "liberusoftware/notifications",
