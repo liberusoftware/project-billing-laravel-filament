@@ -15,8 +15,16 @@ final class UsageLivewireServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'module-billing-usage-livewire');
-        Livewire::component('module-billing-usage::dashboard', UsageDashboard::class);
-        Livewire::component('module-billing-usage::meter-list', MeterList::class);
-        Livewire::component('module-billing-usage::records', UsageRecords::class);
+        $components = [
+            'module-billing-usage::dashboard' => UsageDashboard::class,
+            'module-billing-usage::meter-list' => MeterList::class,
+            'module-billing-usage::records' => UsageRecords::class,
+        ];
+        foreach ($components as $name => $component) {
+            Livewire::component($name, $component);
+        }
+
+        // Livewire 4 resolves namespaced aliases before its explicit component map.
+        Livewire::resolveMissingComponent(static fn (string $name): ?string => $components[$name] ?? null);
     }
 }

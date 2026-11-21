@@ -135,8 +135,8 @@ XDEBUG_MODE=coverage php -d memory_limit=1G vendor/bin/pest --coverage --min=100
 
 Each independently released package owns its source scope and coverage gate.
 Focused integration runs measured 100% line coverage for Billing Core and its
-HTTP adapter. The focused extension suite measured 84.0% for the code remaining
-in `app/Modules`. The full release scope still has coverage gaps.
+HTTP adapter, the Usage host code and released Usage packages, and the code
+remaining in `app/Modules`. The full release scope still has coverage gaps.
 
 ### Publishing the component repositories
 

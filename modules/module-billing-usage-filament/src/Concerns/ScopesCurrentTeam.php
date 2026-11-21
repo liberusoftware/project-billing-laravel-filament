@@ -8,6 +8,9 @@ use Illuminate\Database\Eloquent\Builder;
 
 trait ScopesCurrentTeam
 {
+    // These module models belong to the current team through team_id.
+    protected static bool $isScopedToTenant = false;
+
     public static function getEloquentQuery(): Builder
     {
         $team = data_get(auth()->user(), 'current_team_id') ?? data_get(auth()->user(), 'currentTeam.id');

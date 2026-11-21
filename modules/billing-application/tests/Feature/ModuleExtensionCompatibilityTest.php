@@ -14,6 +14,8 @@ use App\Modules\ModuleServiceProvider;
 use App\Modules\Support\ExternalModuleLoader;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Storage;
 
 it('discovers the existing extension and dispatches its lifecycle events', function (): void {
@@ -213,15 +215,256 @@ it('keeps extension migration and asset commands on their original paths', funct
 
     Artisan::shouldReceive('call')->once()->with('migrate', $migrationOptions);
     Artisan::shouldReceive('call')->once()->with('vendor:publish', ['--tag' => 'fixtureextension-assets', '--force' => true]);
-    Artisan::shouldReceive('call')->once()->with('migrate:rollback', $migrationOptions);
+    Artisan::shouldReceive('call')->once()->with('migrate:rollback', $migrationOptions)
+        ->andThrow(new RuntimeException('Migration rollback unavailable'));
 
     try {
         $application->setBasePath($workspace->path(''));
         $extension->install();
+        Module::query()->create(['name' => 'FixtureExtension', 'enabled' => true]);
         $extension->uninstall();
 
         expect($workspace->exists('public/modules/FixtureExtension/fixture.css'))->toBeFalse();
     } finally {
         $application->setBasePath($originalPath)->useAppPath($originalAppPath);
     }
+});
+
+it('keeps already enabled extensions from rerunning their enable hooks', function (): void {
+    $manager = app(ModuleManager::class);
+    expect($manager->enable('BlogModule'))->toBeTrue();
+
+    $extension = $manager->get('BlogModule');
+    $extension->registerHook('before_enable', fn () => throw new LogicException('Enable hook reran'));
+    Event::fake([ModuleEnabled::class]);
+
+    $extension->enable();
+
+    Event::assertNotDispatched(ModuleEnabled::class);
+    expect($extension->isEnabled())->toBeTrue();
+});
+
+it('preserves the cause of a failed enable hook', function (): void {
+    $extension = new class() extends BlogModule
+    {
+        protected function loadModuleInfo(): void
+        {
+            $this->name = 'FailingExtension';
+        }
+
+        protected function onEnable(): void
+        {
+            throw new LogicException('Extension setup failed');
+        }
+    };
+    Event::fake([ModuleEnabled::class]);
+
+    expect(fn () => $extension->enable())->toThrow(
+        fn (RuntimeException $exception) => expect($exception->getPrevious())->toBeInstanceOf(LogicException::class),
+    );
+    Event::assertNotDispatched(ModuleEnabled::class);
+});
+
+it('continues uninstall when extension cleanup or listeners throw', function (): void {
+    $extension = new class() extends BlogModule
+    {
+        protected function loadModuleInfo(): void
+        {
+            $this->name = 'FailingCleanup';
+            $this->config = ['enabled' => true];
+        }
+
+        protected function onDisable(): void
+        {
+            throw new LogicException('Extension cleanup failed');
+        }
+    };
+    $completed = false;
+    $extension->registerHook('after_uninstall', function () use (&$completed): void {
+        $completed = true;
+    });
+    foreach ([ModuleDisabled::class, ModuleUninstalled::class] as $event) {
+        Event::listen($event, fn () => throw new LogicException('Listener failed'));
+    }
+
+    $extension->uninstall();
+
+    expect($completed)->toBeTrue();
+});
+
+it('finishes installation when asset publication or lifecycle listeners fail', function (): void {
+    $extension = new BlogModule();
+    Artisan::shouldReceive('call')->once()->with('vendor:publish', [
+        '--tag' => 'blogmodule-assets',
+        '--force' => true,
+    ])->andThrow(new RuntimeException('Assets are unavailable'));
+
+    $events = [];
+    foreach ([ModuleEnabled::class, ModuleInstalled::class] as $event) {
+        Event::listen($event, function (object $message) use (&$events): never {
+            $events[] = $message::class;
+            throw new LogicException('Listener failed');
+        });
+    }
+
+    $extension->install();
+
+    expect($events)->toBe([ModuleEnabled::class, ModuleInstalled::class]);
+});
+
+it('rejects an extension migration directory outside its expected location', function (): void {
+    $workspace = Storage::fake('compatibility-invalid-location');
+    $workspace->put('module.json', '{"name":"MisplacedExtension"}');
+    $workspace->makeDirectory('database/migrations');
+    $extension = new class($workspace->path('')) extends BaseModule
+    {
+        public function __construct(private readonly string $extensionPath)
+        {
+            parent::__construct();
+        }
+
+        protected function getModulePath(): string
+        {
+            return $this->extensionPath;
+        }
+    };
+
+    Artisan::shouldReceive('call')->never();
+
+    expect(fn () => $extension->install())->toThrow(RuntimeException::class, 'Invalid module path');
+});
+
+it('registers routes and migrations from the source-layout extension', function (): void {
+    $extensions = Storage::fake('compatibility-source-extension');
+    $extensions->put('SourceExtension/src/routes/web.php', <<<'ROUTE'
+        <?php
+
+        Illuminate\Support\Facades\Route::get('/extension-compatibility', fn () => 'Extension route')
+            ->name('extension.compatibility');
+        ROUTE);
+    $extensions->makeDirectory('SourceExtension/src/database/migrations');
+    foreach (['Resources', 'Pages', 'Widgets'] as $componentDirectory) {
+        $extensions->makeDirectory('SourceExtension/src/Filament/'.$componentDirectory);
+    }
+    config()->set('modules.path', $extensions->path(''));
+
+    app()->register(ModuleServiceProvider::class);
+
+    $this->get('/extension-compatibility')->assertOk()->assertSee('Extension route');
+    expect(app('migrator')->paths())->toContain($extensions->path('SourceExtension/src/database/migrations'));
+});
+
+it('discovers external extensions when the primary extension directory is unavailable', function (): void {
+    config()->set('modules.path', base_path('app/Modules/missing'));
+    config()->set('modules.external_paths', [base_path('app/Modules')]);
+
+    $manager = new ModuleManager();
+
+    expect($manager->all())->toHaveCount(1)
+        ->and($manager->get('BlogModule'))->toBeInstanceOf(BlogModule::class)
+        ->and($manager->install('UnknownExtension'))->toBeFalse()
+        ->and($manager->uninstall('UnknownExtension'))->toBeFalse()
+        ->and($manager->getModuleInfo('UnknownExtension'))->toBe([]);
+});
+
+it('still runs extension hooks while the module state table is unavailable', function (): void {
+    $manager = app(ModuleManager::class);
+    $extension = $manager->get('BlogModule');
+    $events = [ModuleEnabled::class, ModuleInstalled::class, ModuleUninstalled::class];
+    Event::fake($events);
+    Schema::drop('modules');
+    app()->register(ModuleServiceProvider::class);
+
+    expect($extension->isEnabled())->toBeFalse()
+        ->and($manager->enable('BlogModule'))->toBeTrue()
+        ->and($manager->disable('BlogModule'))->toBeTrue()
+        ->and($manager->install('BlogModule'))->toBeTrue()
+        ->and($manager->uninstall('BlogModule'))->toBeTrue();
+
+    Event::assertDispatchedTimes(ModuleEnabled::class, 2);
+    Event::assertDispatchedTimes(ModuleInstalled::class, 1);
+    Event::assertDispatchedTimes(ModuleUninstalled::class, 1);
+});
+
+it('rejects invalid extension names before invoking migration commands', function (): void {
+    $extension = new class() extends BaseModule
+    {
+        protected function loadModuleInfo(): void
+        {
+            $this->name = 'Invalid Module';
+        }
+    };
+    Artisan::shouldReceive('call')->never();
+
+    expect(fn () => $extension->install())->toThrow(InvalidArgumentException::class, 'Invalid module name: Invalid Module');
+    $extension->uninstall();
+});
+
+it('registers providers declared in a deployed source-layout extension', function (): void {
+    $workspace = Storage::fake('compatibility-deployed-extension');
+    $workspace->put('app-modules/DeployedExtension/src/DeployedExtension.php', <<<'MODULE'
+        <?php
+
+        namespace Modules\DeployedExtension;
+
+        class DeployedExtension extends \App\Modules\BaseModule {}
+        MODULE);
+    $workspace->put('app-modules/DeployedExtension/src/module.json', '{"name":"DeployedExtension"}');
+    $workspace->put('app-modules/DeployedExtension/src/Providers/DeployedExtensionServiceProvider.php', <<<'PROVIDER'
+        <?php
+
+        namespace Modules\DeployedExtension\Providers;
+
+        class DeployedExtensionServiceProvider extends \Illuminate\Support\ServiceProvider
+        {
+            public function register(): void
+            {
+                $this->app->instance('deployed-extension.registration', 'ready');
+            }
+        }
+        PROVIDER);
+    $workspace->put('app-modules/UnavailableExtension/UnavailableExtension.php', <<<'MODULE'
+        <?php
+
+        namespace Modules\UnavailableExtension;
+
+        class UnavailableExtension extends \App\Modules\BaseModule
+        {
+            public function __construct()
+            {
+                throw new \RuntimeException('Environment unavailable');
+            }
+        }
+        MODULE);
+    require $workspace->path('app-modules/UnavailableExtension/UnavailableExtension.php');
+    require $workspace->path('app-modules/DeployedExtension/src/DeployedExtension.php');
+    require $workspace->path('app-modules/DeployedExtension/src/Providers/DeployedExtensionServiceProvider.php');
+
+    $application = app();
+    $originalPath = base_path();
+    $originalAppPath = app_path();
+    config()->set('modules.external_paths', [$originalPath.'/app/Modules']);
+
+    try {
+        $application->setBasePath($workspace->path(''));
+        $manager = new ModuleManager();
+        $application->register(ModuleServiceProvider::class);
+
+        expect($manager->has('DeployedExtension'))->toBeTrue()
+            ->and($manager->has('UnavailableExtension'))->toBeFalse()
+            ->and($application->make('deployed-extension.registration'))->toBe('ready');
+    } finally {
+        $application->setBasePath($originalPath)->useAppPath($originalAppPath);
+    }
+});
+
+it('allows the application to boot when an extension directory cannot be read', function (): void {
+    $directory = base_path('app/Modules/unavailable');
+    config()->set('modules.path', $directory);
+    File::partialMock()->shouldReceive('exists')->with($directory)->twice()
+        ->andThrow(new RuntimeException('Extension filesystem unavailable'));
+
+    app()->register(ModuleServiceProvider::class);
+
+    expect(app()->getProvider(ModuleServiceProvider::class))->not->toBeNull();
 });
