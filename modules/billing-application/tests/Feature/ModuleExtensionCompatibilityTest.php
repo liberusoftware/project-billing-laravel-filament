@@ -104,3 +104,69 @@ it('registers extension assets, migration paths and enabled views', function ():
         ->and(ModuleServiceProvider::pathsToPublish(ModuleServiceProvider::class, 'enabled_extension-assets'))
         ->toHaveKey($extensions->path('EnabledExtension/resources/assets'));
 });
+
+it('discovers extensions from installed Composer package metadata when enabled', function (): void {
+    $packages = Storage::fake('compatibility-composer');
+    $application = app();
+    $originalPath = base_path();
+    $originalAppPath = app_path();
+    config()->set('modules.load_composer_modules', true);
+
+    $packages->makeDirectory('vendor/fixtures/BlogModule');
+    $packages->makeDirectory('vendor/fixtures/NotAnExtension');
+    $packages->put('vendor/composer/installed.json', json_encode([
+        'packages' => [
+            ['name' => 'fixtures/regular-package'],
+            ['name' => 'fixtures/missing-package', 'extra' => ['laravel-module' => true]],
+            ['name' => 'fixtures/NotAnExtension', 'extra' => ['laravel-module' => true]],
+            [
+                'name' => 'fixtures/BlogModule',
+                'extra' => ['laravel-module' => true],
+                'autoload' => ['psr-4' => ['App\\Modules\\BlogModule\\' => 'src/']],
+            ],
+        ],
+    ], JSON_THROW_ON_ERROR));
+
+    try {
+        $application->setBasePath($packages->path(''));
+        $extensions = (new ExternalModuleLoader())->load();
+
+        expect($extensions)->toHaveCount(1)
+            ->and($extensions[0])->toBeInstanceOf(BlogModule::class);
+        $packages->delete('vendor/composer/installed.json');
+        expect((new ExternalModuleLoader())->load())->toBe([]);
+    } finally {
+        $application->setBasePath($originalPath)->useAppPath($originalAppPath);
+    }
+});
+
+it('checks dependencies before enabling or disabling extensions', function (): void {
+    $manager = app(ModuleManager::class);
+    $dependent = new class() extends BlogModule
+    {
+        protected function loadModuleInfo(): void
+        {
+            $this->name = 'DependentExtension';
+            $this->version = '1.0.0';
+            $this->description = 'Depends on the Blog extension.';
+            $this->dependencies = ['BlogModule', 'MissingExtension'];
+        }
+    };
+    $manager->register($dependent);
+
+    expect($manager->checkHealth('UnknownExtension')['healthy'])->toBeFalse()
+        ->and($manager->checkAllHealth()['DependentExtension'])->toMatchArray([
+            'healthy' => false,
+            'errors' => ['Missing dependency: MissingExtension'],
+            'warnings' => ['Dependency disabled: BlogModule'],
+        ])
+        ->and(fn () => $manager->enable('DependentExtension'))->toThrow(Exception::class, 'unmet dependencies')
+        ->and(fn () => $manager->install('DependentExtension'))->toThrow(Exception::class, 'unmet dependencies');
+
+    Module::query()->create(['name' => 'DependentExtension', 'enabled' => true]);
+
+    expect($manager->checkHealth('DependentExtension')['errors'])
+        ->toContain('Module is enabled but has unmet dependencies.')
+        ->and(fn () => $manager->disable('BlogModule'))->toThrow(Exception::class, 'other modules depend')
+        ->and(fn () => $manager->uninstall('BlogModule'))->toThrow(Exception::class, 'other modules depend');
+});
