@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Models\CannedResponse;
 use App\Models\Ticket;
 use App\Services\CannedResponseService;
 use Illuminate\Http\RedirectResponse;
@@ -25,14 +26,15 @@ class TicketResponseController extends Controller
 
         if (isset($validated['canned_response_id'])) {
             $this->authorize('update', $ticket);
-            $response = $responses->getAll($ticket->user?->currentTeam?->getKey())->find($validated['canned_response_id']);
-            if ($response === null) {
+            $owner = $ticket->user;
+            $response = $responses->getAll($owner?->currentTeam?->getKey())->find($validated['canned_response_id']);
+            if (! $response instanceof CannedResponse) {
                 throw ValidationException::withMessages(['canned_response_id' => 'The selected canned response is unavailable.']);
             }
 
             $message ??= $responses->use($response, [
-                'client_name' => $ticket->user?->name ?? '',
-                'client_email' => $ticket->user?->email ?? '',
+                'client_name' => (string) $owner?->getAttribute('name'),
+                'client_email' => (string) $owner?->getAttribute('email'),
                 'ticket_id' => (string) $ticket->getKey(),
                 'ticket_subject' => $ticket->title,
             ]);
