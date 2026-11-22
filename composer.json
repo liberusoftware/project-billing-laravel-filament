@@ -33,7 +33,7 @@
         "liberusoftware/analytics-google": "^1.0",
         "liberusoftware/analytics-meta": "^1.0",
         "liberusoftware/api-access": "^1.0",
-        "liberusoftware/application": "^1.0",
+        "liberusoftware/application": "^2.0",
         "liberusoftware/audit": "^1.0",
         "liberusoftware/billing-cpanel": "^0.1.0",
         "liberusoftware/billing-directadmin": "^0.1.0",
@@ -396,6 +396,11 @@
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
+    "homepage": "https://github.com/liberusoftware/project-billing-laravel-filament",
+    "support": {
+        "issues": "https://github.com/liberusoftware/project-billing-laravel-filament/issues",
+        "source": "https://github.com/liberusoftware/project-billing-laravel-filament"
+    },
     "repositories": [
         {
             "type": "git",
