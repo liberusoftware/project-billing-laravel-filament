@@ -20,6 +20,7 @@ Host integrations may still use the original application models and tables.
 | `billing-communications` | VoIP billing, call rates, email and SMS |
 | `billing-customer-portal` | Client records, portal services and storefront |
 | `billing-domains` | Availability, renewals, registrars and DNS |
+| `billing-extensions` | Application extension loader, lifecycle hooks, extension commands and `BlogModule` |
 | `billing-files` | Application files, folders and shares |
 | `billing-filament` | Panel registration, discovery and shared UI |
 | `billing-hosting` | Hosting fulfillment and control-panel integration |
@@ -46,12 +47,13 @@ Capabilities place their application classes in `src/` and accompanying migratio
 factories, seeders, views and tests under `database/`, `resources/` and `tests/` as
 needed. Capability-specific Filament classes live with their owners. Panel providers
 discover those classes and compose the published plugins. The existing extension
-loader remains available in `app/Modules`.
+loader and `BlogModule` live in `modules/billing-extensions`, leaving `app/` free
+of application logic.
 
 The Composer package `liberusoftware/module-manager` loads the registered Billing
 packages. Its `php artisan module:list` and `module:validate` commands inspect
-that registry. The separate `php artisan module …` commands still use
-`app/Modules/` to manage the existing extension format, including `BlogModule`.
+that registry. The separate `php artisan module …` commands use
+`modules/billing-extensions/` to manage the existing extension format, including `BlogModule`.
 
 Run Artisan, Vite and Pest from the root.
 

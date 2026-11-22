@@ -114,6 +114,77 @@ class ServiceAutomationServiceTest extends TestCase
         $this->assertNotNull($subscription->fresh()->ends_at);
     }
 
+    public function test_unsuspend_service_returns_false_when_no_active_suspension(): void
+    {
+        $customer = Customer::factory()->create();
+        $productService = Products_Service::factory()->create();
+
+        $subscription = Subscription::create([
+            'customer_id' => $customer->id,
+            'product_service_id' => $productService->id,
+            'start_date' => now()->subMonth(),
+            'end_date' => now()->addMonth(),
+            'status' => 'active',
+            'renewal_period' => 'monthly',
+        ]);
+
+        $this->assertFalse($this->automationService->unsuspendService($subscription));
+    }
+
+    public function test_auto_unsuspend_on_payment_handles_all_branches(): void
+    {
+        $customer = Customer::factory()->create();
+        $productService = Products_Service::factory()->create();
+
+        $subscription = Subscription::create([
+            'customer_id' => $customer->id,
+            'product_service_id' => $productService->id,
+            'start_date' => now()->subMonth(),
+            'end_date' => now()->addMonth(),
+            'status' => 'suspended',
+            'renewal_period' => 'monthly',
+        ]);
+
+        $unpaidInvoice = Invoice::create([
+            'customer_id' => $customer->id,
+            'subscription_id' => $subscription->id,
+            'invoice_number' => 'INV-UNPAID',
+            'issue_date' => now()->subDays(5),
+            'due_date' => now()->subDay(),
+            'total_amount' => 50,
+            'status' => 'pending',
+        ]);
+
+        $this->assertFalse($this->automationService->autoUnsuspendOnPayment($unpaidInvoice));
+
+        $paidInvoice = Invoice::create([
+            'customer_id' => $customer->id,
+            'subscription_id' => $subscription->id,
+            'invoice_number' => 'INV-PAID-MANUAL',
+            'issue_date' => now()->subDays(5),
+            'due_date' => now()->subDay(),
+            'total_amount' => 50,
+            'status' => 'paid',
+        ]);
+
+        // Paid invoice with manual suspension should not auto-unsuspend
+        $manualSuspension = ServiceSuspension::create([
+            'subscription_id' => $subscription->id,
+            'reason' => 'manual',
+            'suspended_at' => now()->subDays(2),
+            'is_active' => true,
+        ]);
+
+        $this->assertFalse($this->automationService->autoUnsuspendOnPayment($paidInvoice));
+
+        // Overdue payment suspension should auto-unsuspend
+        $manualSuspension->update(['reason' => 'overdue_payment']);
+        $paidInvoice->unsetRelation('subscription');
+
+        $this->assertTrue($this->automationService->autoUnsuspendOnPayment($paidInvoice));
+        $this->assertSame('active', $subscription->fresh()->status);
+    }
+
     protected function tearDown(): void
     {
         Mockery::close();

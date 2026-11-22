@@ -84,4 +84,75 @@ class IpamServiceTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
         $service->allocate($pool, $foreignAsset);
     }
+
+    public function test_gateway_outside_pool_is_rejected_and_existing_ip_is_skipped(): void
+    {
+        $team = Team::factory()->create();
+        $asset = InfrastructureAsset::factory()->create(['team_id' => $team->id]);
+        $service = app(IpamService::class);
+
+        try {
+            $service->createPool($team->id, [
+                'name' => 'Bad Gateway',
+                'cidr' => '192.0.2.0/30',
+                'gateway' => '192.0.2.10',
+            ]);
+            $this->fail('Expected InvalidArgumentException for out-of-range gateway.');
+        } catch (InvalidArgumentException $e) {
+            $this->assertStringContainsString('gateway', $e->getMessage());
+        }
+
+        $pool = $service->createPool($team->id, [
+            'name' => 'Skip Test',
+            'cidr' => '192.0.2.0/29',
+            'infrastructure_asset_id' => $asset->id,
+        ]);
+
+        // Pre-occupy the first usable IP so allocate() skips it
+        \App\Models\IpAddress::create([
+            'team_id' => $team->id,
+            'ip_pool_id' => $pool->id,
+            'address' => '192.0.2.1',
+            'status' => 'assigned',
+        ]);
+
+        $allocated = $service->allocate($pool, $asset);
+        $this->assertSame('192.0.2.2', $allocated->address);
+        $this->assertTrue($allocated->pool->is($pool));
+        $this->assertTrue($allocated->assignable->is($asset));
+        $this->assertTrue($pool->infrastructureAsset->is($asset));
+    }
+
+    public function test_ip_network_edge_cases_and_validation(): void
+    {
+        $this->assertSame('2001:db8::1', IpNetwork::parse('2001:db8::1/128')['first']);
+        $this->assertSame('192.0.3.0', IpNetwork::increment('192.0.2.255'));
+        $this->assertNull(IpNetwork::increment('255.255.255.255'));
+
+        foreach ([
+            ['192.0.2.1', 'CIDR notation'],
+            ['192.0.2.1/24/8', 'CIDR notation'],
+            ['not-an-ip/24', 'invalid IP address'],
+            ['192.0.2.1/abc', 'invalid IP address'],
+            ['192.0.2.1/33', 'between 0 and 32'],
+            ['2001:db8::1/129', 'between 0 and 128'],
+        ] as [$cidr, $expected]) {
+            try {
+                IpNetwork::parse($cidr);
+                $this->fail("Expected InvalidArgumentException for {$cidr}");
+            } catch (InvalidArgumentException $e) {
+                $this->assertStringContainsString($expected, $e->getMessage());
+            }
+        }
+
+        try {
+            IpNetwork::compare('192.0.2.1', '2001:db8::1');
+            $this->fail('Expected InvalidArgumentException for mixed address families.');
+        } catch (InvalidArgumentException $e) {
+            $this->assertStringContainsString('different families', $e->getMessage());
+        }
+
+        $this->expectException(InvalidArgumentException::class);
+        IpNetwork::compare('invalid-ip', '192.0.2.1');
+    }
 }

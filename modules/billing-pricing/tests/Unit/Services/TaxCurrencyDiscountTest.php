@@ -264,6 +264,24 @@ class TaxCurrencyDiscountTest extends TestCase
         $this->assertEquals(1, $discount->fresh()->used_count);
     }
 
+    public function test_discount_invoices_relationship(): void
+    {
+        $discount = Discount::create([
+            'code' => 'REL1',
+            'name' => 'Relationship test',
+            'type' => 'percentage',
+            'value' => 10.00,
+            'start_date' => now()->subDay(),
+            'end_date' => now()->addDay(),
+            'is_active' => true,
+        ]);
+
+        $relation = $discount->invoices();
+
+        $this->assertInstanceOf(\Illuminate\Database\Eloquent\Relations\HasMany::class, $relation);
+        $this->assertSame(Invoice::class, $relation->getRelated()::class);
+    }
+
     /**
      * BUG DOC: applyDiscount overwrites total_amount with (subtotal - discount),
      * ignoring tax_amount. The invoice's own final_total accessor includes tax,

@@ -65,6 +65,71 @@ class InfrastructureApiTest extends TestCase
         ])->assertUnprocessable();
     }
 
+    public function test_tenant_can_list_update_assets_pools_addresses_and_allocate_all_target_types(): void
+    {
+        [, $team] = $this->operator();
+
+        $parent = InfrastructureAsset::factory()->create(['team_id' => $team->id]);
+        $asset = InfrastructureAsset::factory()->create(['team_id' => $team->id, 'parent_id' => $parent->id]);
+
+        $this->getJson('/api/infrastructure/assets')
+            ->assertOk()
+            ->assertJsonCount(2, 'data');
+
+        $this->patchJson("/api/infrastructure/assets/{$asset->id}", [
+            'name' => 'Renamed Router',
+            'status' => 'maintenance',
+        ])->assertOk()
+            ->assertJsonPath('name', 'Renamed Router')
+            ->assertJsonPath('status', 'maintenance');
+
+        $pool = $this->postJson('/api/infrastructure/ip-pools', [
+            'name' => 'Multi Target Pool',
+            'cidr' => '10.20.0.0/28',
+            'infrastructure_asset_id' => $asset->id,
+        ])->assertCreated()->json();
+
+        $this->getJson('/api/infrastructure/ip-pools')
+            ->assertOk()
+            ->assertJsonCount(1, 'data');
+
+        $customer = \App\Models\Customer::factory()->create(['team_id' => $team->id]);
+        $subscription = \App\Models\Subscription::factory()->create([
+            'team_id' => $team->id,
+            'customer_id' => $customer->id,
+        ]);
+        $ispService = \App\Models\IspService::factory()->create([
+            'team_id' => $team->id,
+            'customer_id' => $customer->id,
+        ]);
+        $voipAccount = \App\Models\VoipAccount::factory()->create([
+            'team_id' => $team->id,
+            'customer_id' => $customer->id,
+        ]);
+
+        foreach ([
+            ['customer', $customer->id],
+            ['subscription', $subscription->id],
+            ['isp_service', $ispService->id],
+            ['voip_account', $voipAccount->id],
+        ] as [$type, $id]) {
+            $this->postJson("/api/infrastructure/ip-pools/{$pool['id']}/allocate", [
+                'target_type' => $type,
+                'target_id' => $id,
+            ])->assertCreated();
+        }
+
+        $this->getJson("/api/infrastructure/ip-pools/{$pool['id']}/addresses")
+            ->assertOk()
+            ->assertJsonCount(4, 'data');
+
+        // Exercise default match arm in assignmentTarget
+        $controller = app(\App\Http\Controllers\Api\InfrastructureController::class);
+        $method = new \ReflectionMethod($controller, 'assignmentTarget');
+        $this->expectException(\InvalidArgumentException::class);
+        $method->invoke($controller, request(), 'unsupported_type', 1);
+    }
+
     /** @return array{User, Team} */
     private function operator(): array
     {

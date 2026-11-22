@@ -86,6 +86,51 @@ class IspServiceManagerTest extends TestCase
         $this->assertSame('highly-secret-value', $service->radius_secret);
         $this->assertArrayNotHasKey('radius_secret', $service->toArray());
     }
+
+    public function test_synchronize_reset_usage_terminated_guards_and_model_relationships(): void
+    {
+        $team = \App\Models\Team::factory()->create();
+        $parentAsset = \App\Models\InfrastructureAsset::factory()->create(['team_id' => $team->id]);
+        $childAsset = \App\Models\InfrastructureAsset::factory()->create([
+            'team_id' => $team->id,
+            'parent_id' => $parentAsset->id,
+        ]);
+        $this->assertTrue($childAsset->parent->is($parentAsset));
+        $this->assertCount(1, $parentAsset->children);
+        $this->assertCount(0, $parentAsset->ipPools);
+
+        $subscription = \App\Models\Subscription::factory()->create(['team_id' => $team->id]);
+        $service = IspService::factory()->create([
+            'team_id' => $team->id,
+            'subscription_id' => $subscription->id,
+            'current_period_usage_bytes' => 5000,
+        ]);
+        $this->assertTrue($service->subscription->is($subscription));
+
+        $session = \App\Models\RadiusSession::factory()->create(['isp_service_id' => $service->id]);
+        $this->assertTrue($session->ispService->is($service));
+
+        $radius = new FakeRadiusClient();
+        $manager = app(IspServiceManager::class);
+
+        $synced = $manager->synchronize($service, $radius);
+        $this->assertNotNull($synced->radius_synced_at);
+        $this->assertSame([$service->id], $radius->synchronized);
+
+        $reset = $manager->resetUsagePeriod($service);
+        $this->assertSame(0, $reset->current_period_usage_bytes);
+
+        $terminated = IspService::factory()->create(['status' => IspServiceStatus::Terminated]);
+        try {
+            $manager->activate($terminated, $radius);
+            $this->fail('Expected InvalidArgumentException on activate of terminated service.');
+        } catch (\InvalidArgumentException $e) {
+            $this->assertStringContainsString('terminated', $e->getMessage());
+        }
+
+        $this->expectException(\InvalidArgumentException::class);
+        $manager->suspend($terminated, $radius, 'abuse');
+    }
 }
 
 final class FakeRadiusClient implements RadiusClient

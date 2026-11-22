@@ -95,4 +95,22 @@ class StorefrontOrderTest extends TestCase
         $this->assertSame(0, Order::count());
         $this->assertSame(0, Subscription::count());
     }
+
+    public function test_mounts_default_active_template_and_handles_missing_customer(): void
+    {
+        $user = User::factory()->create();
+        $plan = $this->plan();
+        $template = OrderFormTemplate::factory()->offering([$plan->id])->create(['is_active' => true]);
+
+        $this->actingInClientPanel($user);
+
+        Livewire::test(OrderForm::class)
+            ->assertSet('template.id', $template->id)
+            ->set('selectedPlan', $plan->id)
+            ->set('billingCycle', 'monthly')
+            ->call('placeOrder')
+            ->assertNotified('No customer account is linked to your login.');
+
+        $this->assertSame(0, Order::count());
+    }
 }

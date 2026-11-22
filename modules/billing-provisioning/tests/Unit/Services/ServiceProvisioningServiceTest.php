@@ -296,4 +296,99 @@ class ServiceProvisioningServiceTest extends TestCase
 
         $this->provisioningService->manageService($subscription, 'suspend');
     }
+
+    public function test_provision_hosting_marks_failed_when_control_panel_returns_false_or_throws(): void
+    {
+        $customer = Customer::factory()->create();
+        $product = Products_Service::factory()->create(['type' => 'hosting', 'name' => 'starter']);
+        $subscription = Subscription::factory()->create([
+            'customer_id' => $customer->id,
+            'product_service_id' => $product->id,
+            'domain' => 'fail.example.test',
+        ]);
+
+        $this->hostingService
+            ->shouldReceive('provisionAccount')
+            ->once()
+            ->andReturn(false);
+
+        $failedAccount = $this->provisioningService->provisionService($subscription);
+        $this->assertInstanceOf(HostingAccount::class, $failedAccount);
+        $this->assertSame('failed', $failedAccount->fresh()->status);
+
+        $this->hostingService
+            ->shouldReceive('provisionAccount')
+            ->once()
+            ->andThrow(new \Exception('Panel timeout'));
+
+        try {
+            $this->provisioningService->provisionService($subscription);
+            $this->fail('Expected exception to be rethrown.');
+        } catch (\Exception $e) {
+            $this->assertSame('Panel timeout', $e->getMessage());
+        }
+
+        $this->assertSame(2, HostingAccount::where('status', 'failed')->count());
+    }
+
+    public function test_provision_and_manage_domain_and_email_services(): void
+    {
+        $domainProduct = Products_Service::factory()->create(['type' => 'domain']);
+        $domainSubscription = Subscription::factory()->create(['product_service_id' => $domainProduct->id]);
+
+        $this->assertSame([
+            'status' => 'success',
+            'message' => 'Domain provisioned successfully',
+        ], $this->provisioningService->provisionService($domainSubscription));
+
+        $this->assertSame([
+            'status' => 'success',
+            'message' => 'Domain renew successfully',
+        ], $this->provisioningService->manageService($domainSubscription, 'renew'));
+
+        $emailProduct = Products_Service::factory()->create(['type' => 'email']);
+        $emailSubscription = Subscription::factory()->create(['product_service_id' => $emailProduct->id]);
+
+        $this->assertSame([
+            'status' => 'success',
+            'message' => 'Email service provisioned successfully',
+        ], $this->provisioningService->provisionService($emailSubscription));
+
+        $this->assertSame([
+            'status' => 'success',
+            'message' => 'Email service suspend successfully',
+        ], $this->provisioningService->manageService($emailSubscription, 'suspend'));
+    }
+
+    public function test_manage_service_and_hosting_error_branches(): void
+    {
+        $unknownProduct = Products_Service::factory()->create(['type' => 'unknown']);
+        $unknownSubscription = Subscription::factory()->create(['product_service_id' => $unknownProduct->id]);
+
+        try {
+            $this->provisioningService->manageService($unknownSubscription, 'suspend');
+            $this->fail('Expected Unsupported service type exception.');
+        } catch (\Exception $e) {
+            $this->assertSame('Unsupported service type', $e->getMessage());
+        }
+
+        $hostingProduct = Products_Service::factory()->create(['type' => 'hosting']);
+        $hostingSubscription = Subscription::factory()->create(['product_service_id' => $hostingProduct->id]);
+        HostingAccount::factory()->create(['subscription_id' => $hostingSubscription->id]);
+
+        foreach ([
+            ['upgrade', 'New product required for upgrade'],
+            ['downgrade', 'New product required for downgrade'],
+            ['add_addon', 'Addon name required'],
+            ['remove_addon', 'Addon name required'],
+            ['unknown_action', 'Unsupported action for hosting account'],
+        ] as [$action, $expectedMessage]) {
+            try {
+                $this->provisioningService->manageService($hostingSubscription, $action);
+                $this->fail("Expected exception for action {$action}.");
+            } catch (\Exception $e) {
+                $this->assertSame($expectedMessage, $e->getMessage());
+            }
+        }
+    }
 }

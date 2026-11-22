@@ -10,7 +10,6 @@ parameters:
     # consumer actually installs. Each package carries its own measured level in
     # its tests.yml, as the reusable workflow's phpstan-level input.
     paths:
-        - app/
         - modules/billing-application/src/
         - modules/billing-audit/src/
         - modules/billing-catalog/src/
@@ -18,6 +17,7 @@ parameters:
         - modules/billing-communications/src/
         - modules/billing-customer-portal/src/
         - modules/billing-domains/src/
+        - modules/billing-extensions/src/
         - modules/billing-filament/src/
         - modules/billing-files/src/
         - modules/billing-hosting/src/

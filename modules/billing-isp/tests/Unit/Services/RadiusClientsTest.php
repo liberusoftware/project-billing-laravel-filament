@@ -77,4 +77,35 @@ class RadiusClientsTest extends TestCase
             && str_ends_with($request->url(), '/sessions/disconnect')
             && $request['username'] === 'subscriber');
     }
+
+    public function test_unconfigured_or_failing_radius_client_throws_runtime_exception(): void
+    {
+        $service = IspService::factory()->create([
+            'radius_platform' => RadiusPlatform::FreeRadius,
+            'radius_username' => 'subscriber',
+        ]);
+        $client = app(RadiusClientFactory::class)->make(RadiusPlatform::FreeRadius);
+
+        config([
+            'radius.platforms.freeradius.url' => '',
+            'radius.platforms.freeradius.token' => '',
+        ]);
+
+        try {
+            $client->disconnectUser($service);
+            $this->fail('Expected RuntimeException when RADIUS is not configured.');
+        } catch (\RuntimeException $e) {
+            $this->assertStringContainsString('RADIUS operation failed', $e->getMessage());
+        }
+
+        config([
+            'radius.platforms.freeradius.url' => 'https://radius.example.test',
+            'radius.platforms.freeradius.token' => 'trusted-token',
+        ]);
+        Http::fake(['*' => Http::response(['error' => 'down'], 500)]);
+
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('freeradius RADIUS operation failed.');
+        $client->suspendUser($service);
+    }
 }

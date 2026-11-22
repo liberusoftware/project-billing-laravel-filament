@@ -3,6 +3,9 @@
 use App\Console\Commands\DispatchHostingFulfillments;
 use App\Console\Commands\EscalateTickets;
 use App\Console\Commands\ImportUsage;
+use App\Console\Commands\MakeModuleCommand;
+use App\Console\Commands\ModuleAutoloadCommand;
+use App\Console\Commands\ModuleCommand;
 use App\Console\Commands\ProcessDomainRenewals;
 use App\Console\Commands\ProcessInvoiceReminders;
 use App\Console\Commands\ProcessSubscriptionChanges;
@@ -41,6 +44,9 @@ return Application::configure(basePath: $basePath)
         DispatchHostingFulfillments::class,
         EscalateTickets::class,
         ImportUsage::class,
+        MakeModuleCommand::class,
+        ModuleAutoloadCommand::class,
+        ModuleCommand::class,
         ProcessDomainRenewals::class,
         ProcessInvoiceReminders::class,
         ProcessSubscriptionChanges::class,

@@ -1,6 +1,8 @@
 <?php
 
 use Liberu\Foundation\IdentityFilament\Resources\UserResource;
+use Liberu\Foundation\IdentityFilament\Resources\UserResource\Pages\CreateUser;
+use Liberu\Foundation\IdentityFilament\Resources\UserResource\Pages\EditUser;
 use Liberu\Foundation\IdentityFilament\Resources\UserResource\Pages\ListUsers;
 use Liberu\Foundation\IdentityFilament\Tests\Fixtures\RoledUser;
 use Livewire\Livewire;
@@ -27,4 +29,18 @@ it('is not tenant-scoped', function () {
     // team() relation — owned and member teams both, no single belongsTo. Without
     // the override the tenant panel 500s on this resource.
     expect(UserResource::isScopedToTenant())->toBeFalse();
+});
+
+it('renders the create and edit user pages with delete header action', function () {
+    $actor = RoledUser::factory()->create(['name' => 'Ada Lovelace', 'email' => 'ada@example.test']);
+    $target = RoledUser::factory()->create(['name' => 'Grace Hopper', 'email' => 'grace@example.test']);
+
+    $this->actingAs($actor);
+
+    Livewire::test(CreateUser::class)
+        ->assertOk();
+
+    Livewire::test(EditUser::class, ['record' => $target->getKey()])
+        ->assertOk()
+        ->assertActionExists('delete');
 });

@@ -102,6 +102,48 @@ class IspServiceApiTest extends TestCase
         $this->assertSame(300, $service->refresh()->current_period_usage_bytes);
     }
 
+    public function test_operator_can_list_update_synchronize_suspend_and_delete_isp_service(): void
+    {
+        [, $team] = $this->operator();
+        config([
+            'radius.platforms.freeradius.url' => 'https://radius.example.test/api',
+            'radius.platforms.freeradius.token' => 'trusted-token',
+        ]);
+        Http::fake(['*' => Http::response([], 204)]);
+
+        $customer = Customer::factory()->create(['team_id' => $team->id]);
+        $service = IspService::factory()->create([
+            'team_id' => $team->id,
+            'customer_id' => $customer->id,
+            'radius_platform' => RadiusPlatform::FreeRadius,
+            'status' => \App\Enums\IspServiceStatus::Active,
+        ]);
+
+        $this->getJson("/api/isp-services?status=active&customer_id={$customer->id}")
+            ->assertOk()
+            ->assertJsonCount(1, 'data');
+
+        $this->patchJson("/api/isp-services/{$service->id}", [
+            'download_limit_bps' => 200_000_000,
+        ])->assertOk()
+            ->assertJsonPath('download_limit_bps', 200_000_000);
+
+        $this->postJson("/api/isp-services/{$service->id}/synchronize")
+            ->assertOk()
+            ->assertJsonPath('id', $service->id);
+
+        $this->postJson("/api/isp-services/{$service->id}/suspend", [
+            'reason' => 'Non-payment',
+        ])->assertOk()
+            ->assertJsonPath('status', 'suspended')
+            ->assertJsonPath('suspension_reason', 'Non-payment');
+
+        $this->deleteJson("/api/isp-services/{$service->id}")
+            ->assertNoContent();
+
+        $this->assertDatabaseMissing('isp_services', ['id' => $service->id]);
+    }
+
     /**
      * @return array{User, Team}
      */

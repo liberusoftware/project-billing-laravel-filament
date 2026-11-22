@@ -209,7 +209,7 @@
     "autoload": {
         "psr-4": {
             "App\\": "modules/billing-application/src/",
-            "App\\Modules\\": "app/Modules/",
+            "App\\Modules\\": "modules/billing-extensions/src/",
             "Database\\Factories\\": "modules/billing-application/database/factories/",
             "Database\\Seeders\\": "modules/billing-application/database/seeders/"
         },
@@ -224,6 +224,7 @@
             "modules/billing-customer-portal/database/factories/",
             "modules/billing-customer-portal/src/",
             "modules/billing-domains/src/",
+            "modules/billing-extensions/src/",
             "modules/billing-filament/src/",
             "modules/billing-files/src/",
             "modules/billing-hosting/database/factories/",
@@ -304,70 +305,22 @@
             "Liberu\\Foundation\\TwoFactor\\Tests\\": "modules/two-factor-authentication/tests/",
             "Liberu\\Foundation\\Webhooks\\Tests\\": "modules/webhooks/tests/",
             "Liberu\\Payment\\Contracts\\Tests\\": "modules/payment-contracts/tests/",
-            "Liberu\\Platform\\BusinessWorkflowReconciliation\\Api\\Tests\\": [
-                "modules/liberu-business-workflow-reconciliation-api/tests/",
-                "modules/module-liberu-business-workflow-reconciliation-api/tests/"
-            ],
-            "Liberu\\Platform\\BusinessWorkflowReconciliation\\Filament\\Tests\\": [
-                "modules/liberu-business-workflow-reconciliation-filament/tests/",
-                "modules/module-liberu-business-workflow-reconciliation-filament/tests/"
-            ],
-            "Liberu\\Platform\\BusinessWorkflowReconciliation\\Livewire\\Tests\\": [
-                "modules/liberu-business-workflow-reconciliation-livewire/tests/",
-                "modules/module-liberu-business-workflow-reconciliation-livewire/tests/"
-            ],
-            "Liberu\\Platform\\BusinessWorkflowReconciliation\\Tests\\": [
-                "modules/liberu-business-workflow-reconciliation/tests/",
-                "modules/module-liberu-business-workflow-reconciliation/tests/"
-            ],
-            "Liberu\\Platform\\ExecutiveInsights\\Api\\Tests\\": [
-                "modules/liberu-executive-insights-api/tests/",
-                "modules/module-liberu-executive-insights-api/tests/"
-            ],
-            "Liberu\\Platform\\ExecutiveInsights\\Filament\\Tests\\": [
-                "modules/liberu-executive-insights-filament/tests/",
-                "modules/module-liberu-executive-insights-filament/tests/"
-            ],
-            "Liberu\\Platform\\ExecutiveInsights\\Livewire\\Tests\\": [
-                "modules/liberu-executive-insights-livewire/tests/",
-                "modules/module-liberu-executive-insights-livewire/tests/"
-            ],
-            "Liberu\\Platform\\ExecutiveInsights\\Tests\\": [
-                "modules/liberu-executive-insights/tests/",
-                "modules/module-liberu-executive-insights/tests/"
-            ],
-            "Liberu\\Platform\\PlatformOrchestration\\Api\\Tests\\": [
-                "modules/liberu-platform-orchestration-api/tests/",
-                "modules/module-liberu-platform-orchestration-api/tests/"
-            ],
-            "Liberu\\Platform\\PlatformOrchestration\\Filament\\Tests\\": [
-                "modules/liberu-platform-orchestration-filament/tests/",
-                "modules/module-liberu-platform-orchestration-filament/tests/"
-            ],
-            "Liberu\\Platform\\PlatformOrchestration\\Livewire\\Tests\\": [
-                "modules/liberu-platform-orchestration-livewire/tests/",
-                "modules/module-liberu-platform-orchestration-livewire/tests/"
-            ],
-            "Liberu\\Platform\\PlatformOrchestration\\Tests\\": [
-                "modules/liberu-platform-orchestration/tests/",
-                "modules/module-liberu-platform-orchestration/tests/"
-            ],
-            "Liberu\\Platform\\RevenueAndCareOrchestration\\Api\\Tests\\": [
-                "modules/liberu-revenue-and-care-orchestration-api/tests/",
-                "modules/module-liberu-revenue-and-care-orchestration-api/tests/"
-            ],
-            "Liberu\\Platform\\RevenueAndCareOrchestration\\Filament\\Tests\\": [
-                "modules/liberu-revenue-and-care-orchestration-filament/tests/",
-                "modules/module-liberu-revenue-and-care-orchestration-filament/tests/"
-            ],
-            "Liberu\\Platform\\RevenueAndCareOrchestration\\Livewire\\Tests\\": [
-                "modules/liberu-revenue-and-care-orchestration-livewire/tests/",
-                "modules/module-liberu-revenue-and-care-orchestration-livewire/tests/"
-            ],
-            "Liberu\\Platform\\RevenueAndCareOrchestration\\Tests\\": [
-                "modules/liberu-revenue-and-care-orchestration/tests/",
-                "modules/module-liberu-revenue-and-care-orchestration/tests/"
-            ],
+            "Liberu\\Platform\\BusinessWorkflowReconciliation\\Api\\Tests\\": "modules/liberu-business-workflow-reconciliation-api/tests/",
+            "Liberu\\Platform\\BusinessWorkflowReconciliation\\Filament\\Tests\\": "modules/liberu-business-workflow-reconciliation-filament/tests/",
+            "Liberu\\Platform\\BusinessWorkflowReconciliation\\Livewire\\Tests\\": "modules/liberu-business-workflow-reconciliation-livewire/tests/",
+            "Liberu\\Platform\\BusinessWorkflowReconciliation\\Tests\\": "modules/liberu-business-workflow-reconciliation/tests/",
+            "Liberu\\Platform\\ExecutiveInsights\\Api\\Tests\\": "modules/liberu-executive-insights-api/tests/",
+            "Liberu\\Platform\\ExecutiveInsights\\Filament\\Tests\\": "modules/liberu-executive-insights-filament/tests/",
+            "Liberu\\Platform\\ExecutiveInsights\\Livewire\\Tests\\": "modules/liberu-executive-insights-livewire/tests/",
+            "Liberu\\Platform\\ExecutiveInsights\\Tests\\": "modules/liberu-executive-insights/tests/",
+            "Liberu\\Platform\\PlatformOrchestration\\Api\\Tests\\": "modules/liberu-platform-orchestration-api/tests/",
+            "Liberu\\Platform\\PlatformOrchestration\\Filament\\Tests\\": "modules/liberu-platform-orchestration-filament/tests/",
+            "Liberu\\Platform\\PlatformOrchestration\\Livewire\\Tests\\": "modules/liberu-platform-orchestration-livewire/tests/",
+            "Liberu\\Platform\\PlatformOrchestration\\Tests\\": "modules/liberu-platform-orchestration/tests/",
+            "Liberu\\Platform\\RevenueAndCareOrchestration\\Api\\Tests\\": "modules/liberu-revenue-and-care-orchestration-api/tests/",
+            "Liberu\\Platform\\RevenueAndCareOrchestration\\Filament\\Tests\\": "modules/liberu-revenue-and-care-orchestration-filament/tests/",
+            "Liberu\\Platform\\RevenueAndCareOrchestration\\Livewire\\Tests\\": "modules/liberu-revenue-and-care-orchestration-livewire/tests/",
+            "Liberu\\Platform\\RevenueAndCareOrchestration\\Tests\\": "modules/liberu-revenue-and-care-orchestration/tests/",
             "Tests\\": [
                 "tests/",
                 "modules/billing-application/tests/",
@@ -377,6 +330,7 @@
                 "modules/billing-communications/tests/",
                 "modules/billing-customer-portal/tests/",
                 "modules/billing-domains/tests/",
+                "modules/billing-extensions/tests/",
                 "modules/billing-filament/tests/",
                 "modules/billing-hosting/tests/",
                 "modules/billing-identity/tests/",
