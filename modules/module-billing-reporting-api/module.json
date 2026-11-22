@@ -3,7 +3,7 @@
   "name": "module-billing-reporting-api",
   "display_name": "Billing Reporting Api",
   "description": "Api adapter for Billing Reporting.",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "category": "presentation",
   "provider": "Liberu\\Billing\\Reporting\\Api\\ReportingApiServiceProvider",
   "requires": {

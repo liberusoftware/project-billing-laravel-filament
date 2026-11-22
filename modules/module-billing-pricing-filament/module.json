@@ -3,7 +3,7 @@
   "name": "module-billing-pricing-filament",
   "display_name": "Billing Pricing Filament",
   "description": "Filament resource adapter for Billing Pricing.",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "category": "presentation",
   "provider": "Liberu\\Billing\\Pricing\\Filament\\PricingFilamentServiceProvider",
   "requires": {

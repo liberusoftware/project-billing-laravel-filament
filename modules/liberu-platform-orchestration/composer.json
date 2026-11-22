@@ -1,6 +1,6 @@
 {
   "name": "liberusoftware/module-liberu-platform-orchestration",
-  "version": "1.5.1",
+  "version": "1.5.2",
   "type": "liberu-module",
   "description": "Liberu liberu-platform-orchestration module.",
   "license": "MIT",

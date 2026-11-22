@@ -3099,22 +3099,22 @@
         },
         {
             "name": "guzzlehttp/guzzle",
-            "version": "8.5.5",
+            "version": "8.6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/guzzle.git",
-                "reference": "d1a26e6ce24268e740af501de8748d1c945e6f4b"
+                "reference": "ba6574fd975ab16f87dc356729a36777c03851e8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/d1a26e6ce24268e740af501de8748d1c945e6f4b",
-                "reference": "d1a26e6ce24268e740af501de8748d1c945e6f4b",
+                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/ba6574fd975ab16f87dc356729a36777c03851e8",
+                "reference": "ba6574fd975ab16f87dc356729a36777c03851e8",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
-                "guzzlehttp/promises": "^3.1.1",
-                "guzzlehttp/psr7": "^3.5.1",
+                "guzzlehttp/promises": "^3.2",
+                "guzzlehttp/psr7": "^3.6",
                 "php": "^7.4 || ^8.0",
                 "psr/http-client": "^1.0",
                 "psr/http-factory": "^1.0",
@@ -3206,7 +3206,7 @@
             ],
             "support": {
                 "issues": "https://github.com/guzzle/guzzle/issues",
-                "source": "https://github.com/guzzle/guzzle/tree/8.5.5"
+                "source": "https://github.com/guzzle/guzzle/tree/8.6.0"
             },
             "funding": [
                 {
@@ -3222,7 +3222,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-11-21T21:14:02+00:00"
+            "time": "2026-11-22T16:48:13+00:00"
         },
         {
             "name": "guzzlehttp/promises",
@@ -5417,16 +5417,16 @@
         },
         {
             "name": "league/csv",
-            "version": "9.29.0",
+            "version": "9.29.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/csv.git",
-                "reference": "13d5600d2c935c8785707e7d1d44ca1f2a22d6f4"
+                "reference": "fb9ea14460001b62fcb54d8ac247cc501f60e6e0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/csv/zipball/13d5600d2c935c8785707e7d1d44ca1f2a22d6f4",
-                "reference": "13d5600d2c935c8785707e7d1d44ca1f2a22d6f4",
+                "url": "https://api.github.com/repos/thephpleague/csv/zipball/fb9ea14460001b62fcb54d8ac247cc501f60e6e0",
+                "reference": "fb9ea14460001b62fcb54d8ac247cc501f60e6e0",
                 "shasum": ""
             },
             "require": {
@@ -5508,7 +5508,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-10-28T08:56:24+00:00"
+            "time": "2026-11-22T13:51:45+00:00"
         },
         {
             "name": "league/flysystem",
@@ -6429,16 +6429,16 @@
         },
         {
             "name": "liberusoftware/audit",
-            "version": "1.11.0",
+            "version": "1.11.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/liberusoftware/module-audit.git",
-                "reference": "96c35af49cfd93c6a55ce1ab5701a8131d131e5b"
+                "reference": "2893608e719f7bfd8ac808a46be7a266ec906768"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/liberusoftware/module-audit/zipball/96c35af49cfd93c6a55ce1ab5701a8131d131e5b",
-                "reference": "96c35af49cfd93c6a55ce1ab5701a8131d131e5b",
+                "url": "https://api.github.com/repos/liberusoftware/module-audit/zipball/2893608e719f7bfd8ac808a46be7a266ec906768",
+                "reference": "2893608e719f7bfd8ac808a46be7a266ec906768",
                 "shasum": ""
             },
             "require": {
@@ -6469,9 +6469,9 @@
             "description": "Contextual material-change audit records with correlation and retention boundaries.",
             "support": {
                 "issues": "https://github.com/liberusoftware/module-audit/issues",
-                "source": "https://github.com/liberusoftware/module-audit/tree/v1.11.0"
+                "source": "https://github.com/liberusoftware/module-audit/tree/v1.11.1"
             },
-            "time": "2026-11-22T04:49:00+00:00"
+            "time": "2026-11-22T21:30:51+00:00"
         },
         {
             "name": "liberusoftware/billing-cpanel",
@@ -6813,16 +6813,16 @@
         },
         {
             "name": "liberusoftware/currency-context",
-            "version": "1.6.4",
+            "version": "1.6.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/liberusoftware/module-currency-context.git",
-                "reference": "d639a56289bf54c4553a7c78b7df6d788926fdac"
+                "reference": "a00e6849b27cc56dabb43f5908d896582423bb48"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/liberusoftware/module-currency-context/zipball/d639a56289bf54c4553a7c78b7df6d788926fdac",
-                "reference": "d639a56289bf54c4553a7c78b7df6d788926fdac",
+                "url": "https://api.github.com/repos/liberusoftware/module-currency-context/zipball/a00e6849b27cc56dabb43f5908d896582423bb48",
+                "reference": "a00e6849b27cc56dabb43f5908d896582423bb48",
                 "shasum": ""
             },
             "require": {
@@ -6854,9 +6854,9 @@
             "description": "Precise money values, ISO currency metadata, context, formatting, and exchange-rate contracts.",
             "support": {
                 "issues": "https://github.com/liberusoftware/module-currency-context/issues",
-                "source": "https://github.com/liberusoftware/module-currency-context/tree/v1.6.4"
+                "source": "https://github.com/liberusoftware/module-currency-context/tree/v1.6.5"
             },
-            "time": "2026-11-22T04:49:07+00:00"
+            "time": "2026-11-22T21:30:51+00:00"
         },
         {
             "name": "liberusoftware/developer-experience",
@@ -6998,16 +6998,16 @@
         },
         {
             "name": "liberusoftware/identity-core",
-            "version": "1.8.0",
+            "version": "1.8.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/liberusoftware/module-identity-core.git",
-                "reference": "1d013d31af989394df070ae06b55e2701e194248"
+                "reference": "5fd737b40bdc1d1840d84a2792a330d8807c0cf7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/liberusoftware/module-identity-core/zipball/1d013d31af989394df070ae06b55e2701e194248",
-                "reference": "1d013d31af989394df070ae06b55e2701e194248",
+                "url": "https://api.github.com/repos/liberusoftware/module-identity-core/zipball/5fd737b40bdc1d1840d84a2792a330d8807c0cf7",
+                "reference": "5fd737b40bdc1d1840d84a2792a330d8807c0cf7",
                 "shasum": ""
             },
             "require": {
@@ -7037,22 +7037,22 @@
             "description": "Provider-neutral identity policy, normalization, and versioned security events.",
             "support": {
                 "issues": "https://github.com/liberusoftware/module-identity-core/issues",
-                "source": "https://github.com/liberusoftware/module-identity-core/tree/v1.8.0"
+                "source": "https://github.com/liberusoftware/module-identity-core/tree/v1.8.1"
             },
-            "time": "2026-11-22T04:49:15+00:00"
+            "time": "2026-11-22T21:30:51+00:00"
         },
         {
             "name": "liberusoftware/identity-core-filament",
-            "version": "1.7.4",
+            "version": "1.7.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/liberusoftware/module-identity-core-filament.git",
-                "reference": "2810e1cf24e50e39a154b3a16204ea463b52f828"
+                "reference": "35b2e5ea631575f02ccf00b58256c80668bb358d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/liberusoftware/module-identity-core-filament/zipball/2810e1cf24e50e39a154b3a16204ea463b52f828",
-                "reference": "2810e1cf24e50e39a154b3a16204ea463b52f828",
+                "url": "https://api.github.com/repos/liberusoftware/module-identity-core-filament/zipball/35b2e5ea631575f02ccf00b58256c80668bb358d",
+                "reference": "35b2e5ea631575f02ccf00b58256c80668bb358d",
                 "shasum": ""
             },
             "require": {
@@ -7082,17 +7082,17 @@
             "description": "Filament administration adapter for the configured Liberu identity model.",
             "support": {
                 "issues": "https://github.com/liberusoftware/module-identity-core-filament/issues",
-                "source": "https://github.com/liberusoftware/module-identity-core-filament/tree/v1.7.4"
+                "source": "https://github.com/liberusoftware/module-identity-core-filament/tree/v1.7.5"
             },
-            "time": "2026-11-22T00:41:53+00:00"
+            "time": "2026-11-22T21:30:51+00:00"
         },
         {
             "name": "liberusoftware/identity-socialstream",
-            "version": "1.9.0",
+            "version": "1.9.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/liberusoftware/module-identity-socialstream.git",
-                "reference": "b482d60bd978a5b73d2ce6f50d9a8277f3625dc5"
+                "reference": "766ba41d5a4f9dd61415fc85b34f61e28df6ad65"
             },
             "require": {
                 "bursteri/socialstream": "^7.0.0",
@@ -7132,7 +7132,7 @@
                 "MIT"
             ],
             "description": "Socialstream/Socialite identity-linking provider adapter.",
-            "time": "2026-11-22T04:49:22+00:00"
+            "time": "2026-11-22T21:30:53+00:00"
         },
         {
             "name": "liberusoftware/import-export",
@@ -7182,11 +7182,11 @@
         },
         {
             "name": "liberusoftware/integrations",
-            "version": "1.12.0",
+            "version": "1.13.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/liberusoftware/module-integrations.git",
-                "reference": "26755a76dbd01e49e348e8c852e3ec0b1a40421c"
+                "reference": "8b6e64bcd8a9d7d47ffd6da3a31598bf2b8e9823"
             },
             "require": {
                 "illuminate/database": "^13.38.0",
@@ -7224,20 +7224,20 @@
                 "MIT"
             ],
             "description": "Provider adapter registry and protected connection lifecycle.",
-            "time": "2026-11-22T04:50:43+00:00"
+            "time": "2026-11-22T21:30:51+00:00"
         },
         {
             "name": "liberusoftware/jetstream-bridge",
-            "version": "1.4.13",
+            "version": "1.4.14",
             "source": {
                 "type": "git",
                 "url": "https://github.com/liberusoftware/module-jetstream-bridge.git",
-                "reference": "09da8fb9fe08dfb240854b5663611295079ff903"
+                "reference": "d8714e6c271d41b99ab6a99c8677606e0c955cca"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/liberusoftware/module-jetstream-bridge/zipball/09da8fb9fe08dfb240854b5663611295079ff903",
-                "reference": "09da8fb9fe08dfb240854b5663611295079ff903",
+                "url": "https://api.github.com/repos/liberusoftware/module-jetstream-bridge/zipball/d8714e6c271d41b99ab6a99c8677606e0c955cca",
+                "reference": "d8714e6c271d41b99ab6a99c8677606e0c955cca",
                 "shasum": ""
             },
             "require": {
@@ -7270,9 +7270,9 @@
             "description": "Fortify and Jetstream-compatible action adapters for Liberu identity capabilities.",
             "support": {
                 "issues": "https://github.com/liberusoftware/module-jetstream-bridge/issues",
-                "source": "https://github.com/liberusoftware/module-jetstream-bridge/tree/v1.4.13"
+                "source": "https://github.com/liberusoftware/module-jetstream-bridge/tree/v1.4.14"
             },
-            "time": "2026-11-02T16:46:46+00:00"
+            "time": "2026-11-22T21:30:55+00:00"
         },
         {
             "name": "liberusoftware/localization-contracts",
@@ -7498,16 +7498,16 @@
         },
         {
             "name": "liberusoftware/module-billing-catalog",
-            "version": "0.1.1",
+            "version": "0.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/liberusoftware/module-module-billing-catalog.git",
-                "reference": "f220c9a173b2b98f144e162e26fa0ad2ca205dbe"
+                "reference": "8d58a5afbdb69ffacd7c577ffc93a629e48e0ffa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/liberusoftware/module-module-billing-catalog/zipball/f220c9a173b2b98f144e162e26fa0ad2ca205dbe",
-                "reference": "f220c9a173b2b98f144e162e26fa0ad2ca205dbe",
+                "url": "https://api.github.com/repos/liberusoftware/module-module-billing-catalog/zipball/8d58a5afbdb69ffacd7c577ffc93a629e48e0ffa",
+                "reference": "8d58a5afbdb69ffacd7c577ffc93a629e48e0ffa",
                 "shasum": ""
             },
             "require": {
@@ -7534,22 +7534,22 @@
             "description": "Provider-neutral catalog products and lifecycle for Liberu Billing.",
             "support": {
                 "issues": "https://github.com/liberusoftware/module-module-billing-catalog/issues",
-                "source": "https://github.com/liberusoftware/module-module-billing-catalog/tree/v0.1.1"
+                "source": "https://github.com/liberusoftware/module-module-billing-catalog/tree/v0.1.2"
             },
-            "time": "2026-10-26T23:16:41+00:00"
+            "time": "2026-11-22T21:31:05+00:00"
         },
         {
             "name": "liberusoftware/module-billing-catalog-api",
-            "version": "0.1.0",
+            "version": "0.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/liberusoftware/module-module-billing-catalog-api.git",
-                "reference": "bfa52037d1128b9489719eb5692335ee246dde20"
+                "reference": "4f554d319c1ede026830871826169bafa5e62d5e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/liberusoftware/module-module-billing-catalog-api/zipball/bfa52037d1128b9489719eb5692335ee246dde20",
-                "reference": "bfa52037d1128b9489719eb5692335ee246dde20",
+                "url": "https://api.github.com/repos/liberusoftware/module-module-billing-catalog-api/zipball/4f554d319c1ede026830871826169bafa5e62d5e",
+                "reference": "4f554d319c1ede026830871826169bafa5e62d5e",
                 "shasum": ""
             },
             "require": {
@@ -7579,22 +7579,22 @@
             "description": "HTTP API adapter for the Liberu Billing Catalog module.",
             "support": {
                 "issues": "https://github.com/liberusoftware/module-module-billing-catalog-api/issues",
-                "source": "https://github.com/liberusoftware/module-module-billing-catalog-api/tree/v0.1.0"
+                "source": "https://github.com/liberusoftware/module-module-billing-catalog-api/tree/v0.1.1"
             },
-            "time": "2026-10-26T23:16:49+00:00"
+            "time": "2026-11-22T21:31:07+00:00"
         },
         {
             "name": "liberusoftware/module-billing-catalog-filament",
-            "version": "0.1.0",
+            "version": "0.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/liberusoftware/module-module-billing-catalog-filament.git",
-                "reference": "c89e30281300039ca75860c2f2dc6b835ad78979"
+                "reference": "5d33c1d6a86e25bbea03026e84d1441b0b0de517"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/liberusoftware/module-module-billing-catalog-filament/zipball/c89e30281300039ca75860c2f2dc6b835ad78979",
-                "reference": "c89e30281300039ca75860c2f2dc6b835ad78979",
+                "url": "https://api.github.com/repos/liberusoftware/module-module-billing-catalog-filament/zipball/5d33c1d6a86e25bbea03026e84d1441b0b0de517",
+                "reference": "5d33c1d6a86e25bbea03026e84d1441b0b0de517",
                 "shasum": ""
             },
             "require": {
@@ -7621,22 +7621,22 @@
             "description": "Filament 5 adapter for the Liberu Billing Catalog module.",
             "support": {
                 "issues": "https://github.com/liberusoftware/module-module-billing-catalog-filament/issues",
-                "source": "https://github.com/liberusoftware/module-module-billing-catalog-filament/tree/v0.1.0"
+                "source": "https://github.com/liberusoftware/module-module-billing-catalog-filament/tree/v0.1.1"
             },
-            "time": "2026-10-26T23:16:57+00:00"
+            "time": "2026-11-22T21:31:07+00:00"
         },
         {
             "name": "liberusoftware/module-billing-catalog-livewire",
-            "version": "0.1.0",
+            "version": "0.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/liberusoftware/module-module-billing-catalog-livewire.git",
-                "reference": "4339909482a4312ef98cb37a02b41bc67a76e53a"
+                "reference": "5832a6bf640dfff3699a3920300b134f312f678d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/liberusoftware/module-module-billing-catalog-livewire/zipball/4339909482a4312ef98cb37a02b41bc67a76e53a",
-                "reference": "4339909482a4312ef98cb37a02b41bc67a76e53a",
+                "url": "https://api.github.com/repos/liberusoftware/module-module-billing-catalog-livewire/zipball/5832a6bf640dfff3699a3920300b134f312f678d",
+                "reference": "5832a6bf640dfff3699a3920300b134f312f678d",
                 "shasum": ""
             },
             "require": {
@@ -7663,22 +7663,22 @@
             "description": "Livewire 4 adapter for the Liberu Billing Catalog module.",
             "support": {
                 "issues": "https://github.com/liberusoftware/module-module-billing-catalog-livewire/issues",
-                "source": "https://github.com/liberusoftware/module-module-billing-catalog-livewire/tree/v0.1.0"
+                "source": "https://github.com/liberusoftware/module-module-billing-catalog-livewire/tree/v0.1.1"
             },
-            "time": "2026-10-26T23:17:06+00:00"
+            "time": "2026-11-22T21:31:08+00:00"
         },
         {
             "name": "liberusoftware/module-billing-collections",
-            "version": "0.1.0",
+            "version": "0.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/liberusoftware/module-module-billing-collections.git",
-                "reference": "5a8bbb0c4a88e285488e56fb17ff97c1e68e9dd1"
+                "reference": "a2ad3f3d5a7fb0cd2d544f6de8045130ea9f0e81"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/liberusoftware/module-module-billing-collections/zipball/5a8bbb0c4a88e285488e56fb17ff97c1e68e9dd1",
-                "reference": "5a8bbb0c4a88e285488e56fb17ff97c1e68e9dd1",
+                "url": "https://api.github.com/repos/liberusoftware/module-module-billing-collections/zipball/a2ad3f3d5a7fb0cd2d544f6de8045130ea9f0e81",
+                "reference": "a2ad3f3d5a7fb0cd2d544f6de8045130ea9f0e81",
                 "shasum": ""
             },
             "require": {
@@ -7706,22 +7706,22 @@
             "description": "Provider-neutral collections, dunning, credit control, suspension, write-off, and recovery.",
             "support": {
                 "issues": "https://github.com/liberusoftware/module-module-billing-collections/issues",
-                "source": "https://github.com/liberusoftware/module-module-billing-collections/tree/v0.1.0"
+                "source": "https://github.com/liberusoftware/module-module-billing-collections/tree/v0.1.1"
             },
-            "time": "2026-10-26T23:17:15+00:00"
+            "time": "2026-11-22T21:31:10+00:00"
         },
         {
             "name": "liberusoftware/module-billing-collections-api",
-            "version": "0.1.0",
+            "version": "0.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/liberusoftware/module-module-billing-collections-api.git",
-                "reference": "5f441d6a59769391386bf033a7fd8cd9b8ee0113"
+                "reference": "17ab355005f8314d081e54e69065381530cc8b63"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/liberusoftware/module-module-billing-collections-api/zipball/5f441d6a59769391386bf033a7fd8cd9b8ee0113",
-                "reference": "5f441d6a59769391386bf033a7fd8cd9b8ee0113",
+                "url": "https://api.github.com/repos/liberusoftware/module-module-billing-collections-api/zipball/17ab355005f8314d081e54e69065381530cc8b63",
+                "reference": "17ab355005f8314d081e54e69065381530cc8b63",
                 "shasum": ""
             },
             "require": {
@@ -7751,22 +7751,22 @@
             "description": "HTTP API adapter for Liberu Billing Collections.",
             "support": {
                 "issues": "https://github.com/liberusoftware/module-module-billing-collections-api/issues",
-                "source": "https://github.com/liberusoftware/module-module-billing-collections-api/tree/v0.1.0"
+                "source": "https://github.com/liberusoftware/module-module-billing-collections-api/tree/v0.1.1"
             },
-            "time": "2026-10-26T23:17:24+00:00"
+            "time": "2026-11-22T21:31:10+00:00"
         },
         {
             "name": "liberusoftware/module-billing-collections-filament",
-            "version": "0.1.0",
+            "version": "0.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/liberusoftware/module-module-billing-collections-filament.git",
-                "reference": "817096b44d44bd3ee7dd99fbf60ef89c10c6d82c"
+                "reference": "f2df1d227b1ddaf1cf930478b6041bfe9652d348"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/liberusoftware/module-module-billing-collections-filament/zipball/817096b44d44bd3ee7dd99fbf60ef89c10c6d82c",
-                "reference": "817096b44d44bd3ee7dd99fbf60ef89c10c6d82c",
+                "url": "https://api.github.com/repos/liberusoftware/module-module-billing-collections-filament/zipball/f2df1d227b1ddaf1cf930478b6041bfe9652d348",
+                "reference": "f2df1d227b1ddaf1cf930478b6041bfe9652d348",
                 "shasum": ""
             },
             "require": {
@@ -7793,22 +7793,22 @@
             "description": "Filament 5 adapter for Liberu Billing Collections.",
             "support": {
                 "issues": "https://github.com/liberusoftware/module-module-billing-collections-filament/issues",
-                "source": "https://github.com/liberusoftware/module-module-billing-collections-filament/tree/v0.1.0"
+                "source": "https://github.com/liberusoftware/module-module-billing-collections-filament/tree/v0.1.1"
             },
-            "time": "2026-10-26T23:17:32+00:00"
+            "time": "2026-11-22T21:31:10+00:00"
         },
         {
             "name": "liberusoftware/module-billing-collections-livewire",
-            "version": "0.1.0",
+            "version": "0.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/liberusoftware/module-module-billing-collections-livewire.git",
-                "reference": "d3f194c02fcdc7ddda8e1403a394ceea64d5a10a"
+                "reference": "d8e540fe2e75259df59d2abb7cfa90d93f43f6c2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/liberusoftware/module-module-billing-collections-livewire/zipball/d3f194c02fcdc7ddda8e1403a394ceea64d5a10a",
-                "reference": "d3f194c02fcdc7ddda8e1403a394ceea64d5a10a",
+                "url": "https://api.github.com/repos/liberusoftware/module-module-billing-collections-livewire/zipball/d8e540fe2e75259df59d2abb7cfa90d93f43f6c2",
+                "reference": "d8e540fe2e75259df59d2abb7cfa90d93f43f6c2",
                 "shasum": ""
             },
             "require": {
@@ -7835,22 +7835,22 @@
             "description": "Livewire 4 adapter for Liberu Billing Collections.",
             "support": {
                 "issues": "https://github.com/liberusoftware/module-module-billing-collections-livewire/issues",
-                "source": "https://github.com/liberusoftware/module-module-billing-collections-livewire/tree/v0.1.0"
+                "source": "https://github.com/liberusoftware/module-module-billing-collections-livewire/tree/v0.1.1"
             },
-            "time": "2026-10-26T23:17:41+00:00"
+            "time": "2026-11-22T21:31:13+00:00"
         },
         {
             "name": "liberusoftware/module-billing-communications",
-            "version": "0.1.0",
+            "version": "0.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/liberusoftware/module-module-billing-communications.git",
-                "reference": "b996d3254367a91a7baa3954b48a0582118face9"
+                "reference": "04a40eb621b7b1362c74d99b01faf4cf9a754478"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/liberusoftware/module-module-billing-communications/zipball/b996d3254367a91a7baa3954b48a0582118face9",
-                "reference": "b996d3254367a91a7baa3954b48a0582118face9",
+                "url": "https://api.github.com/repos/liberusoftware/module-module-billing-communications/zipball/04a40eb621b7b1362c74d99b01faf4cf9a754478",
+                "reference": "04a40eb621b7b1362c74d99b01faf4cf9a754478",
                 "shasum": ""
             },
             "require": {
@@ -7878,22 +7878,22 @@
             "description": "Provider-neutral Billing Communications domain module.",
             "support": {
                 "issues": "https://github.com/liberusoftware/module-module-billing-communications/issues",
-                "source": "https://github.com/liberusoftware/module-module-billing-communications/tree/v0.1.0"
+                "source": "https://github.com/liberusoftware/module-module-billing-communications/tree/v0.1.1"
             },
-            "time": "2026-10-27T11:34:14+00:00"
+            "time": "2026-11-22T21:31:12+00:00"
         },
         {
             "name": "liberusoftware/module-billing-communications-api",
-            "version": "0.1.0",
+            "version": "0.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/liberusoftware/module-module-billing-communications-api.git",
-                "reference": "2f810e438f526c4e8e3c35e31ad2a38ece700cdc"
+                "reference": "c0c45c5b42335f6843bf25bf8c9bdf4c6f2f081b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/liberusoftware/module-module-billing-communications-api/zipball/2f810e438f526c4e8e3c35e31ad2a38ece700cdc",
-                "reference": "2f810e438f526c4e8e3c35e31ad2a38ece700cdc",
+                "url": "https://api.github.com/repos/liberusoftware/module-module-billing-communications-api/zipball/c0c45c5b42335f6843bf25bf8c9bdf4c6f2f081b",
+                "reference": "c0c45c5b42335f6843bf25bf8c9bdf4c6f2f081b",
                 "shasum": ""
             },
             "require": {
@@ -7923,22 +7923,22 @@
             "description": "Api adapter for Billing Communications.",
             "support": {
                 "issues": "https://github.com/liberusoftware/module-module-billing-communications-api/issues",
-                "source": "https://github.com/liberusoftware/module-module-billing-communications-api/tree/v0.1.0"
+                "source": "https://github.com/liberusoftware/module-module-billing-communications-api/tree/v0.1.1"
             },
-            "time": "2026-10-27T11:34:22+00:00"
+            "time": "2026-11-22T21:31:13+00:00"
         },
         {
             "name": "liberusoftware/module-billing-communications-filament",
-            "version": "0.1.0",
+            "version": "0.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/liberusoftware/module-module-billing-communications-filament.git",
-                "reference": "2da56203e1163aff696533d9241cb5b84c88a679"
+                "reference": "3afd491ddfe99c9e528efde26141ef0dfbe59ff5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/liberusoftware/module-module-billing-communications-filament/zipball/2da56203e1163aff696533d9241cb5b84c88a679",
-                "reference": "2da56203e1163aff696533d9241cb5b84c88a679",
+                "url": "https://api.github.com/repos/liberusoftware/module-module-billing-communications-filament/zipball/3afd491ddfe99c9e528efde26141ef0dfbe59ff5",
+                "reference": "3afd491ddfe99c9e528efde26141ef0dfbe59ff5",
                 "shasum": ""
             },
             "require": {
@@ -7965,22 +7965,22 @@
             "description": "Filament adapter for Billing Communications.",
             "support": {
                 "issues": "https://github.com/liberusoftware/module-module-billing-communications-filament/issues",
-                "source": "https://github.com/liberusoftware/module-module-billing-communications-filament/tree/v0.1.0"
+                "source": "https://github.com/liberusoftware/module-module-billing-communications-filament/tree/v0.1.1"
             },
-            "time": "2026-10-27T11:34:30+00:00"
+            "time": "2026-11-22T21:31:14+00:00"
         },
         {
             "name": "liberusoftware/module-billing-communications-livewire",
-            "version": "0.1.0",
+            "version": "0.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/liberusoftware/module-module-billing-communications-livewire.git",
-                "reference": "33a96107134be7710046bad3fc031ce34bfecb3c"
+                "reference": "4b5f113235aa889f112800541f4c0dd3cff4410e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/liberusoftware/module-module-billing-communications-livewire/zipball/33a96107134be7710046bad3fc031ce34bfecb3c",
-                "reference": "33a96107134be7710046bad3fc031ce34bfecb3c",
+                "url": "https://api.github.com/repos/liberusoftware/module-module-billing-communications-livewire/zipball/4b5f113235aa889f112800541f4c0dd3cff4410e",
+                "reference": "4b5f113235aa889f112800541f4c0dd3cff4410e",
                 "shasum": ""
             },
             "require": {
@@ -8007,9 +8007,9 @@
             "description": "Livewire adapter for Billing Communications.",
             "support": {
                 "issues": "https://github.com/liberusoftware/module-module-billing-communications-livewire/issues",
-                "source": "https://github.com/liberusoftware/module-module-billing-communications-livewire/tree/v0.1.0"
+                "source": "https://github.com/liberusoftware/module-module-billing-communications-livewire/tree/v0.1.1"
             },
-            "time": "2026-10-27T11:34:38+00:00"
+            "time": "2026-11-22T21:31:14+00:00"
         },
         {
             "name": "liberusoftware/module-billing-core-api",
@@ -8100,16 +8100,16 @@
         },
         {
             "name": "liberusoftware/module-billing-core-livewire",
-            "version": "0.1.3",
+            "version": "0.1.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/liberusoftware/module-module-billing-core-livewire.git",
-                "reference": "d4e050db4297d595f12c0f0e8361d81700979610"
+                "reference": "f34a80cc93360d23fa22c31c0a04095dede4a730"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/liberusoftware/module-module-billing-core-livewire/zipball/d4e050db4297d595f12c0f0e8361d81700979610",
-                "reference": "d4e050db4297d595f12c0f0e8361d81700979610",
+                "url": "https://api.github.com/repos/liberusoftware/module-module-billing-core-livewire/zipball/f34a80cc93360d23fa22c31c0a04095dede4a730",
+                "reference": "f34a80cc93360d23fa22c31c0a04095dede4a730",
                 "shasum": ""
             },
             "require": {
@@ -8136,9 +8136,9 @@
             "description": "Livewire 4 adapter for the Liberu Billing Core module.",
             "support": {
                 "issues": "https://github.com/liberusoftware/module-module-billing-core-livewire/issues",
-                "source": "https://github.com/liberusoftware/module-module-billing-core-livewire/tree/v0.1.3"
+                "source": "https://github.com/liberusoftware/module-module-billing-core-livewire/tree/v0.1.4"
             },
-            "time": "2026-10-27T11:35:02+00:00"
+            "time": "2026-11-22T21:31:14+00:00"
         },
         {
             "name": "liberusoftware/module-billing-customer-portal",
@@ -8272,16 +8272,16 @@
         },
         {
             "name": "liberusoftware/module-billing-customer-portal-livewire",
-            "version": "0.1.0",
+            "version": "0.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/liberusoftware/module-module-billing-customer-portal-livewire.git",
-                "reference": "4a69856c804a3dc6b352a3fb98959c138a96ad56"
+                "reference": "aaaac8da81b0fb1b018ff234f528491ea383298a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/liberusoftware/module-module-billing-customer-portal-livewire/zipball/4a69856c804a3dc6b352a3fb98959c138a96ad56",
-                "reference": "4a69856c804a3dc6b352a3fb98959c138a96ad56",
+                "url": "https://api.github.com/repos/liberusoftware/module-module-billing-customer-portal-livewire/zipball/aaaac8da81b0fb1b018ff234f528491ea383298a",
+                "reference": "aaaac8da81b0fb1b018ff234f528491ea383298a",
                 "shasum": ""
             },
             "require": {
@@ -8308,9 +8308,9 @@
             "description": "Livewire adapter for Billing Customer Portal.",
             "support": {
                 "issues": "https://github.com/liberusoftware/module-module-billing-customer-portal-livewire/issues",
-                "source": "https://github.com/liberusoftware/module-module-billing-customer-portal-livewire/tree/v0.1.0"
+                "source": "https://github.com/liberusoftware/module-module-billing-customer-portal-livewire/tree/v0.1.1"
             },
-            "time": "2026-10-27T11:35:42+00:00"
+            "time": "2026-11-22T21:31:17+00:00"
         },
         {
             "name": "liberusoftware/module-billing-domains",
@@ -8486,16 +8486,16 @@
         },
         {
             "name": "liberusoftware/module-billing-hosting",
-            "version": "0.1.2",
+            "version": "0.1.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/liberusoftware/module-module-billing-hosting.git",
-                "reference": "9c1b9dda85a74bb85f062a9fca61af4d7b9e31bb"
+                "reference": "5f1498b40789e2ef45f686437faa20dbec4d068b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/liberusoftware/module-module-billing-hosting/zipball/9c1b9dda85a74bb85f062a9fca61af4d7b9e31bb",
-                "reference": "9c1b9dda85a74bb85f062a9fca61af4d7b9e31bb",
+                "url": "https://api.github.com/repos/liberusoftware/module-module-billing-hosting/zipball/5f1498b40789e2ef45f686437faa20dbec4d068b",
+                "reference": "5f1498b40789e2ef45f686437faa20dbec4d068b",
                 "shasum": ""
             },
             "require": {
@@ -8524,22 +8524,22 @@
             "description": "Provider-neutral Billing Hosting domain module.",
             "support": {
                 "issues": "https://github.com/liberusoftware/module-module-billing-hosting/issues",
-                "source": "https://github.com/liberusoftware/module-module-billing-hosting/tree/v0.1.2"
+                "source": "https://github.com/liberusoftware/module-module-billing-hosting/tree/v0.1.3"
             },
-            "time": "2026-11-14T14:31:32+00:00"
+            "time": "2026-11-22T21:31:17+00:00"
         },
         {
             "name": "liberusoftware/module-billing-hosting-api",
-            "version": "0.1.0",
+            "version": "0.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/liberusoftware/module-module-billing-hosting-api.git",
-                "reference": "0aac5b70c07025b791ca0f5213160bbf71305845"
+                "reference": "4322baf84cbe7d6172910ecb3c40a9f6bc038842"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/liberusoftware/module-module-billing-hosting-api/zipball/0aac5b70c07025b791ca0f5213160bbf71305845",
-                "reference": "0aac5b70c07025b791ca0f5213160bbf71305845",
+                "url": "https://api.github.com/repos/liberusoftware/module-module-billing-hosting-api/zipball/4322baf84cbe7d6172910ecb3c40a9f6bc038842",
+                "reference": "4322baf84cbe7d6172910ecb3c40a9f6bc038842",
                 "shasum": ""
             },
             "require": {
@@ -8569,22 +8569,22 @@
             "description": "Api adapter for Billing Hosting.",
             "support": {
                 "issues": "https://github.com/liberusoftware/module-module-billing-hosting-api/issues",
-                "source": "https://github.com/liberusoftware/module-module-billing-hosting-api/tree/v0.1.0"
+                "source": "https://github.com/liberusoftware/module-module-billing-hosting-api/tree/v0.1.1"
             },
-            "time": "2026-11-02T14:12:16+00:00"
+            "time": "2026-11-22T21:31:17+00:00"
         },
         {
             "name": "liberusoftware/module-billing-hosting-filament",
-            "version": "0.1.0",
+            "version": "0.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/liberusoftware/module-module-billing-hosting-filament.git",
-                "reference": "d598b2a77095debb8b89ce879c524369ff328434"
+                "reference": "c34cfd60f4630e7e431a5083a19c30bf0d9c2d58"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/liberusoftware/module-module-billing-hosting-filament/zipball/d598b2a77095debb8b89ce879c524369ff328434",
-                "reference": "d598b2a77095debb8b89ce879c524369ff328434",
+                "url": "https://api.github.com/repos/liberusoftware/module-module-billing-hosting-filament/zipball/c34cfd60f4630e7e431a5083a19c30bf0d9c2d58",
+                "reference": "c34cfd60f4630e7e431a5083a19c30bf0d9c2d58",
                 "shasum": ""
             },
             "require": {
@@ -8611,22 +8611,22 @@
             "description": "Filament adapter for Billing Hosting.",
             "support": {
                 "issues": "https://github.com/liberusoftware/module-module-billing-hosting-filament/issues",
-                "source": "https://github.com/liberusoftware/module-module-billing-hosting-filament/tree/v0.1.0"
+                "source": "https://github.com/liberusoftware/module-module-billing-hosting-filament/tree/v0.1.1"
             },
-            "time": "2026-11-02T14:12:24+00:00"
+            "time": "2026-11-22T21:31:18+00:00"
         },
         {
             "name": "liberusoftware/module-billing-hosting-livewire",
-            "version": "0.1.0",
+            "version": "0.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/liberusoftware/module-module-billing-hosting-livewire.git",
-                "reference": "f48dab54ad08c61991da0f55ba8c4dd472da4560"
+                "reference": "156fff5b778efcfe7c20d30f0cc8443e13c262e9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/liberusoftware/module-module-billing-hosting-livewire/zipball/f48dab54ad08c61991da0f55ba8c4dd472da4560",
-                "reference": "f48dab54ad08c61991da0f55ba8c4dd472da4560",
+                "url": "https://api.github.com/repos/liberusoftware/module-module-billing-hosting-livewire/zipball/156fff5b778efcfe7c20d30f0cc8443e13c262e9",
+                "reference": "156fff5b778efcfe7c20d30f0cc8443e13c262e9",
                 "shasum": ""
             },
             "require": {
@@ -8653,9 +8653,9 @@
             "description": "Livewire adapter for Billing Hosting.",
             "support": {
                 "issues": "https://github.com/liberusoftware/module-module-billing-hosting-livewire/issues",
-                "source": "https://github.com/liberusoftware/module-module-billing-hosting-livewire/tree/v0.1.0"
+                "source": "https://github.com/liberusoftware/module-module-billing-hosting-livewire/tree/v0.1.1"
             },
-            "time": "2026-11-02T14:12:35+00:00"
+            "time": "2026-11-22T21:31:18+00:00"
         },
         {
             "name": "liberusoftware/module-billing-invoicing",
@@ -8832,16 +8832,16 @@
         },
         {
             "name": "liberusoftware/module-billing-isp",
-            "version": "0.1.0",
+            "version": "0.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/liberusoftware/module-module-billing-isp.git",
-                "reference": "a5dd4c52ecca6a86429bedd500ea99504aa4984a"
+                "reference": "a9488ad29f57a57133cf55804ca7be34baa8c1c0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/liberusoftware/module-module-billing-isp/zipball/a5dd4c52ecca6a86429bedd500ea99504aa4984a",
-                "reference": "a5dd4c52ecca6a86429bedd500ea99504aa4984a",
+                "url": "https://api.github.com/repos/liberusoftware/module-module-billing-isp/zipball/a9488ad29f57a57133cf55804ca7be34baa8c1c0",
+                "reference": "a9488ad29f57a57133cf55804ca7be34baa8c1c0",
                 "shasum": ""
             },
             "require": {
@@ -8869,22 +8869,22 @@
             "description": "Provider-neutral Billing ISP domain module.",
             "support": {
                 "issues": "https://github.com/liberusoftware/module-module-billing-isp/issues",
-                "source": "https://github.com/liberusoftware/module-module-billing-isp/tree/v0.1.0"
+                "source": "https://github.com/liberusoftware/module-module-billing-isp/tree/v0.1.1"
             },
-            "time": "2026-11-02T14:13:24+00:00"
+            "time": "2026-11-22T21:31:20+00:00"
         },
         {
             "name": "liberusoftware/module-billing-isp-api",
-            "version": "0.1.0",
+            "version": "0.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/liberusoftware/module-module-billing-isp-api.git",
-                "reference": "ce07caa426040655cc164bf3eec6bc18c4414159"
+                "reference": "c19245d80e22891c84245346f19ff8554ab2de8f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/liberusoftware/module-module-billing-isp-api/zipball/ce07caa426040655cc164bf3eec6bc18c4414159",
-                "reference": "ce07caa426040655cc164bf3eec6bc18c4414159",
+                "url": "https://api.github.com/repos/liberusoftware/module-module-billing-isp-api/zipball/c19245d80e22891c84245346f19ff8554ab2de8f",
+                "reference": "c19245d80e22891c84245346f19ff8554ab2de8f",
                 "shasum": ""
             },
             "require": {
@@ -8914,22 +8914,22 @@
             "description": "Api adapter for Billing ISP.",
             "support": {
                 "issues": "https://github.com/liberusoftware/module-module-billing-isp-api/issues",
-                "source": "https://github.com/liberusoftware/module-module-billing-isp-api/tree/v0.1.0"
+                "source": "https://github.com/liberusoftware/module-module-billing-isp-api/tree/v0.1.1"
             },
-            "time": "2026-11-02T14:13:34+00:00"
+            "time": "2026-11-22T21:31:21+00:00"
         },
         {
             "name": "liberusoftware/module-billing-isp-filament",
-            "version": "0.1.0",
+            "version": "0.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/liberusoftware/module-module-billing-isp-filament.git",
-                "reference": "69a8247e0f8af8f2d4963b6e48091e35cd7eb432"
+                "reference": "759d19a7edbfb32f777126abceaebadea46a5539"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/liberusoftware/module-module-billing-isp-filament/zipball/69a8247e0f8af8f2d4963b6e48091e35cd7eb432",
-                "reference": "69a8247e0f8af8f2d4963b6e48091e35cd7eb432",
+                "url": "https://api.github.com/repos/liberusoftware/module-module-billing-isp-filament/zipball/759d19a7edbfb32f777126abceaebadea46a5539",
+                "reference": "759d19a7edbfb32f777126abceaebadea46a5539",
                 "shasum": ""
             },
             "require": {
@@ -8956,22 +8956,22 @@
             "description": "Filament adapter for Billing ISP.",
             "support": {
                 "issues": "https://github.com/liberusoftware/module-module-billing-isp-filament/issues",
-                "source": "https://github.com/liberusoftware/module-module-billing-isp-filament/tree/v0.1.0"
+                "source": "https://github.com/liberusoftware/module-module-billing-isp-filament/tree/v0.1.1"
             },
-            "time": "2026-11-02T14:13:43+00:00"
+            "time": "2026-11-22T21:31:21+00:00"
         },
         {
             "name": "liberusoftware/module-billing-isp-livewire",
-            "version": "0.1.0",
+            "version": "0.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/liberusoftware/module-module-billing-isp-livewire.git",
-                "reference": "8d45e54642ef596ed132a57e1140f71e62c5133f"
+                "reference": "88228fefe265cc480b40b7d217dc0312b786645b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/liberusoftware/module-module-billing-isp-livewire/zipball/8d45e54642ef596ed132a57e1140f71e62c5133f",
-                "reference": "8d45e54642ef596ed132a57e1140f71e62c5133f",
+                "url": "https://api.github.com/repos/liberusoftware/module-module-billing-isp-livewire/zipball/88228fefe265cc480b40b7d217dc0312b786645b",
+                "reference": "88228fefe265cc480b40b7d217dc0312b786645b",
                 "shasum": ""
             },
             "require": {
@@ -8998,9 +8998,9 @@
             "description": "Livewire adapter for Billing ISP.",
             "support": {
                 "issues": "https://github.com/liberusoftware/module-module-billing-isp-livewire/issues",
-                "source": "https://github.com/liberusoftware/module-module-billing-isp-livewire/tree/v0.1.0"
+                "source": "https://github.com/liberusoftware/module-module-billing-isp-livewire/tree/v0.1.1"
             },
-            "time": "2026-11-02T14:13:53+00:00"
+            "time": "2026-11-22T21:31:21+00:00"
         },
         {
             "name": "liberusoftware/module-billing-orders",
@@ -9175,16 +9175,16 @@
         },
         {
             "name": "liberusoftware/module-billing-payments",
-            "version": "0.1.0",
+            "version": "0.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/liberusoftware/module-billing-payments.git",
-                "reference": "2fc2bcdde83a8c5fc25120c7966310c7385988e7"
+                "reference": "eafdadbd3feafbe4a9d865170b5bb5212c613ec9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/liberusoftware/module-billing-payments/zipball/2fc2bcdde83a8c5fc25120c7966310c7385988e7",
-                "reference": "2fc2bcdde83a8c5fc25120c7966310c7385988e7",
+                "url": "https://api.github.com/repos/liberusoftware/module-billing-payments/zipball/eafdadbd3feafbe4a9d865170b5bb5212c613ec9",
+                "reference": "eafdadbd3feafbe4a9d865170b5bb5212c613ec9",
                 "shasum": ""
             },
             "require": {
@@ -9192,6 +9192,8 @@
                 "illuminate/events": "^13.38.0",
                 "illuminate/support": "^13.38.0",
                 "liberusoftware/module-manager": "^1.0",
+                "liberusoftware/payment-contracts": "^1.0",
+                "liberusoftware/payment-core": "^1.0",
                 "php": "^8.5"
             },
             "type": "liberu-module",
@@ -9212,22 +9214,22 @@
             "description": "Provider-neutral payment methods, capture, allocation, refunds, disputes, and reconciliation.",
             "support": {
                 "issues": "https://github.com/liberusoftware/module-billing-payments/issues",
-                "source": "https://github.com/liberusoftware/module-billing-payments/tree/v0.1.0"
+                "source": "https://github.com/liberusoftware/module-billing-payments/tree/v0.1.1"
             },
-            "time": "2026-11-02T16:38:36+00:00"
+            "time": "2026-11-22T21:31:23+00:00"
         },
         {
             "name": "liberusoftware/module-billing-payments-api",
-            "version": "0.1.0",
+            "version": "0.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/liberusoftware/module-billing-payments-api.git",
-                "reference": "0558977099f5cc42e950f8b6d363470b03b0714b"
+                "reference": "13ee64304140fbaf3ed931d1209c51d2dec099e5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/liberusoftware/module-billing-payments-api/zipball/0558977099f5cc42e950f8b6d363470b03b0714b",
-                "reference": "0558977099f5cc42e950f8b6d363470b03b0714b",
+                "url": "https://api.github.com/repos/liberusoftware/module-billing-payments-api/zipball/13ee64304140fbaf3ed931d1209c51d2dec099e5",
+                "reference": "13ee64304140fbaf3ed931d1209c51d2dec099e5",
                 "shasum": ""
             },
             "require": {
@@ -9257,22 +9259,22 @@
             "description": "HTTP API adapter for Liberu Billing Payments.",
             "support": {
                 "issues": "https://github.com/liberusoftware/module-billing-payments-api/issues",
-                "source": "https://github.com/liberusoftware/module-billing-payments-api/tree/v0.1.0"
+                "source": "https://github.com/liberusoftware/module-billing-payments-api/tree/v0.1.1"
             },
-            "time": "2026-11-02T16:38:42+00:00"
+            "time": "2026-11-22T21:31:23+00:00"
         },
         {
             "name": "liberusoftware/module-billing-payments-filament",
-            "version": "0.1.1",
+            "version": "0.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/liberusoftware/module-billing-payments-filament.git",
-                "reference": "c5a58a3b4eda0992b320a10fa3fad21abc07e5cb"
+                "reference": "66f9899bedd4a700421383e2b1abdfbb2cb379c9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/liberusoftware/module-billing-payments-filament/zipball/c5a58a3b4eda0992b320a10fa3fad21abc07e5cb",
-                "reference": "c5a58a3b4eda0992b320a10fa3fad21abc07e5cb",
+                "url": "https://api.github.com/repos/liberusoftware/module-billing-payments-filament/zipball/66f9899bedd4a700421383e2b1abdfbb2cb379c9",
+                "reference": "66f9899bedd4a700421383e2b1abdfbb2cb379c9",
                 "shasum": ""
             },
             "require": {
@@ -9299,22 +9301,22 @@
             "description": "Filament 5 adapter for Liberu Billing Payments.",
             "support": {
                 "issues": "https://github.com/liberusoftware/module-billing-payments-filament/issues",
-                "source": "https://github.com/liberusoftware/module-billing-payments-filament/tree/v0.1.1"
+                "source": "https://github.com/liberusoftware/module-billing-payments-filament/tree/v0.1.2"
             },
-            "time": "2026-11-14T14:26:07+00:00"
+            "time": "2026-11-22T21:31:24+00:00"
         },
         {
             "name": "liberusoftware/module-billing-payments-livewire",
-            "version": "0.1.0",
+            "version": "0.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/liberusoftware/module-billing-payments-livewire.git",
-                "reference": "972d7c934124c471f6d1de26de00dabb6a23271a"
+                "reference": "5f6fe71c868136358cbbec9c9571ba1155a67d67"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/liberusoftware/module-billing-payments-livewire/zipball/972d7c934124c471f6d1de26de00dabb6a23271a",
-                "reference": "972d7c934124c471f6d1de26de00dabb6a23271a",
+                "url": "https://api.github.com/repos/liberusoftware/module-billing-payments-livewire/zipball/5f6fe71c868136358cbbec9c9571ba1155a67d67",
+                "reference": "5f6fe71c868136358cbbec9c9571ba1155a67d67",
                 "shasum": ""
             },
             "require": {
@@ -9341,22 +9343,22 @@
             "description": "Livewire 4 adapter for Liberu Billing Payments.",
             "support": {
                 "issues": "https://github.com/liberusoftware/module-billing-payments-livewire/issues",
-                "source": "https://github.com/liberusoftware/module-billing-payments-livewire/tree/v0.1.0"
+                "source": "https://github.com/liberusoftware/module-billing-payments-livewire/tree/v0.1.1"
             },
-            "time": "2026-11-02T16:38:56+00:00"
+            "time": "2026-11-22T21:31:25+00:00"
         },
         {
             "name": "liberusoftware/module-billing-pricing",
-            "version": "0.1.3",
+            "version": "0.1.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/liberusoftware/module-billing-pricing.git",
-                "reference": "f6424184ecbbc046f8369a104f0e5fe4324e0f2a"
+                "reference": "b8910efda124bcf5e4a45ef8b73cee06f647134d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/liberusoftware/module-billing-pricing/zipball/f6424184ecbbc046f8369a104f0e5fe4324e0f2a",
-                "reference": "f6424184ecbbc046f8369a104f0e5fe4324e0f2a",
+                "url": "https://api.github.com/repos/liberusoftware/module-billing-pricing/zipball/b8910efda124bcf5e4a45ef8b73cee06f647134d",
+                "reference": "b8910efda124bcf5e4a45ef8b73cee06f647134d",
                 "shasum": ""
             },
             "require": {
@@ -9383,22 +9385,22 @@
             "description": "Provider-neutral pricing, contracts, discounts, proration, and snapshots for Liberu Billing.",
             "support": {
                 "issues": "https://github.com/liberusoftware/module-billing-pricing/issues",
-                "source": "https://github.com/liberusoftware/module-billing-pricing/tree/v0.1.3"
+                "source": "https://github.com/liberusoftware/module-billing-pricing/tree/v0.1.4"
             },
-            "time": "2026-11-02T16:39:03+00:00"
+            "time": "2026-11-22T21:31:26+00:00"
         },
         {
             "name": "liberusoftware/module-billing-pricing-api",
-            "version": "0.1.3",
+            "version": "0.1.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/liberusoftware/module-billing-pricing-api.git",
-                "reference": "411411d217e34d9602bb783ee2ad7ab20e8578a8"
+                "reference": "defe412c032cf2ed530a8d8ba9803f2a8f353ff8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/liberusoftware/module-billing-pricing-api/zipball/411411d217e34d9602bb783ee2ad7ab20e8578a8",
-                "reference": "411411d217e34d9602bb783ee2ad7ab20e8578a8",
+                "url": "https://api.github.com/repos/liberusoftware/module-billing-pricing-api/zipball/defe412c032cf2ed530a8d8ba9803f2a8f353ff8",
+                "reference": "defe412c032cf2ed530a8d8ba9803f2a8f353ff8",
                 "shasum": ""
             },
             "require": {
@@ -9428,22 +9430,22 @@
             "description": "HTTP API adapter for Liberu Billing Pricing.",
             "support": {
                 "issues": "https://github.com/liberusoftware/module-billing-pricing-api/issues",
-                "source": "https://github.com/liberusoftware/module-billing-pricing-api/tree/v0.1.3"
+                "source": "https://github.com/liberusoftware/module-billing-pricing-api/tree/v0.1.4"
             },
-            "time": "2026-11-02T16:39:10+00:00"
+            "time": "2026-11-22T21:31:26+00:00"
         },
         {
             "name": "liberusoftware/module-billing-pricing-filament",
-            "version": "0.1.4",
+            "version": "0.1.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/liberusoftware/module-billing-pricing-filament.git",
-                "reference": "5490f48a7181e481690995da5828f41437bba53e"
+                "reference": "e42cc4c1d69d05db02afb744b3cff451bd2e1663"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/liberusoftware/module-billing-pricing-filament/zipball/5490f48a7181e481690995da5828f41437bba53e",
-                "reference": "5490f48a7181e481690995da5828f41437bba53e",
+                "url": "https://api.github.com/repos/liberusoftware/module-billing-pricing-filament/zipball/e42cc4c1d69d05db02afb744b3cff451bd2e1663",
+                "reference": "e42cc4c1d69d05db02afb744b3cff451bd2e1663",
                 "shasum": ""
             },
             "require": {
@@ -9470,22 +9472,22 @@
             "description": "Filament adapter for Liberu Billing Pricing.",
             "support": {
                 "issues": "https://github.com/liberusoftware/module-billing-pricing-filament/issues",
-                "source": "https://github.com/liberusoftware/module-billing-pricing-filament/tree/v0.1.4"
+                "source": "https://github.com/liberusoftware/module-billing-pricing-filament/tree/v0.1.5"
             },
-            "time": "2026-11-14T14:26:09+00:00"
+            "time": "2026-11-22T21:31:27+00:00"
         },
         {
             "name": "liberusoftware/module-billing-pricing-livewire",
-            "version": "0.1.3",
+            "version": "0.1.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/liberusoftware/module-billing-pricing-livewire.git",
-                "reference": "e2db73690d614461dfefd50c55c9e035447b1f15"
+                "reference": "47a26d040fc1a18efc40f21e28d23dde276f4d5c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/liberusoftware/module-billing-pricing-livewire/zipball/e2db73690d614461dfefd50c55c9e035447b1f15",
-                "reference": "e2db73690d614461dfefd50c55c9e035447b1f15",
+                "url": "https://api.github.com/repos/liberusoftware/module-billing-pricing-livewire/zipball/47a26d040fc1a18efc40f21e28d23dde276f4d5c",
+                "reference": "47a26d040fc1a18efc40f21e28d23dde276f4d5c",
                 "shasum": ""
             },
             "require": {
@@ -9512,22 +9514,22 @@
             "description": "Livewire adapter for Liberu Billing Pricing.",
             "support": {
                 "issues": "https://github.com/liberusoftware/module-billing-pricing-livewire/issues",
-                "source": "https://github.com/liberusoftware/module-billing-pricing-livewire/tree/v0.1.3"
+                "source": "https://github.com/liberusoftware/module-billing-pricing-livewire/tree/v0.1.4"
             },
-            "time": "2026-11-02T16:39:24+00:00"
+            "time": "2026-11-22T21:31:27+00:00"
         },
         {
             "name": "liberusoftware/module-billing-provisioning",
-            "version": "0.1.0",
+            "version": "0.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/liberusoftware/module-billing-provisioning.git",
-                "reference": "904cc25e5fb3dda02d0a611a081156323800bdf7"
+                "reference": "7fefd083c64b9146012a87b5dfd5615ae3e342b3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/liberusoftware/module-billing-provisioning/zipball/904cc25e5fb3dda02d0a611a081156323800bdf7",
-                "reference": "904cc25e5fb3dda02d0a611a081156323800bdf7",
+                "url": "https://api.github.com/repos/liberusoftware/module-billing-provisioning/zipball/7fefd083c64b9146012a87b5dfd5615ae3e342b3",
+                "reference": "7fefd083c64b9146012a87b5dfd5615ae3e342b3",
                 "shasum": ""
             },
             "require": {
@@ -9555,22 +9557,22 @@
             "description": "Provider-neutral billing service provisioning and reconciliation.",
             "support": {
                 "issues": "https://github.com/liberusoftware/module-billing-provisioning/issues",
-                "source": "https://github.com/liberusoftware/module-billing-provisioning/tree/v0.1.0"
+                "source": "https://github.com/liberusoftware/module-billing-provisioning/tree/v0.1.1"
             },
-            "time": "2026-11-02T16:39:31+00:00"
+            "time": "2026-11-22T21:31:28+00:00"
         },
         {
             "name": "liberusoftware/module-billing-provisioning-api",
-            "version": "0.1.0",
+            "version": "0.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/liberusoftware/module-billing-provisioning-api.git",
-                "reference": "0c46d04e4b2d4774c386d99c6ed0eb58eb3964ba"
+                "reference": "e27daeb641e468fde4366cbcb7501388d650e007"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/liberusoftware/module-billing-provisioning-api/zipball/0c46d04e4b2d4774c386d99c6ed0eb58eb3964ba",
-                "reference": "0c46d04e4b2d4774c386d99c6ed0eb58eb3964ba",
+                "url": "https://api.github.com/repos/liberusoftware/module-billing-provisioning-api/zipball/e27daeb641e468fde4366cbcb7501388d650e007",
+                "reference": "e27daeb641e468fde4366cbcb7501388d650e007",
                 "shasum": ""
             },
             "require": {
@@ -9599,22 +9601,22 @@
             "description": "HTTP API adapter for Liberu Billing Provisioning.",
             "support": {
                 "issues": "https://github.com/liberusoftware/module-billing-provisioning-api/issues",
-                "source": "https://github.com/liberusoftware/module-billing-provisioning-api/tree/v0.1.0"
+                "source": "https://github.com/liberusoftware/module-billing-provisioning-api/tree/v0.1.1"
             },
-            "time": "2026-11-02T16:39:37+00:00"
+            "time": "2026-11-22T21:31:29+00:00"
         },
         {
             "name": "liberusoftware/module-billing-provisioning-filament",
-            "version": "0.1.1",
+            "version": "0.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/liberusoftware/module-billing-provisioning-filament.git",
-                "reference": "0c3db471c3e3146821ef9730101be438d2ac6bb1"
+                "reference": "e4f0494bcfa8c8aa75c4f9051d8db409d14e4410"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/liberusoftware/module-billing-provisioning-filament/zipball/0c3db471c3e3146821ef9730101be438d2ac6bb1",
-                "reference": "0c3db471c3e3146821ef9730101be438d2ac6bb1",
+                "url": "https://api.github.com/repos/liberusoftware/module-billing-provisioning-filament/zipball/e4f0494bcfa8c8aa75c4f9051d8db409d14e4410",
+                "reference": "e4f0494bcfa8c8aa75c4f9051d8db409d14e4410",
                 "shasum": ""
             },
             "require": {
@@ -9641,22 +9643,22 @@
             "description": "Filament adapter for Liberu Billing Provisioning.",
             "support": {
                 "issues": "https://github.com/liberusoftware/module-billing-provisioning-filament/issues",
-                "source": "https://github.com/liberusoftware/module-billing-provisioning-filament/tree/v0.1.1"
+                "source": "https://github.com/liberusoftware/module-billing-provisioning-filament/tree/v0.1.2"
             },
-            "time": "2026-11-14T14:26:09+00:00"
+            "time": "2026-11-22T21:31:30+00:00"
         },
         {
             "name": "liberusoftware/module-billing-provisioning-livewire",
-            "version": "0.1.0",
+            "version": "0.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/liberusoftware/module-billing-provisioning-livewire.git",
-                "reference": "f42ddf7b2d11722065fa5d7b0715e3191aa1d366"
+                "reference": "58683018abffc3d9b0a907e11b1f94c34316952b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/liberusoftware/module-billing-provisioning-livewire/zipball/f42ddf7b2d11722065fa5d7b0715e3191aa1d366",
-                "reference": "f42ddf7b2d11722065fa5d7b0715e3191aa1d366",
+                "url": "https://api.github.com/repos/liberusoftware/module-billing-provisioning-livewire/zipball/58683018abffc3d9b0a907e11b1f94c34316952b",
+                "reference": "58683018abffc3d9b0a907e11b1f94c34316952b",
                 "shasum": ""
             },
             "require": {
@@ -9683,22 +9685,22 @@
             "description": "Livewire adapter for Liberu Billing Provisioning.",
             "support": {
                 "issues": "https://github.com/liberusoftware/module-billing-provisioning-livewire/issues",
-                "source": "https://github.com/liberusoftware/module-billing-provisioning-livewire/tree/v0.1.0"
+                "source": "https://github.com/liberusoftware/module-billing-provisioning-livewire/tree/v0.1.1"
             },
-            "time": "2026-11-02T16:39:53+00:00"
+            "time": "2026-11-22T21:31:30+00:00"
         },
         {
             "name": "liberusoftware/module-billing-reporting",
-            "version": "0.1.0",
+            "version": "0.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/liberusoftware/module-billing-reporting.git",
-                "reference": "fcde97feeb7bd75bc385f139a72fc7a0cf81286c"
+                "reference": "43e309cbdbb2c699181c750803f55fa8ba2b68b8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/liberusoftware/module-billing-reporting/zipball/fcde97feeb7bd75bc385f139a72fc7a0cf81286c",
-                "reference": "fcde97feeb7bd75bc385f139a72fc7a0cf81286c",
+                "url": "https://api.github.com/repos/liberusoftware/module-billing-reporting/zipball/43e309cbdbb2c699181c750803f55fa8ba2b68b8",
+                "reference": "43e309cbdbb2c699181c750803f55fa8ba2b68b8",
                 "shasum": ""
             },
             "require": {
@@ -9726,22 +9728,22 @@
             "description": "Provider-neutral Billing Reporting domain module.",
             "support": {
                 "issues": "https://github.com/liberusoftware/module-billing-reporting/issues",
-                "source": "https://github.com/liberusoftware/module-billing-reporting/tree/v0.1.0"
+                "source": "https://github.com/liberusoftware/module-billing-reporting/tree/v0.1.1"
             },
-            "time": "2026-11-02T16:40:00+00:00"
+            "time": "2026-11-22T21:31:31+00:00"
         },
         {
             "name": "liberusoftware/module-billing-reporting-api",
-            "version": "0.1.0",
+            "version": "0.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/liberusoftware/module-billing-reporting-api.git",
-                "reference": "0607b91888198c2d9d09d1efe221c27e7a75122f"
+                "reference": "de943540ec77df69a563956d6687c54b034e83f2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/liberusoftware/module-billing-reporting-api/zipball/0607b91888198c2d9d09d1efe221c27e7a75122f",
-                "reference": "0607b91888198c2d9d09d1efe221c27e7a75122f",
+                "url": "https://api.github.com/repos/liberusoftware/module-billing-reporting-api/zipball/de943540ec77df69a563956d6687c54b034e83f2",
+                "reference": "de943540ec77df69a563956d6687c54b034e83f2",
                 "shasum": ""
             },
             "require": {
@@ -9771,22 +9773,22 @@
             "description": "Api adapter for Billing Reporting.",
             "support": {
                 "issues": "https://github.com/liberusoftware/module-billing-reporting-api/issues",
-                "source": "https://github.com/liberusoftware/module-billing-reporting-api/tree/v0.1.0"
+                "source": "https://github.com/liberusoftware/module-billing-reporting-api/tree/v0.1.1"
             },
-            "time": "2026-11-02T16:40:08+00:00"
+            "time": "2026-11-22T21:31:31+00:00"
         },
         {
             "name": "liberusoftware/module-billing-reporting-filament",
-            "version": "0.1.1",
+            "version": "0.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/liberusoftware/module-billing-reporting-filament.git",
-                "reference": "93e88734197435ba8316432a91facb6c3bd45d0c"
+                "reference": "55e4b1713dcfffaacf160d9237bdc541fb165478"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/liberusoftware/module-billing-reporting-filament/zipball/93e88734197435ba8316432a91facb6c3bd45d0c",
-                "reference": "93e88734197435ba8316432a91facb6c3bd45d0c",
+                "url": "https://api.github.com/repos/liberusoftware/module-billing-reporting-filament/zipball/55e4b1713dcfffaacf160d9237bdc541fb165478",
+                "reference": "55e4b1713dcfffaacf160d9237bdc541fb165478",
                 "shasum": ""
             },
             "require": {
@@ -9813,22 +9815,22 @@
             "description": "Filament adapter for Billing Reporting.",
             "support": {
                 "issues": "https://github.com/liberusoftware/module-billing-reporting-filament/issues",
-                "source": "https://github.com/liberusoftware/module-billing-reporting-filament/tree/v0.1.1"
+                "source": "https://github.com/liberusoftware/module-billing-reporting-filament/tree/v0.1.2"
             },
-            "time": "2026-11-14T14:26:10+00:00"
+            "time": "2026-11-22T21:31:32+00:00"
         },
         {
             "name": "liberusoftware/module-billing-reporting-livewire",
-            "version": "0.1.0",
+            "version": "0.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/liberusoftware/module-billing-reporting-livewire.git",
-                "reference": "9b1aa9eb951b8c2822e8844ffe243a3eaf2eda57"
+                "reference": "bf08dc5de5c263bb41e786fb4900b0a1a871da12"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/liberusoftware/module-billing-reporting-livewire/zipball/9b1aa9eb951b8c2822e8844ffe243a3eaf2eda57",
-                "reference": "9b1aa9eb951b8c2822e8844ffe243a3eaf2eda57",
+                "url": "https://api.github.com/repos/liberusoftware/module-billing-reporting-livewire/zipball/bf08dc5de5c263bb41e786fb4900b0a1a871da12",
+                "reference": "bf08dc5de5c263bb41e786fb4900b0a1a871da12",
                 "shasum": ""
             },
             "require": {
@@ -9855,22 +9857,22 @@
             "description": "Livewire adapter for Billing Reporting.",
             "support": {
                 "issues": "https://github.com/liberusoftware/module-billing-reporting-livewire/issues",
-                "source": "https://github.com/liberusoftware/module-billing-reporting-livewire/tree/v0.1.0"
+                "source": "https://github.com/liberusoftware/module-billing-reporting-livewire/tree/v0.1.1"
             },
-            "time": "2026-11-02T16:40:22+00:00"
+            "time": "2026-11-22T21:31:33+00:00"
         },
         {
             "name": "liberusoftware/module-billing-subscriptions",
-            "version": "0.1.0",
+            "version": "0.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/liberusoftware/module-billing-subscriptions.git",
-                "reference": "85b50159dd318394cc1f07edb5024491a8e297a8"
+                "reference": "0d8e4047e31b250f08da6e3b76a84c8915279ba9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/liberusoftware/module-billing-subscriptions/zipball/85b50159dd318394cc1f07edb5024491a8e297a8",
-                "reference": "85b50159dd318394cc1f07edb5024491a8e297a8",
+                "url": "https://api.github.com/repos/liberusoftware/module-billing-subscriptions/zipball/0d8e4047e31b250f08da6e3b76a84c8915279ba9",
+                "reference": "0d8e4047e31b250f08da6e3b76a84c8915279ba9",
                 "shasum": ""
             },
             "require": {
@@ -9898,22 +9900,22 @@
             "description": "Provider-neutral subscription lifecycle for Liberu Billing.",
             "support": {
                 "issues": "https://github.com/liberusoftware/module-billing-subscriptions/issues",
-                "source": "https://github.com/liberusoftware/module-billing-subscriptions/tree/v0.1.0"
+                "source": "https://github.com/liberusoftware/module-billing-subscriptions/tree/v0.1.1"
             },
-            "time": "2026-11-02T16:40:28+00:00"
+            "time": "2026-11-22T21:31:34+00:00"
         },
         {
             "name": "liberusoftware/module-billing-subscriptions-api",
-            "version": "0.1.0",
+            "version": "0.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/liberusoftware/module-billing-subscriptions-api.git",
-                "reference": "96a592264c19d58aaf8eba90cc6a3fc76e62f6e0"
+                "reference": "1193e4404797404d1de73c1b322bf406a4cee72d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/liberusoftware/module-billing-subscriptions-api/zipball/96a592264c19d58aaf8eba90cc6a3fc76e62f6e0",
-                "reference": "96a592264c19d58aaf8eba90cc6a3fc76e62f6e0",
+                "url": "https://api.github.com/repos/liberusoftware/module-billing-subscriptions-api/zipball/1193e4404797404d1de73c1b322bf406a4cee72d",
+                "reference": "1193e4404797404d1de73c1b322bf406a4cee72d",
                 "shasum": ""
             },
             "require": {
@@ -9943,22 +9945,22 @@
             "description": "HTTP API adapter for Liberu Billing Subscriptions.",
             "support": {
                 "issues": "https://github.com/liberusoftware/module-billing-subscriptions-api/issues",
-                "source": "https://github.com/liberusoftware/module-billing-subscriptions-api/tree/v0.1.0"
+                "source": "https://github.com/liberusoftware/module-billing-subscriptions-api/tree/v0.1.1"
             },
-            "time": "2026-11-02T16:40:34+00:00"
+            "time": "2026-11-22T21:31:34+00:00"
         },
         {
             "name": "liberusoftware/module-billing-subscriptions-filament",
-            "version": "0.1.1",
+            "version": "0.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/liberusoftware/module-billing-subscriptions-filament.git",
-                "reference": "ed76c622db7123622f4443799a70643b8d8f1671"
+                "reference": "ec07d70b5fe1fe592227d2735dc6ade75963d903"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/liberusoftware/module-billing-subscriptions-filament/zipball/ed76c622db7123622f4443799a70643b8d8f1671",
-                "reference": "ed76c622db7123622f4443799a70643b8d8f1671",
+                "url": "https://api.github.com/repos/liberusoftware/module-billing-subscriptions-filament/zipball/ec07d70b5fe1fe592227d2735dc6ade75963d903",
+                "reference": "ec07d70b5fe1fe592227d2735dc6ade75963d903",
                 "shasum": ""
             },
             "require": {
@@ -9985,22 +9987,22 @@
             "description": "Filament 5 adapter for Liberu Billing Subscriptions.",
             "support": {
                 "issues": "https://github.com/liberusoftware/module-billing-subscriptions-filament/issues",
-                "source": "https://github.com/liberusoftware/module-billing-subscriptions-filament/tree/v0.1.1"
+                "source": "https://github.com/liberusoftware/module-billing-subscriptions-filament/tree/v0.1.2"
             },
-            "time": "2026-11-14T14:26:10+00:00"
+            "time": "2026-11-22T21:31:35+00:00"
         },
         {
             "name": "liberusoftware/module-billing-subscriptions-livewire",
-            "version": "0.1.0",
+            "version": "0.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/liberusoftware/module-billing-subscriptions-livewire.git",
-                "reference": "7fa13feeca6ffc784b63b083bc62f5a1e08ba146"
+                "reference": "d2aec6dded439c7360fe51d8e3e9848b4efa9277"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/liberusoftware/module-billing-subscriptions-livewire/zipball/7fa13feeca6ffc784b63b083bc62f5a1e08ba146",
-                "reference": "7fa13feeca6ffc784b63b083bc62f5a1e08ba146",
+                "url": "https://api.github.com/repos/liberusoftware/module-billing-subscriptions-livewire/zipball/d2aec6dded439c7360fe51d8e3e9848b4efa9277",
+                "reference": "d2aec6dded439c7360fe51d8e3e9848b4efa9277",
                 "shasum": ""
             },
             "require": {
@@ -10027,9 +10029,9 @@
             "description": "Livewire 4 adapter for Liberu Billing Subscriptions.",
             "support": {
                 "issues": "https://github.com/liberusoftware/module-billing-subscriptions-livewire/issues",
-                "source": "https://github.com/liberusoftware/module-billing-subscriptions-livewire/tree/v0.1.0"
+                "source": "https://github.com/liberusoftware/module-billing-subscriptions-livewire/tree/v0.1.1"
             },
-            "time": "2026-11-02T16:40:47+00:00"
+            "time": "2026-11-22T21:31:36+00:00"
         },
         {
             "name": "liberusoftware/module-billing-usage",
@@ -10205,16 +10207,16 @@
         },
         {
             "name": "liberusoftware/module-liberu-business-workflow-reconciliation",
-            "version": "1.6.1",
+            "version": "1.6.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/liberusoftware/module-liberu-business-workflow-reconciliation.git",
-                "reference": "236038d231286241aca1eef3bfd94cb8734d932a"
+                "reference": "429c138ec4f565f65c3cb72fbfcf5e7cd741886b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/liberusoftware/module-liberu-business-workflow-reconciliation/zipball/236038d231286241aca1eef3bfd94cb8734d932a",
-                "reference": "236038d231286241aca1eef3bfd94cb8734d932a",
+                "url": "https://api.github.com/repos/liberusoftware/module-liberu-business-workflow-reconciliation/zipball/429c138ec4f565f65c3cb72fbfcf5e7cd741886b",
+                "reference": "429c138ec4f565f65c3cb72fbfcf5e7cd741886b",
                 "shasum": ""
             },
             "require": {
@@ -10246,22 +10248,22 @@
             "description": "Liberu liberu-business-workflow-reconciliation module.",
             "support": {
                 "issues": "https://github.com/liberusoftware/module-liberu-business-workflow-reconciliation/issues",
-                "source": "https://github.com/liberusoftware/module-liberu-business-workflow-reconciliation/tree/v1.6.1"
+                "source": "https://github.com/liberusoftware/module-liberu-business-workflow-reconciliation/tree/v1.6.2"
             },
-            "time": "2026-11-20T18:19:46+00:00"
+            "time": "2026-11-22T21:30:55+00:00"
         },
         {
             "name": "liberusoftware/module-liberu-business-workflow-reconciliation-api",
-            "version": "1.4.0",
+            "version": "1.4.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/liberusoftware/module-liberu-business-workflow-reconciliation-api.git",
-                "reference": "4215bfac623c60af40278db36afd4bf001e2324f"
+                "reference": "bfe78e27227c6a253546a9b63e5039494ad06279"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/liberusoftware/module-liberu-business-workflow-reconciliation-api/zipball/4215bfac623c60af40278db36afd4bf001e2324f",
-                "reference": "4215bfac623c60af40278db36afd4bf001e2324f",
+                "url": "https://api.github.com/repos/liberusoftware/module-liberu-business-workflow-reconciliation-api/zipball/bfe78e27227c6a253546a9b63e5039494ad06279",
+                "reference": "bfe78e27227c6a253546a9b63e5039494ad06279",
                 "shasum": ""
             },
             "require": {
@@ -10294,22 +10296,22 @@
             "description": "Liberu liberu-business-workflow-reconciliation-api module.",
             "support": {
                 "issues": "https://github.com/liberusoftware/module-liberu-business-workflow-reconciliation-api/issues",
-                "source": "https://github.com/liberusoftware/module-liberu-business-workflow-reconciliation-api/tree/v1.4.0"
+                "source": "https://github.com/liberusoftware/module-liberu-business-workflow-reconciliation-api/tree/v1.4.2"
             },
-            "time": "2026-11-02T16:48:44+00:00"
+            "time": "2026-11-22T21:30:56+00:00"
         },
         {
             "name": "liberusoftware/module-liberu-business-workflow-reconciliation-filament",
-            "version": "1.4.0",
+            "version": "1.4.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/liberusoftware/module-liberu-business-workflow-reconciliation-filament.git",
-                "reference": "67077026fe92f1729755dd1dd372012a0c3ae97d"
+                "reference": "3b751cf2387aaf53979cde4707cd55db0fa2d241"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/liberusoftware/module-liberu-business-workflow-reconciliation-filament/zipball/67077026fe92f1729755dd1dd372012a0c3ae97d",
-                "reference": "67077026fe92f1729755dd1dd372012a0c3ae97d",
+                "url": "https://api.github.com/repos/liberusoftware/module-liberu-business-workflow-reconciliation-filament/zipball/3b751cf2387aaf53979cde4707cd55db0fa2d241",
+                "reference": "3b751cf2387aaf53979cde4707cd55db0fa2d241",
                 "shasum": ""
             },
             "require": {
@@ -10340,9 +10342,9 @@
             "description": "Liberu liberu-business-workflow-reconciliation-filament module.",
             "support": {
                 "issues": "https://github.com/liberusoftware/module-liberu-business-workflow-reconciliation-filament/issues",
-                "source": "https://github.com/liberusoftware/module-liberu-business-workflow-reconciliation-filament/tree/v1.4.0"
+                "source": "https://github.com/liberusoftware/module-liberu-business-workflow-reconciliation-filament/tree/v1.4.1"
             },
-            "time": "2026-11-02T16:48:48+00:00"
+            "time": "2026-11-22T21:30:56+00:00"
         },
         {
             "name": "liberusoftware/module-liberu-business-workflow-reconciliation-livewire",
@@ -10392,16 +10394,16 @@
         },
         {
             "name": "liberusoftware/module-liberu-executive-insights",
-            "version": "1.6.1",
+            "version": "1.6.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/liberusoftware/module-liberu-executive-insights.git",
-                "reference": "0b67de33bd243359dd05402ebb9f09d2b6c60e01"
+                "reference": "7ce420bd92903f8d2c44e87c1c7079ff3660fdd2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/liberusoftware/module-liberu-executive-insights/zipball/0b67de33bd243359dd05402ebb9f09d2b6c60e01",
-                "reference": "0b67de33bd243359dd05402ebb9f09d2b6c60e01",
+                "url": "https://api.github.com/repos/liberusoftware/module-liberu-executive-insights/zipball/7ce420bd92903f8d2c44e87c1c7079ff3660fdd2",
+                "reference": "7ce420bd92903f8d2c44e87c1c7079ff3660fdd2",
                 "shasum": ""
             },
             "require": {
@@ -10433,22 +10435,22 @@
             "description": "Liberu liberu-executive-insights module.",
             "support": {
                 "issues": "https://github.com/liberusoftware/module-liberu-executive-insights/issues",
-                "source": "https://github.com/liberusoftware/module-liberu-executive-insights/tree/v1.6.1"
+                "source": "https://github.com/liberusoftware/module-liberu-executive-insights/tree/v1.6.2"
             },
-            "time": "2026-11-20T18:19:56+00:00"
+            "time": "2026-11-22T21:30:57+00:00"
         },
         {
             "name": "liberusoftware/module-liberu-executive-insights-api",
-            "version": "1.4.0",
+            "version": "1.4.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/liberusoftware/module-liberu-executive-insights-api.git",
-                "reference": "2c49b1060d74eb5e755ec9f21fa69675aaac7bc2"
+                "reference": "3ee796ed64aec34d68e55e31e5efa8f86ef2f5d8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/liberusoftware/module-liberu-executive-insights-api/zipball/2c49b1060d74eb5e755ec9f21fa69675aaac7bc2",
-                "reference": "2c49b1060d74eb5e755ec9f21fa69675aaac7bc2",
+                "url": "https://api.github.com/repos/liberusoftware/module-liberu-executive-insights-api/zipball/3ee796ed64aec34d68e55e31e5efa8f86ef2f5d8",
+                "reference": "3ee796ed64aec34d68e55e31e5efa8f86ef2f5d8",
                 "shasum": ""
             },
             "require": {
@@ -10481,22 +10483,22 @@
             "description": "Liberu liberu-executive-insights-api module.",
             "support": {
                 "issues": "https://github.com/liberusoftware/module-liberu-executive-insights-api/issues",
-                "source": "https://github.com/liberusoftware/module-liberu-executive-insights-api/tree/v1.4.0"
+                "source": "https://github.com/liberusoftware/module-liberu-executive-insights-api/tree/v1.4.2"
             },
-            "time": "2026-11-02T16:49:00+00:00"
+            "time": "2026-11-22T21:30:59+00:00"
         },
         {
             "name": "liberusoftware/module-liberu-executive-insights-filament",
-            "version": "1.4.0",
+            "version": "1.4.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/liberusoftware/module-liberu-executive-insights-filament.git",
-                "reference": "15d3c0ac121409e891423f4175c955a5c952738f"
+                "reference": "916a961bf62f9677eabe144311d5951f8f4bf6ca"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/liberusoftware/module-liberu-executive-insights-filament/zipball/15d3c0ac121409e891423f4175c955a5c952738f",
-                "reference": "15d3c0ac121409e891423f4175c955a5c952738f",
+                "url": "https://api.github.com/repos/liberusoftware/module-liberu-executive-insights-filament/zipball/916a961bf62f9677eabe144311d5951f8f4bf6ca",
+                "reference": "916a961bf62f9677eabe144311d5951f8f4bf6ca",
                 "shasum": ""
             },
             "require": {
@@ -10527,9 +10529,9 @@
             "description": "Liberu liberu-executive-insights-filament module.",
             "support": {
                 "issues": "https://github.com/liberusoftware/module-liberu-executive-insights-filament/issues",
-                "source": "https://github.com/liberusoftware/module-liberu-executive-insights-filament/tree/v1.4.0"
+                "source": "https://github.com/liberusoftware/module-liberu-executive-insights-filament/tree/v1.4.1"
             },
-            "time": "2026-11-02T16:49:03+00:00"
+            "time": "2026-11-22T21:31:02+00:00"
         },
         {
             "name": "liberusoftware/module-liberu-executive-insights-livewire",
@@ -10579,16 +10581,16 @@
         },
         {
             "name": "liberusoftware/module-liberu-platform-orchestration",
-            "version": "1.5.1",
+            "version": "1.5.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/liberusoftware/module-liberu-platform-orchestration.git",
-                "reference": "2dad4a16a3e21f99a1cf419e3bbaedb256613fac"
+                "reference": "b0c11e4fb8a4193991fce6f928193c7a2eadc88b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/liberusoftware/module-liberu-platform-orchestration/zipball/2dad4a16a3e21f99a1cf419e3bbaedb256613fac",
-                "reference": "2dad4a16a3e21f99a1cf419e3bbaedb256613fac",
+                "url": "https://api.github.com/repos/liberusoftware/module-liberu-platform-orchestration/zipball/b0c11e4fb8a4193991fce6f928193c7a2eadc88b",
+                "reference": "b0c11e4fb8a4193991fce6f928193c7a2eadc88b",
                 "shasum": ""
             },
             "require": {
@@ -10620,22 +10622,22 @@
             "description": "Liberu liberu-platform-orchestration module.",
             "support": {
                 "issues": "https://github.com/liberusoftware/module-liberu-platform-orchestration/issues",
-                "source": "https://github.com/liberusoftware/module-liberu-platform-orchestration/tree/v1.5.1"
+                "source": "https://github.com/liberusoftware/module-liberu-platform-orchestration/tree/v1.5.2"
             },
-            "time": "2026-11-20T18:20:07+00:00"
+            "time": "2026-11-22T21:31:00+00:00"
         },
         {
             "name": "liberusoftware/module-liberu-platform-orchestration-api",
-            "version": "1.3.0",
+            "version": "1.3.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/liberusoftware/module-liberu-platform-orchestration-api.git",
-                "reference": "467097a138ff465be4c7423f2c1075ccfcd2daba"
+                "reference": "59e7078b45ce146e8f165dc05fce3da3603c4302"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/liberusoftware/module-liberu-platform-orchestration-api/zipball/467097a138ff465be4c7423f2c1075ccfcd2daba",
-                "reference": "467097a138ff465be4c7423f2c1075ccfcd2daba",
+                "url": "https://api.github.com/repos/liberusoftware/module-liberu-platform-orchestration-api/zipball/59e7078b45ce146e8f165dc05fce3da3603c4302",
+                "reference": "59e7078b45ce146e8f165dc05fce3da3603c4302",
                 "shasum": ""
             },
             "require": {
@@ -10668,22 +10670,22 @@
             "description": "Liberu liberu-platform-orchestration-api module.",
             "support": {
                 "issues": "https://github.com/liberusoftware/module-liberu-platform-orchestration-api/issues",
-                "source": "https://github.com/liberusoftware/module-liberu-platform-orchestration-api/tree/v1.3.0"
+                "source": "https://github.com/liberusoftware/module-liberu-platform-orchestration-api/tree/v1.3.2"
             },
-            "time": "2026-11-02T16:49:15+00:00"
+            "time": "2026-11-22T21:31:01+00:00"
         },
         {
             "name": "liberusoftware/module-liberu-platform-orchestration-filament",
-            "version": "1.3.0",
+            "version": "1.3.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/liberusoftware/module-liberu-platform-orchestration-filament.git",
-                "reference": "e6cd0c0d092c30fff0f6d0d6267091cca21caa15"
+                "reference": "662b843ab3f81a46b95164c126981f16025dcb48"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/liberusoftware/module-liberu-platform-orchestration-filament/zipball/e6cd0c0d092c30fff0f6d0d6267091cca21caa15",
-                "reference": "e6cd0c0d092c30fff0f6d0d6267091cca21caa15",
+                "url": "https://api.github.com/repos/liberusoftware/module-liberu-platform-orchestration-filament/zipball/662b843ab3f81a46b95164c126981f16025dcb48",
+                "reference": "662b843ab3f81a46b95164c126981f16025dcb48",
                 "shasum": ""
             },
             "require": {
@@ -10714,9 +10716,9 @@
             "description": "Liberu liberu-platform-orchestration-filament module.",
             "support": {
                 "issues": "https://github.com/liberusoftware/module-liberu-platform-orchestration-filament/issues",
-                "source": "https://github.com/liberusoftware/module-liberu-platform-orchestration-filament/tree/v1.3.0"
+                "source": "https://github.com/liberusoftware/module-liberu-platform-orchestration-filament/tree/v1.3.1"
             },
-            "time": "2026-11-02T16:49:18+00:00"
+            "time": "2026-11-22T21:31:01+00:00"
         },
         {
             "name": "liberusoftware/module-liberu-platform-orchestration-livewire",
@@ -10766,16 +10768,16 @@
         },
         {
             "name": "liberusoftware/module-liberu-revenue-and-care-orchestration",
-            "version": "1.3.0",
+            "version": "1.3.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/liberusoftware/module-liberu-revenue-and-care-orchestration.git",
-                "reference": "9b22992d7cb167de2a8a004a31e69ece51815eee"
+                "reference": "3cfd7d05ce5f3e2b6073f097a2a275480ab18fdf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/liberusoftware/module-liberu-revenue-and-care-orchestration/zipball/9b22992d7cb167de2a8a004a31e69ece51815eee",
-                "reference": "9b22992d7cb167de2a8a004a31e69ece51815eee",
+                "url": "https://api.github.com/repos/liberusoftware/module-liberu-revenue-and-care-orchestration/zipball/3cfd7d05ce5f3e2b6073f097a2a275480ab18fdf",
+                "reference": "3cfd7d05ce5f3e2b6073f097a2a275480ab18fdf",
                 "shasum": ""
             },
             "require": {
@@ -10807,22 +10809,22 @@
             "description": "Liberu liberu-revenue-and-care-orchestration module.",
             "support": {
                 "issues": "https://github.com/liberusoftware/module-liberu-revenue-and-care-orchestration/issues",
-                "source": "https://github.com/liberusoftware/module-liberu-revenue-and-care-orchestration/tree/v1.3.0"
+                "source": "https://github.com/liberusoftware/module-liberu-revenue-and-care-orchestration/tree/v1.3.1"
             },
-            "time": "2026-11-02T16:49:26+00:00"
+            "time": "2026-11-22T21:31:02+00:00"
         },
         {
             "name": "liberusoftware/module-liberu-revenue-and-care-orchestration-api",
-            "version": "1.2.0",
+            "version": "1.2.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/liberusoftware/module-liberu-revenue-and-care-orchestration-api.git",
-                "reference": "1e9fcb4763f90fba88621ca72f0a71cf1a7acfd4"
+                "reference": "a082a5d1f8cebee7fa386fd8af5c49a6e00b9a63"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/liberusoftware/module-liberu-revenue-and-care-orchestration-api/zipball/1e9fcb4763f90fba88621ca72f0a71cf1a7acfd4",
-                "reference": "1e9fcb4763f90fba88621ca72f0a71cf1a7acfd4",
+                "url": "https://api.github.com/repos/liberusoftware/module-liberu-revenue-and-care-orchestration-api/zipball/a082a5d1f8cebee7fa386fd8af5c49a6e00b9a63",
+                "reference": "a082a5d1f8cebee7fa386fd8af5c49a6e00b9a63",
                 "shasum": ""
             },
             "require": {
@@ -10855,22 +10857,22 @@
             "description": "Liberu liberu-revenue-and-care-orchestration-api module.",
             "support": {
                 "issues": "https://github.com/liberusoftware/module-liberu-revenue-and-care-orchestration-api/issues",
-                "source": "https://github.com/liberusoftware/module-liberu-revenue-and-care-orchestration-api/tree/v1.2.0"
+                "source": "https://github.com/liberusoftware/module-liberu-revenue-and-care-orchestration-api/tree/v1.2.2"
             },
-            "time": "2026-11-02T16:49:31+00:00"
+            "time": "2026-11-22T21:31:04+00:00"
         },
         {
             "name": "liberusoftware/module-liberu-revenue-and-care-orchestration-filament",
-            "version": "1.2.0",
+            "version": "1.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/liberusoftware/module-liberu-revenue-and-care-orchestration-filament.git",
-                "reference": "7bb7222792a4408d3d6737c80c04ae0953d37dcd"
+                "reference": "fe089b8093c84c48ba798caffc056078e1225e89"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/liberusoftware/module-liberu-revenue-and-care-orchestration-filament/zipball/7bb7222792a4408d3d6737c80c04ae0953d37dcd",
-                "reference": "7bb7222792a4408d3d6737c80c04ae0953d37dcd",
+                "url": "https://api.github.com/repos/liberusoftware/module-liberu-revenue-and-care-orchestration-filament/zipball/fe089b8093c84c48ba798caffc056078e1225e89",
+                "reference": "fe089b8093c84c48ba798caffc056078e1225e89",
                 "shasum": ""
             },
             "require": {
@@ -10901,9 +10903,9 @@
             "description": "Liberu liberu-revenue-and-care-orchestration-filament module.",
             "support": {
                 "issues": "https://github.com/liberusoftware/module-liberu-revenue-and-care-orchestration-filament/issues",
-                "source": "https://github.com/liberusoftware/module-liberu-revenue-and-care-orchestration-filament/tree/v1.2.0"
+                "source": "https://github.com/liberusoftware/module-liberu-revenue-and-care-orchestration-filament/tree/v1.2.1"
             },
-            "time": "2026-11-02T16:49:35+00:00"
+            "time": "2026-11-22T21:31:05+00:00"
         },
         {
             "name": "liberusoftware/module-liberu-revenue-and-care-orchestration-livewire",
@@ -10953,11 +10955,11 @@
         },
         {
             "name": "liberusoftware/module-manager",
-            "version": "1.10.1",
+            "version": "1.10.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/liberusoftware/module-module-manager.git",
-                "reference": "c69eebdbce56bbaf54be6926a6ae623b065eeb2b"
+                "reference": "8451fdf2eb0764c1d3ae341945a2a8f5592df9af"
             },
             "require": {
                 "composer/semver": "^3.5.2",
@@ -10995,7 +10997,7 @@
                 "MIT"
             ],
             "description": "Deterministic manifest discovery and runtime enablement for Liberu modules.",
-            "time": "2026-11-21T17:59:31+00:00"
+            "time": "2026-11-22T12:02:29+00:00"
         },
         {
             "name": "liberusoftware/module-manager-filament",
@@ -11137,11 +11139,11 @@
         },
         {
             "name": "liberusoftware/organizations-teams",
-            "version": "1.12.2",
+            "version": "1.13.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/liberusoftware/module-organizations-teams.git",
-                "reference": "a727ec8a5556d0c6c945c15271d8cd41c0b37732"
+                "reference": "afc4badb4b61497bb2d06c779a91809446f29d17"
             },
             "require": {
                 "laravel/jetstream": "^5.5.3",
@@ -11181,20 +11183,20 @@
                 "MIT"
             ],
             "description": "Organization, team, membership, invitation, ownership, and context foundation.",
-            "time": "2026-11-22T05:19:15+00:00"
+            "time": "2026-11-22T11:56:42+00:00"
         },
         {
             "name": "liberusoftware/organizations-teams-filament",
-            "version": "1.6.4",
+            "version": "1.6.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/liberusoftware/module-organizations-teams-filament.git",
-                "reference": "335c9b835bfcab7d77d3c2495e21572d06636521"
+                "reference": "6695b176b62ca8795c099ae5d9217d31ecdc6cef"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/liberusoftware/module-organizations-teams-filament/zipball/335c9b835bfcab7d77d3c2495e21572d06636521",
-                "reference": "335c9b835bfcab7d77d3c2495e21572d06636521",
+                "url": "https://api.github.com/repos/liberusoftware/module-organizations-teams-filament/zipball/6695b176b62ca8795c099ae5d9217d31ecdc6cef",
+                "reference": "6695b176b62ca8795c099ae5d9217d31ecdc6cef",
                 "shasum": ""
             },
             "require": {
@@ -11224,9 +11226,9 @@
             "description": "Filament administration adapter for organizations and teams.",
             "support": {
                 "issues": "https://github.com/liberusoftware/module-organizations-teams-filament/issues",
-                "source": "https://github.com/liberusoftware/module-organizations-teams-filament/tree/v1.6.4"
+                "source": "https://github.com/liberusoftware/module-organizations-teams-filament/tree/v1.6.5"
             },
-            "time": "2026-11-22T00:42:59+00:00"
+            "time": "2026-11-22T21:31:37+00:00"
         },
         {
             "name": "liberusoftware/passkeys",
@@ -11342,11 +11344,11 @@
         },
         {
             "name": "liberusoftware/payment-core",
-            "version": "v1.1.1",
+            "version": "v1.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/liberusoftware/payment-core.git",
-                "reference": "fd23166f4d2e716b8b2b93337d05dcacd0ba7038"
+                "reference": "3fb53e00bb2855033260b82e90132818330b9490"
             },
             "require": {
                 "illuminate/database": "^13.0",
@@ -11375,7 +11377,7 @@
                 "MIT"
             ],
             "description": "Provider-neutral merchant payment orchestration, gateway registry, idempotency, webhook inbox, and reconciliation core.",
-            "time": "2026-11-22T11:32:49+00:00"
+            "time": "2026-11-22T21:31:38+00:00"
         },
         {
             "name": "liberusoftware/payment-gocardless",
@@ -11641,11 +11643,11 @@
         },
         {
             "name": "liberusoftware/roles-permissions",
-            "version": "1.9.0",
+            "version": "1.9.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/liberusoftware/module-roles-permissions.git",
-                "reference": "e877f74e5f53d62314aae9d6383414508d9ab6b7"
+                "reference": "22f64e841150ee0422ac7ec7fbb4585e0465a1d3"
             },
             "require": {
                 "liberusoftware/module-manager": "^1.0",
@@ -11681,20 +11683,20 @@
                 "MIT"
             ],
             "description": "Contextual roles, permissions, policies, and authorization safeguards.",
-            "time": "2026-11-22T04:51:02+00:00"
+            "time": "2026-11-22T21:31:38+00:00"
         },
         {
             "name": "liberusoftware/roles-permissions-filament",
-            "version": "1.7.1",
+            "version": "1.7.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/liberusoftware/module-roles-permissions-filament.git",
-                "reference": "d2eed989dc3c3cd9e38296bcf9808cfb55052578"
+                "reference": "e7891b9cdb49df3bf537cb0575e44ff7720bcad6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/liberusoftware/module-roles-permissions-filament/zipball/d2eed989dc3c3cd9e38296bcf9808cfb55052578",
-                "reference": "d2eed989dc3c3cd9e38296bcf9808cfb55052578",
+                "url": "https://api.github.com/repos/liberusoftware/module-roles-permissions-filament/zipball/e7891b9cdb49df3bf537cb0575e44ff7720bcad6",
+                "reference": "e7891b9cdb49df3bf537cb0575e44ff7720bcad6",
                 "shasum": ""
             },
             "require": {
@@ -11725,9 +11727,9 @@
             "description": "Filament Shield presentation adapter for Liberu authorization.",
             "support": {
                 "issues": "https://github.com/liberusoftware/module-roles-permissions-filament/issues",
-                "source": "https://github.com/liberusoftware/module-roles-permissions-filament/tree/v1.7.1"
+                "source": "https://github.com/liberusoftware/module-roles-permissions-filament/tree/v1.7.2"
             },
-            "time": "2026-11-22T05:30:20+00:00"
+            "time": "2026-11-22T21:31:38+00:00"
         },
         {
             "name": "liberusoftware/scheduler-queues",

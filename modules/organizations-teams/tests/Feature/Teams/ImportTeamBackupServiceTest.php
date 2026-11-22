@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Tests\Feature\Teams;
 
+use App\Models\Contact;
+use App\Models\Task;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
-use Liberu\Foundation\Integrations\Models\Webhook;
-use Liberu\Foundation\Integrations\Models\WebhookDelivery;
 use Liberu\Foundation\Organizations\Exceptions\TeamImportException;
 use Liberu\Foundation\Organizations\Models\Team;
 use Liberu\Foundation\Organizations\Services\ImportTeamBackupService;
@@ -21,9 +21,17 @@ class ImportTeamBackupServiceTest extends TestCase
 {
     use RefreshDatabase;
 
-    private function backupOf(Team $source): string
+    /**
+     * Back up a team, then delete its rows to simulate a disjoint target env
+     * (a real cross-env import lands in a DB that does not already hold this
+     * team's data / colliding unique values). Returns the backup's local path.
+     */
+    private function backupThenClear(Team $source): string
     {
         $result = (new TeamBackupService())->backup($source, 'local');
+
+        Task::withoutGlobalScope('tenant')->where('team_id', $source->id)->delete();
+        Contact::withoutGlobalScope('tenant')->where('team_id', $source->id)->delete();
 
         return Storage::disk('local')->path($result['path']);
     }
@@ -35,41 +43,30 @@ class ImportTeamBackupServiceTest extends TestCase
         $assignee = User::factory()->create();
 
         $source = Team::factory()->create();
-        $webhook = Webhook::create([
-            'team_id' => $source->id,
-            'user_id' => $assignee->id,
-            'name' => 'CrossEnv Hook',
-            'url' => 'https://hooks.example.com/cross-env',
-            'events' => ['contact.created'],
-            'is_active' => true,
-        ]);
-        WebhookDelivery::create([
-            'team_id' => $source->id,
-            'webhook_id' => $webhook->id,
-            'event' => 'contact.created',
-            'success' => true,
-            'status_code' => 200,
+        $contact = Contact::factory()->create(['team_id' => $source->id, 'name' => 'CrossEnv Co']);
+        Task::factory()->create([
+            'team_id' => $source->id, 'contact_id' => $contact->id, 'assigned_to' => $assignee->id,
         ]);
 
-        $localZip = $this->backupOf($source);
+        $localZip = $this->backupThenClear($source);
 
         $new = (new ImportTeamBackupService())->import($localZip, 'Imported Team', $importer);
 
         $this->assertNotSame($source->id, $new->id);
         $this->assertSame($importer->id, $new->user_id);
 
-        $newWebhook = DB::table('webhooks')->where('team_id', $new->id)->first();
-        $newDelivery = DB::table('crm_webhook_deliveries')->where('team_id', $new->id)->first();
-        $this->assertNotNull($newWebhook);
-        $this->assertNotNull($newDelivery);
-        $this->assertSame('CrossEnv Hook', $newWebhook->name);
+        $newContact = DB::table('contacts')->where('team_id', $new->id)->first();
+        $newTask = DB::table('tasks')->where('team_id', $new->id)->first();
+        $this->assertNotNull($newContact);
+        $this->assertNotNull($newTask);
+        $this->assertSame('CrossEnv Co', $newContact->name);
 
-        // New PK, cross-model FK rewired to the imported webhook.
-        $this->assertNotSame($webhook->id, (int) $newWebhook->id);
-        $this->assertSame((int) $newWebhook->id, (int) $newDelivery->webhook_id);
+        // New PK, cross-model FK rewired to the imported contact.
+        $this->assertNotSame($contact->id, (int) $newContact->id);
+        $this->assertSame((int) $newContact->id, (int) $newTask->contact_id);
 
-        // User reference resolves to the importer, not the source-env user.
-        $this->assertSame($importer->id, (int) $newWebhook->user_id);
+        // User reference resolves to the importer, not the source-env assignee.
+        $this->assertSame($importer->id, (int) $newTask->assigned_to);
     }
 
     public function test_import_is_atomic_and_leaves_no_orphan_team_on_failure(): void
@@ -77,28 +74,22 @@ class ImportTeamBackupServiceTest extends TestCase
         Storage::fake('local');
         $importer = User::factory()->create();
         $source = Team::factory()->create();
-        Webhook::create([
-            'team_id' => $source->id,
-            'name' => 'Rollback Hook',
-            'url' => 'https://hooks.example.com/rollback',
-            'events' => ['contact.created'],
-            'is_active' => true,
-        ]);
+        Contact::factory()->create(['team_id' => $source->id, 'email' => 'dupe@example.com']);
 
         // Corrupt one row so the insert fails after the team transaction starts.
         $result = (new TeamBackupService())->backup($source, 'local');
         $zip = new ZipArchive();
         $zip->open(Storage::disk('local')->path($result['path']));
-        $webhooks = json_decode((string) $zip->getFromName('models/Webhook.json'), true, flags: JSON_THROW_ON_ERROR);
-        $webhooks[0]['invalid_column'] = 'forces rollback';
-        $zip->deleteName('models/Webhook.json');
-        $zip->addFromString('models/Webhook.json', json_encode($webhooks, JSON_THROW_ON_ERROR));
+        $contacts = json_decode((string) $zip->getFromName('models/Contact.json'), true, flags: JSON_THROW_ON_ERROR);
+        $contacts[0]['invalid_column'] = 'forces rollback';
+        $zip->deleteName('models/Contact.json');
+        $zip->addFromString('models/Contact.json', json_encode($contacts, JSON_THROW_ON_ERROR));
         $zip->close();
         $teamsBefore = DB::table('teams')->count();
 
         try {
             (new ImportTeamBackupService())->import(Storage::disk('local')->path($result['path']), 'X', $importer);
-            $this->fail('expected a failure');
+            $this->fail('expected a unique-collision failure');
         } catch (\Throwable) {
             // expected
         }

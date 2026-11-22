@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Tests\Feature\Teams;
 
+use App\Models\Contact;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Storage;
-use Liberu\Foundation\Integrations\Models\Webhook;
 use Liberu\Foundation\Organizations\Jobs\GenerateTeamBackup;
 use Liberu\Foundation\Organizations\Models\Team;
 use Liberu\Foundation\Organizations\Models\TeamBackup;
@@ -23,13 +23,7 @@ class GenerateTeamBackupJobTest extends TestCase
     {
         Storage::fake('local');
         $team = Team::factory()->create();
-        Webhook::create([
-            'team_id' => $team->id,
-            'name' => 'Backup Hook',
-            'url' => 'https://hooks.example.com/backup',
-            'events' => ['contact.created'],
-            'is_active' => true,
-        ]);
+        Contact::factory()->create(['team_id' => $team->id]);
         $backup = TeamBackup::factory()->create(['team_id' => $team->id, 'disk' => 'local']);
 
         (new GenerateTeamBackup($backup->id))->handle(app(TeamBackupService::class));

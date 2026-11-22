@@ -3,7 +3,7 @@
   "name": "module-billing-subscriptions-api",
   "display_name": "Billing Subscriptions API",
   "description": "Sanctum-protected API adapter for Billing Subscriptions.",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "category": "presentation",
   "provider": "Liberu\\Billing\\Subscriptions\\Api\\SubscriptionsApiServiceProvider",
   "requires": {
@@ -16,7 +16,13 @@
     }
   },
   "suggests": [],
-  "capabilities": ["billing.subscriptions.api"],
+  "capabilities": [
+    "billing.subscriptions.api"
+  ],
   "default_enabled": true,
-  "features": ["Subscription collection", "Activation", "Lifecycle actions"]
+  "features": [
+    "Subscription collection",
+    "Activation",
+    "Lifecycle actions"
+  ]
 }

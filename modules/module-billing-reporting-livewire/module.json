@@ -3,7 +3,7 @@
   "name": "module-billing-reporting-livewire",
   "display_name": "Billing Reporting Livewire",
   "description": "Livewire adapter for Billing Reporting.",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "category": "presentation",
   "provider": "Liberu\\Billing\\Reporting\\Livewire\\ReportingLivewireServiceProvider",
   "requires": {
@@ -17,7 +17,12 @@
   "suggests": [],
   "presentation": {
     "livewire": {
-      "components": ["module-billing-reporting::dashboard", "module-billing-reporting::metrics", "module-billing-reporting::snapshots", "module-billing-reporting::customer-summary"]
+      "components": [
+        "module-billing-reporting::dashboard",
+        "module-billing-reporting::metrics",
+        "module-billing-reporting::snapshots",
+        "module-billing-reporting::customer-summary"
+      ]
     }
   },
   "capabilities": [

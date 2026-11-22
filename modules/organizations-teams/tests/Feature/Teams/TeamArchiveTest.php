@@ -17,7 +17,7 @@ class TeamArchiveTest extends TestCase
 
     public function test_archive_sets_timestamp_and_marks_archived(): void
     {
-        $team = Team::factory()->create(['personal_team' => false]);
+        $team = Team::factory()->create();
 
         $team->archive();
 
@@ -36,7 +36,7 @@ class TeamArchiveTest extends TestCase
 
     public function test_archive_is_idempotent(): void
     {
-        $team = Team::factory()->create(['personal_team' => false]);
+        $team = Team::factory()->create();
         $team->archive();
         $first = $team->archived_at;
 
@@ -50,7 +50,7 @@ class TeamArchiveTest extends TestCase
         $user = User::factory()->withPersonalTeam()->create();
         $personal = $user->personalTeam();
 
-        $shared = Team::factory()->create(['personal_team' => false]);
+        $shared = Team::factory()->create();
         $user->forceFill(['current_team_id' => $shared->id])->save();
 
         $shared->archive();
@@ -60,7 +60,7 @@ class TeamArchiveTest extends TestCase
 
     public function test_restore_clears_archived_state(): void
     {
-        $team = Team::factory()->create(['personal_team' => false]);
+        $team = Team::factory()->create();
         $team->archive();
 
         $team->restore();
@@ -71,8 +71,8 @@ class TeamArchiveTest extends TestCase
 
     public function test_global_scope_hides_archived_but_with_archived_reveals(): void
     {
-        $active = Team::factory()->create(['personal_team' => false]);
-        $archived = Team::factory()->create(['personal_team' => false]);
+        $active = Team::factory()->create();
+        $archived = Team::factory()->create();
         $archived->archive();
 
         $ids = Team::query()->pluck('id');
@@ -86,7 +86,7 @@ class TeamArchiveTest extends TestCase
     public function test_archived_team_drops_from_user_tenants_and_access(): void
     {
         $user = User::factory()->withPersonalTeam()->create();
-        $shared = Team::factory()->create(['user_id' => $user->id, 'personal_team' => false]);
+        $shared = Team::factory()->create(['user_id' => $user->id]);
         $user->teams()->attach($shared);
         $user->unsetRelation('ownedTeams')->unsetRelation('teams');
 
@@ -104,7 +104,7 @@ class TeamArchiveTest extends TestCase
     public function test_default_tenant_is_never_an_archived_team(): void
     {
         $user = User::factory()->withPersonalTeam()->create();
-        $shared = Team::factory()->create(['user_id' => $user->id, 'personal_team' => false]);
+        $shared = Team::factory()->create(['user_id' => $user->id]);
         $user->forceFill(['current_team_id' => $shared->id])->save();
         $shared->archive();
 
@@ -119,7 +119,7 @@ class TeamArchiveTest extends TestCase
         // current_team_id points at an archived team -> currentTeam relation
         // resolves to null via the global scope -> no tenant, no data leak.
         $user = User::factory()->create();
-        $shared = Team::factory()->create(['personal_team' => false]);
+        $shared = Team::factory()->create();
         $user->forceFill(['current_team_id' => $shared->id])->save();
         Team::query()->whereKey($shared->id)->update(['archived_at' => now()]);
 

@@ -3,7 +3,7 @@
   "name": "module-billing-provisioning-livewire",
   "display_name": "Billing Provisioning Livewire",
   "description": "Livewire adapter for Liberu Billing Provisioning.",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "category": "presentation",
   "provider": "Liberu\\Billing\\Provisioning\\Livewire\\ProvisioningLivewireServiceProvider",
   "requires": {
@@ -22,5 +22,11 @@
   "features": [
     "Provisioning Livewire components"
   ],
-  "presentation": {"livewire": {"components": ["module-billing-provisioning::operations"]}}
+  "presentation": {
+    "livewire": {
+      "components": [
+        "module-billing-provisioning::operations"
+      ]
+    }
+  }
 }

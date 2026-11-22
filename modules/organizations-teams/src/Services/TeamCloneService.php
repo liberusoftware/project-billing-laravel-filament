@@ -63,15 +63,6 @@ class TeamCloneService
         Menu::class => ['parent_id' => Menu::class],
     ];
 
-    /**
-     * @param  list<class-string>|null  $cloneableModels
-     * @param  array<class-string, array<string, class-string>>|null  $fkEdges
-     */
-    public function __construct(
-        private readonly ?array $cloneableModels = null,
-        private readonly ?array $fkEdges = null,
-    ) {}
-
     public function clone(Team $source, string $name, User $owner): Team
     {
         $team = new Team();
@@ -102,11 +93,7 @@ class TeamCloneService
     {
         $idMap = [];
 
-        foreach ($this->cloneableModels ?? self::CLONEABLE_MODELS as $class) {
-            if (! class_exists($class)) {
-                continue;
-            }
-
+        foreach (self::CLONEABLE_MODELS as $class) {
             $table = (new $class())->getTable();
             if (! Schema::hasTable($table)) {
                 continue;
@@ -133,11 +120,7 @@ class TeamCloneService
      */
     private function patchForeignKeys(Team $team, array $idMap): void
     {
-        foreach ($this->fkEdges ?? self::FK_EDGES as $class => $edges) {
-            if (! class_exists($class)) {
-                continue;
-            }
-
+        foreach (self::FK_EDGES as $class => $edges) {
             $table = (new $class())->getTable();
             if (! Schema::hasTable($table) || empty($idMap[$class])) {
                 continue;

@@ -3,7 +3,7 @@
   "name": "module-billing-payments-api",
   "display_name": "Billing Payments API",
   "description": "Sanctum-protected API adapter for Billing Payments.",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "category": "presentation",
   "provider": "Liberu\\Billing\\Payments\\Api\\PaymentsApiServiceProvider",
   "requires": {
@@ -16,7 +16,19 @@
     }
   },
   "suggests": [],
-  "capabilities": ["billing.payments.api"],
+  "capabilities": [
+    "billing.payments.api"
+  ],
   "default_enabled": true,
-  "features": ["Payment collection", "Payment methods", "Mandates", "Payment creation", "Capture", "Allocation", "Refunds", "Disputes", "Reconciliation"]
+  "features": [
+    "Payment collection",
+    "Payment methods",
+    "Mandates",
+    "Payment creation",
+    "Capture",
+    "Allocation",
+    "Refunds",
+    "Disputes",
+    "Reconciliation"
+  ]
 }

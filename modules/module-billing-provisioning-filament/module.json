@@ -3,7 +3,7 @@
   "name": "module-billing-provisioning-filament",
   "display_name": "Billing Provisioning Filament",
   "description": "Filament adapter for Liberu Billing Provisioning.",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "category": "presentation",
   "provider": "Liberu\\Billing\\Provisioning\\Filament\\ProvisioningFilamentServiceProvider",
   "requires": {

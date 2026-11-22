@@ -8,7 +8,6 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Liberu\Foundation\Organizations\Database\Factories\TeamBackupFactory;
 
 /**
  * Tracking row for a team data-export. Not IsTenantModel — backups are an
@@ -17,11 +16,6 @@ use Liberu\Foundation\Organizations\Database\Factories\TeamBackupFactory;
 class TeamBackup extends Model
 {
     use HasFactory;
-
-    protected static function newFactory(): TeamBackupFactory
-    {
-        return TeamBackupFactory::new();
-    }
 
     protected $fillable = [
         'team_id',

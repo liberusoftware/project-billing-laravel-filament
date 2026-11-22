@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Tests\Feature\Teams;
 
+use App\Models\Contact;
+use App\Models\Lead;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Storage;
-use Liberu\Foundation\Integrations\Models\Webhook;
-use Liberu\Foundation\Integrations\Models\WebhookDelivery;
 use Liberu\Foundation\Organizations\Models\Team;
 use Liberu\Foundation\Organizations\Services\TeamBackupService;
 use Tests\TestCase;
@@ -33,13 +33,7 @@ class TeamBackupServiceTest extends TestCase
     {
         Storage::fake('local');
         $team = Team::factory()->create();
-        Webhook::create([
-            'team_id' => $team->id,
-            'name' => 'Acme Hook',
-            'url' => 'https://hooks.example.com/acme',
-            'events' => ['contact.created'],
-            'is_active' => true,
-        ]);
+        Contact::factory()->create(['team_id' => $team->id, 'name' => 'Acme Buyer']);
 
         $result = (new TeamBackupService())->backup($team, 'local');
 
@@ -48,9 +42,9 @@ class TeamBackupServiceTest extends TestCase
 
         $manifest = json_decode($this->readEntry($result['path'], 'manifest.json'), true);
         $this->assertSame($team->id, $manifest['team']['id']);
-        $this->assertSame(1, $manifest['models']['Webhook']);
+        $this->assertSame(1, $manifest['models']['Contact']);
 
-        $this->assertStringContainsString('Acme Hook', $this->readEntry($result['path'], 'models/Webhook.json'));
+        $this->assertStringContainsString('Acme Buyer', $this->readEntry($result['path'], 'models/Contact.json'));
     }
 
     public function test_backup_contains_only_the_target_teams_rows(): void
@@ -58,37 +52,18 @@ class TeamBackupServiceTest extends TestCase
         Storage::fake('local');
         $teamA = Team::factory()->create();
         $teamB = Team::factory()->create();
-        Webhook::create([
-            'team_id' => $teamA->id,
-            'name' => 'Mine Hook',
-            'url' => 'https://hooks.example.com/mine',
-            'events' => ['contact.created'],
-            'is_active' => true,
-        ]);
-        $otherHook = Webhook::create([
-            'team_id' => $teamB->id,
-            'name' => 'Other Hook',
-            'url' => 'https://hooks.example.com/other',
-            'events' => ['contact.created'],
-            'is_active' => true,
-        ]);
-        WebhookDelivery::create([
-            'team_id' => $teamB->id,
-            'webhook_id' => $otherHook->id,
-            'event' => 'contact.created',
-            'success' => true,
-            'status_code' => 200,
-        ]);
+        Contact::factory()->create(['team_id' => $teamA->id, 'name' => 'Mine Contact']);
+        Contact::factory()->create(['team_id' => $teamB->id, 'name' => 'Other Contact']);
+        Lead::factory()->create(['team_id' => $teamB->id]);
 
         $result = (new TeamBackupService())->backup($teamA, 'local');
 
-        $webhooks = $this->readEntry($result['path'], 'models/Webhook.json');
-        $this->assertStringContainsString('Mine Hook', $webhooks);
-        $this->assertStringNotContainsString('Other Hook', $webhooks);
+        $contacts = $this->readEntry($result['path'], 'models/Contact.json');
+        $this->assertStringContainsString('Mine Contact', $contacts);
+        $this->assertStringNotContainsString('Other Contact', $contacts);
 
         $manifest = json_decode($this->readEntry($result['path'], 'manifest.json'), true);
-        $this->assertSame(1, $manifest['models']['Webhook']);
-        $this->assertSame(0, $manifest['models']['WebhookDelivery']);
+        $this->assertSame(1, $manifest['models']['Contact']);
     }
 
     public function test_backup_includes_team_membership_extras(): void

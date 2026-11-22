@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Liberu\Foundation\Organizations\Database\Factories;
+namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Liberu\Foundation\Organizations\Models\Team;

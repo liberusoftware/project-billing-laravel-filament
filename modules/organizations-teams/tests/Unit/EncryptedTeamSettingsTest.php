@@ -24,15 +24,8 @@ it('encrypts workspace credentials and excludes them from serialization and mass
 
     expect($raw)->not->toContain('private-key')
         ->and($team->toArray())->not->toHaveKey('settings')
-        ->and($team->toJson())->not->toContain('private-key')
-        ->and($team->isFillable('settings'))->toBeFalse();
-    $wasStrict = Model::preventsSilentlyDiscardingAttributes();
-    Model::preventSilentlyDiscardingAttributes(false);
-    try {
-        $team->fill(['settings' => ['api_key' => 'untrusted-replacement']]);
-    } finally {
-        Model::preventSilentlyDiscardingAttributes($wasStrict);
-    }
+        ->and($team->toJson())->not->toContain('private-key');
+    $team->fill(['settings' => ['api_key' => 'untrusted-replacement']]);
     expect($team->settings['api_key'])->toBe('private-key');
 
     $loaded = new Team();

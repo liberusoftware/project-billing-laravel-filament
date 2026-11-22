@@ -3,7 +3,7 @@
   "name": "module-billing-hosting-filament",
   "display_name": "Billing Hosting Filament",
   "description": "Filament adapter for Billing Hosting.",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "category": "presentation",
   "provider": "Liberu\\Billing\\Hosting\\Filament\\HostingFilamentServiceProvider",
   "requires": {
@@ -22,5 +22,11 @@
   "features": [
     "Hosting Filament integration"
   ],
-  "presentation": {"filament": {"admin": ["Liberu\\Billing\\Hosting\\Filament\\HostingFilamentPlugin"]}}
+  "presentation": {
+    "filament": {
+      "admin": [
+        "Liberu\\Billing\\Hosting\\Filament\\HostingFilamentPlugin"
+      ]
+    }
+  }
 }

@@ -3,12 +3,24 @@
   "name": "module-billing-catalog",
   "display_name": "Billing Catalog",
   "description": "Products and product lifecycle owned by Billing Catalog.",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "category": "capability",
   "provider": "Liberu\\Billing\\Catalog\\CatalogServiceProvider",
-  "requires": {"php": "^8.5", "laravel": "^13.0", "packages": {"liberusoftware/module-manager": "^1.0"}},
+  "requires": {
+    "php": "^8.5",
+    "laravel": "^13.0",
+    "packages": {
+      "liberusoftware/module-manager": "^1.0"
+    }
+  },
   "suggests": [],
-  "capabilities": ["billing.catalog"],
+  "capabilities": [
+    "billing.catalog"
+  ],
   "default_enabled": true,
-  "features": ["Products", "Product lifecycle", "Team-scoped catalog"]
+  "features": [
+    "Products",
+    "Product lifecycle",
+    "Team-scoped catalog"
+  ]
 }

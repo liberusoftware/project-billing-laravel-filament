@@ -3,16 +3,30 @@
   "name": "module-billing-subscriptions",
   "display_name": "Billing Subscriptions",
   "description": "Subscription activation, renewal, trials, configurable periods, changes, pauses, cancellation, expiry, and entitlements.",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "category": "capability",
   "provider": "Liberu\\Billing\\Subscriptions\\SubscriptionsServiceProvider",
   "requires": {
     "php": "^8.5",
     "laravel": "^13.0",
-    "packages": {"liberusoftware/module-manager": "^1.0"}
+    "packages": {
+      "liberusoftware/module-manager": "^1.0"
+    }
   },
   "suggests": [],
-  "capabilities": ["billing.subscriptions"],
+  "capabilities": [
+    "billing.subscriptions"
+  ],
   "default_enabled": true,
-  "features": ["Activation", "Renewal", "Trials", "Configurable periods", "Plan changes", "Pause", "Cancellation", "Expiry", "Entitlements"]
+  "features": [
+    "Activation",
+    "Renewal",
+    "Trials",
+    "Configurable periods",
+    "Plan changes",
+    "Pause",
+    "Cancellation",
+    "Expiry",
+    "Entitlements"
+  ]
 }

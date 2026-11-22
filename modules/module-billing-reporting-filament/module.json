@@ -3,7 +3,7 @@
   "name": "module-billing-reporting-filament",
   "display_name": "Billing Reporting Filament",
   "description": "Filament adapter for Billing Reporting.",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "category": "presentation",
   "provider": "Liberu\\Billing\\Reporting\\Filament\\ReportingFilamentServiceProvider",
   "requires": {

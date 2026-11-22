@@ -3,7 +3,7 @@
   "name": "payment-core",
   "display_name": "Payment Core",
   "description": "Provider-neutral merchant payment orchestration, gateway registry, and webhook inbox.",
-  "version": "1.1.0",
+  "version": "1.1.2",
   "category": "capability",
   "provider": "Liberu\\Payment\\Core\\PaymentCoreServiceProvider",
   "requires": {

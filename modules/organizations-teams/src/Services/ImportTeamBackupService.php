@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Liberu\Foundation\Organizations\Services;
 
 use App\Models\User;
+use App\Support\SchemaGraph;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
@@ -106,7 +107,7 @@ class ImportTeamBackupService
      */
     private function remapForeignKeys(Team $team, array $idMap, int $importerId): void
     {
-        $edges = $this->foreignKeyEdges(array_keys($idMap));
+        $edges = SchemaGraph::edges(array_keys($idMap));
 
         foreach (array_keys($idMap) as $table) {
             $patchable = $this->patchableColumns($table, $edges[$table] ?? []);
@@ -176,25 +177,5 @@ class ImportTeamBackupService
         }
 
         return $patchable;
-    }
-
-    /**
-     * @param  list<string>  $tables
-     * @return array<string, array<string, string>>
-     */
-    private function foreignKeyEdges(array $tables): array
-    {
-        $edges = [];
-
-        foreach ($tables as $table) {
-            foreach (Schema::getForeignKeys($table) as $fk) {
-                if (count($fk['columns']) !== 1) {
-                    continue;
-                }
-                $edges[$table][$fk['columns'][0]] = $fk['foreign_table'];
-            }
-        }
-
-        return $edges;
     }
 }

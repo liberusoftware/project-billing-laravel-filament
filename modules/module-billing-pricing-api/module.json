@@ -3,7 +3,7 @@
   "name": "module-billing-pricing-api",
   "display_name": "Billing Pricing API",
   "description": "Sanctum-protected Billing Pricing API presentation.",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "category": "presentation",
   "provider": "Liberu\\Billing\\Pricing\\Api\\PricingApiServiceProvider",
   "requires": {
