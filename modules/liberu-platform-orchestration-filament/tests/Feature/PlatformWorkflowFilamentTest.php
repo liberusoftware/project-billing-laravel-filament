@@ -55,14 +55,14 @@ it('registers the filament plugin and configures the platform workflow resource 
     $schema = PlatformWorkflowResource::form(Schema::make());
     expect($schema->getComponents())->toHaveCount(2);
 
-    $listPage = new ListPlatformWorkflows;
+    $listPage = new ListPlatformWorkflows();
     $table = PlatformWorkflowResource::table(Table::make($listPage));
     expect($table->getColumns())->toHaveCount(3);
 
     $pages = PlatformWorkflowResource::getPages();
     expect(array_keys($pages))->toBe(['index', 'create', 'edit']);
 
-    $createPage = new CreatePlatformWorkflow;
+    $createPage = new CreatePlatformWorkflow();
     $mutate = Closure::bind(fn (array $data): array => $this->mutateFormDataBeforeCreate($data), $createPage, CreatePlatformWorkflow::class);
 
     expect($mutate(['name' => 'New Workflow', 'status' => 'draft']))
@@ -71,7 +71,7 @@ it('registers the filament plugin and configures the platform workflow resource 
     Filament::setTenant(null);
     expect(fn () => $mutate(['name' => 'Blocked']))->toThrow(HttpException::class);
 
-    $editPage = new EditPlatformWorkflow;
+    $editPage = new EditPlatformWorkflow();
     $editActions = Closure::bind(fn (): array => $this->getHeaderActions(), $editPage, EditPlatformWorkflow::class)();
     $listActions = Closure::bind(fn (): array => $this->getHeaderActions(), $listPage, ListPlatformWorkflows::class)();
 

@@ -6,11 +6,11 @@ namespace Liberu\Payment\Adyen;
 
 use Liberu\Payment\Contracts\Contracts\DisputeAndChargebackHandlerContract;
 use Liberu\Payment\Contracts\Contracts\MerchantWebhookVerifierContract;
-use Liberu\Payment\Contracts\Contracts\POSHardwareTerminalContract;
 use Liberu\Payment\Contracts\Contracts\PaymentCaptureAndRefundContract;
 use Liberu\Payment\Contracts\Contracts\PaymentGatewayAdapterContract;
 use Liberu\Payment\Contracts\Contracts\PaymentIntentServiceContract;
 use Liberu\Payment\Contracts\Contracts\PayoutAndSettlementReconcilerContract;
+use Liberu\Payment\Contracts\Contracts\POSHardwareTerminalContract;
 use Liberu\Payment\Contracts\Contracts\SavedPaymentMethodVaultContract;
 use Liberu\Payment\Contracts\DTOs\BeginPaymentMethodSetupCommand;
 use Liberu\Payment\Contracts\DTOs\CancelPaymentIntentCommand;
@@ -20,7 +20,6 @@ use Liberu\Payment\Contracts\DTOs\ConfirmPaymentMethodSetupCommand;
 use Liberu\Payment\Contracts\DTOs\ConnectionHealthDto;
 use Liberu\Payment\Contracts\DTOs\CreatePaymentIntentCommand;
 use Liberu\Payment\Contracts\DTOs\CreateTerminalPaymentCommand;
-use Liberu\Payment\Contracts\DTOs\TerminalPaymentResultDto;
 use Liberu\Payment\Contracts\DTOs\DetachPaymentMethodCommand;
 use Liberu\Payment\Contracts\DTOs\MerchantAccountContextDto;
 use Liberu\Payment\Contracts\DTOs\MerchantWebhookEventDto;
@@ -36,19 +35,12 @@ use Liberu\Payment\Contracts\DTOs\RawWebhookPayloadDto;
 use Liberu\Payment\Contracts\DTOs\RefundPaymentCommand;
 use Liberu\Payment\Contracts\DTOs\SettlementQueryDto;
 use Liberu\Payment\Contracts\DTOs\SubmitDisputeEvidenceCommand;
+use Liberu\Payment\Contracts\DTOs\TerminalPaymentResultDto;
 use Liberu\Payment\Contracts\DTOs\VaultedPaymentMethodDto;
 use Liberu\Payment\Contracts\DTOs\VoidPaymentCommand;
 use Liberu\Payment\Contracts\Enums\PaymentLifecycleState;
 
-final readonly class AdyenPaymentAdapter implements
-    PaymentGatewayAdapterContract,
-    PaymentIntentServiceContract,
-    PaymentCaptureAndRefundContract,
-    SavedPaymentMethodVaultContract,
-    MerchantWebhookVerifierContract,
-    DisputeAndChargebackHandlerContract,
-    PayoutAndSettlementReconcilerContract,
-    POSHardwareTerminalContract
+final readonly class AdyenPaymentAdapter implements DisputeAndChargebackHandlerContract, MerchantWebhookVerifierContract, PaymentCaptureAndRefundContract, PaymentGatewayAdapterContract, PaymentIntentServiceContract, PayoutAndSettlementReconcilerContract, POSHardwareTerminalContract, SavedPaymentMethodVaultContract
 {
     public function providerKey(): string
     {

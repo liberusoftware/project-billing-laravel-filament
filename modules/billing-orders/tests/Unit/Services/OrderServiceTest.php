@@ -8,10 +8,12 @@ use App\Models\Customer;
 use App\Models\Invoice;
 use App\Models\Order;
 use App\Models\OrderFormTemplate;
+use App\Models\Products_Service;
 use App\Models\Subscription;
 use App\Models\SubscriptionPlan;
 use App\Services\OrderService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Str;
 use InvalidArgumentException;
 use Tests\TestCase;
 
@@ -130,7 +132,7 @@ class OrderServiceTest extends TestCase
         }
 
         // Valid checkout key + custom period days + matching expected_quote
-        $uuid = (string) \Illuminate\Support\Str::uuid();
+        $uuid = (string) Str::uuid();
         $first = $service->placeOrder($template, $customer, [
             'subscription_plan_id' => $plan->id,
             'billing_cycle' => 'custom',
@@ -201,8 +203,8 @@ class OrderServiceTest extends TestCase
     {
         $customer = Customer::factory()->create();
         $plan = $this->plan(15.00);
-        $nonHosting = \App\Models\Products_Service::factory()->create(['type' => 'domain']);
-        $hosting = \App\Models\Products_Service::factory()->create(['type' => 'hosting']);
+        $nonHosting = Products_Service::factory()->create(['type' => 'domain']);
+        $hosting = Products_Service::factory()->create(['type' => 'hosting']);
         $service = app(OrderService::class);
 
         $badProductTemplate = OrderFormTemplate::factory()->create([

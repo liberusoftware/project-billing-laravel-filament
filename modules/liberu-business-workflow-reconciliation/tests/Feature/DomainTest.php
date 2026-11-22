@@ -26,7 +26,7 @@ foreach ([
 }
 
 it('creates and hydrates its aggregate through the domain action', function (): void {
-    $record = (new CreateReconciliationCase)->execute([
+    $record = (new CreateReconciliationCase())->execute([
         'tenant_id' => 'team-1',
         'idempotency_key' => 'request-1',
         'name' => 'Sample record',
@@ -45,7 +45,7 @@ it('creates and hydrates its aggregate through the domain action', function (): 
 it('transitions reconciliation cases across allowed lifecycle states and rejects invalid transitions', function (): void {
     Event::fake([ReconciliationCaseTransitioned::class]);
 
-    $record = (new CreateReconciliationCase)->execute([
+    $record = (new CreateReconciliationCase())->execute([
         'tenant_id' => 'team-1',
         'idempotency_key' => 'transition-1',
         'name' => 'Case A',
@@ -53,7 +53,7 @@ it('transitions reconciliation cases across allowed lifecycle states and rejects
         'metadata' => [],
     ]);
 
-    $transition = new TransitionReconciliationCase;
+    $transition = new TransitionReconciliationCase();
     $active = $transition->execute($record, LifecycleStatus::Active);
     expect($active->status)->toBe(LifecycleStatus::Active->value);
 

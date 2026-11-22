@@ -55,14 +55,14 @@ it('registers the filament plugin and configures the insight snapshot resource a
     $schema = InsightSnapshotResource::form(Schema::make());
     expect($schema->getComponents())->toHaveCount(2);
 
-    $listPage = new ListInsightSnapshots;
+    $listPage = new ListInsightSnapshots();
     $table = InsightSnapshotResource::table(Table::make($listPage));
     expect($table->getColumns())->toHaveCount(3);
 
     $pages = InsightSnapshotResource::getPages();
     expect(array_keys($pages))->toBe(['index', 'create', 'edit']);
 
-    $createPage = new CreateInsightSnapshot;
+    $createPage = new CreateInsightSnapshot();
     $mutate = Closure::bind(fn (array $data): array => $this->mutateFormDataBeforeCreate($data), $createPage, CreateInsightSnapshot::class);
 
     expect($mutate(['name' => 'New Snapshot', 'status' => 'draft']))
@@ -71,7 +71,7 @@ it('registers the filament plugin and configures the insight snapshot resource a
     Filament::setTenant(null);
     expect(fn () => $mutate(['name' => 'Blocked']))->toThrow(HttpException::class);
 
-    $editPage = new EditInsightSnapshot;
+    $editPage = new EditInsightSnapshot();
     $editActions = Closure::bind(fn (): array => $this->getHeaderActions(), $editPage, EditInsightSnapshot::class)();
     $listActions = Closure::bind(fn (): array => $this->getHeaderActions(), $listPage, ListInsightSnapshots::class)();
 

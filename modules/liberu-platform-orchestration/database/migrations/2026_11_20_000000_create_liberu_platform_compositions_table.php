@@ -17,7 +17,7 @@ return new class() extends Migration
         Schema::create('liberu_platform_compositions', function (Blueprint $table): void {
             $table->id();
             $table->unsignedBigInteger('team_id')->nullable()->index();
-            $table->string('key');
+            $table->string('key')->index();
             $table->string('display_name');
             $table->string('application');
             $table->string('state')->default('draft');

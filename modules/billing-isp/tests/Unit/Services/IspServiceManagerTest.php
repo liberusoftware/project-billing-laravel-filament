@@ -6,7 +6,11 @@ namespace Tests\Unit\Services;
 
 use App\Contracts\RadiusClient;
 use App\Enums\IspServiceStatus;
+use App\Models\InfrastructureAsset;
 use App\Models\IspService;
+use App\Models\RadiusSession;
+use App\Models\Subscription;
+use App\Models\Team;
 use App\Services\IspServiceManager;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -89,9 +93,9 @@ class IspServiceManagerTest extends TestCase
 
     public function test_synchronize_reset_usage_terminated_guards_and_model_relationships(): void
     {
-        $team = \App\Models\Team::factory()->create();
-        $parentAsset = \App\Models\InfrastructureAsset::factory()->create(['team_id' => $team->id]);
-        $childAsset = \App\Models\InfrastructureAsset::factory()->create([
+        $team = Team::factory()->create();
+        $parentAsset = InfrastructureAsset::factory()->create(['team_id' => $team->id]);
+        $childAsset = InfrastructureAsset::factory()->create([
             'team_id' => $team->id,
             'parent_id' => $parentAsset->id,
         ]);
@@ -99,7 +103,7 @@ class IspServiceManagerTest extends TestCase
         $this->assertCount(1, $parentAsset->children);
         $this->assertCount(0, $parentAsset->ipPools);
 
-        $subscription = \App\Models\Subscription::factory()->create(['team_id' => $team->id]);
+        $subscription = Subscription::factory()->create(['team_id' => $team->id]);
         $service = IspService::factory()->create([
             'team_id' => $team->id,
             'subscription_id' => $subscription->id,
@@ -107,7 +111,7 @@ class IspServiceManagerTest extends TestCase
         ]);
         $this->assertTrue($service->subscription->is($subscription));
 
-        $session = \App\Models\RadiusSession::factory()->create(['isp_service_id' => $service->id]);
+        $session = RadiusSession::factory()->create(['isp_service_id' => $service->id]);
         $this->assertTrue($session->ispService->is($service));
 
         $radius = new FakeRadiusClient();

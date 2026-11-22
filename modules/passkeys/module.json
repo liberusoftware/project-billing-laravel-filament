@@ -3,7 +3,7 @@
   "name": "passkeys",
   "display_name": "Passkeys and WebAuthn",
   "description": "WebAuthn / FIDO2 passwordless authentication and cryptographic step-up verification.",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "category": "foundation",
   "provider": "Liberu\\Passkeys\\PasskeysServiceProvider",
   "requires": {

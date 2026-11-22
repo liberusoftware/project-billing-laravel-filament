@@ -46,3 +46,33 @@ parameters:
     # policy every package is now held to. The five level-9 errors are audit
     # findings, not a reason to keep a number nothing enforced.
     level: 5
+
+    databaseMigrationsPath:
+        - database/migrations
+        - modules/billing-application/database/migrations
+        - modules/billing-audit/database/migrations
+        - modules/billing-catalog/database/migrations
+        - modules/billing-collections/database/migrations
+        - modules/billing-communications/database/migrations
+        - modules/billing-customer-portal/database/migrations
+        - modules/billing-domains/database/migrations
+        - modules/billing-extensions/database/migrations
+        - modules/billing-files/database/migrations
+        - modules/billing-hosting/database/migrations
+        - modules/billing-identity/database/migrations
+        - modules/billing-integrations/database/migrations
+        - modules/billing-invoicing/database/migrations
+        - modules/billing-isp/database/migrations
+        - modules/billing-licensing/database/migrations
+        - modules/billing-money/database/migrations
+        - modules/billing-orders/database/migrations
+        - modules/billing-payments/database/migrations
+        - modules/billing-pricing/database/migrations
+        - modules/billing-projects/database/migrations
+        - modules/billing-referrals/database/migrations
+        - modules/billing-reporting/database/migrations
+        - modules/billing-search/database/migrations
+        - modules/billing-settings/database/migrations
+        - modules/billing-subscriptions/database/migrations
+        - modules/billing-support/database/migrations
+        - modules/billing-usage/database/migrations

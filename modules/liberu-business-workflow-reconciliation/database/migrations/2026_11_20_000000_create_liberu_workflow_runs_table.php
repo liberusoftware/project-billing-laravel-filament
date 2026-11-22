@@ -20,8 +20,8 @@ return new class() extends Migration
             $table->string('correlation_id')->unique();
             $table->string('workflow_key');
             $table->string('contract_version');
-            $table->string('state')->default('running');
-            $table->json('steps');
+            $table->string('state')->default('pending');
+            $table->json('steps')->nullable();
             $table->text('last_error')->nullable();
             $table->timestamps();
         });

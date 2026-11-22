@@ -10,7 +10,7 @@ use Livewire\Livewire;
 
 it('renders tenant-scoped insight snapshots, validates status filter, and exposes adapter status', function (): void {
     expect(class_exists(ExecutiveInsightsLivewireServiceProvider::class))->toBeTrue();
-    expect((new Status)->render())->toContain('ExecutiveInsights');
+    expect((new Status())->render())->toContain('ExecutiveInsights');
 
     $user = User::factory()->withPersonalTeam()->create();
     $otherUser = User::factory()->withPersonalTeam()->create();

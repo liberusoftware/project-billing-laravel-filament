@@ -55,14 +55,14 @@ it('registers the filament plugin and configures the care plan resource and page
     $schema = CarePlanResource::form(Schema::make());
     expect($schema->getComponents())->toHaveCount(2);
 
-    $listPage = new ListCarePlans;
+    $listPage = new ListCarePlans();
     $table = CarePlanResource::table(Table::make($listPage));
     expect($table->getColumns())->toHaveCount(3);
 
     $pages = CarePlanResource::getPages();
     expect(array_keys($pages))->toBe(['index', 'create', 'edit']);
 
-    $createPage = new CreateCarePlan;
+    $createPage = new CreateCarePlan();
     $mutate = Closure::bind(fn (array $data): array => $this->mutateFormDataBeforeCreate($data), $createPage, CreateCarePlan::class);
 
     expect($mutate(['name' => 'New Plan', 'status' => 'draft']))
@@ -71,7 +71,7 @@ it('registers the filament plugin and configures the care plan resource and page
     Filament::setTenant(null);
     expect(fn () => $mutate(['name' => 'Blocked']))->toThrow(HttpException::class);
 
-    $editPage = new EditCarePlan;
+    $editPage = new EditCarePlan();
     $editActions = Closure::bind(fn (): array => $this->getHeaderActions(), $editPage, EditCarePlan::class)();
     $listActions = Closure::bind(fn (): array => $this->getHeaderActions(), $listPage, ListCarePlans::class)();
 

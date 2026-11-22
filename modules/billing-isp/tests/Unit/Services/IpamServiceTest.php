@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tests\Unit\Services;
 
 use App\Models\InfrastructureAsset;
+use App\Models\IpAddress;
 use App\Models\Team;
 use App\Services\IpamService;
 use App\Support\IpNetwork;
@@ -109,7 +110,7 @@ class IpamServiceTest extends TestCase
         ]);
 
         // Pre-occupy the first usable IP so allocate() skips it
-        \App\Models\IpAddress::create([
+        IpAddress::create([
             'team_id' => $team->id,
             'ip_pool_id' => $pool->id,
             'address' => '192.0.2.1',

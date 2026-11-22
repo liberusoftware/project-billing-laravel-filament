@@ -24,7 +24,7 @@ foreach ([
 }
 
 it('creates and hydrates its aggregate through the domain action', function (): void {
-    $record = (new CreateInsightSnapshot)->execute([
+    $record = (new CreateInsightSnapshot())->execute([
         'tenant_id' => 'team-1',
         'idempotency_key' => 'request-1',
         'name' => 'Sample record',
@@ -43,7 +43,7 @@ it('creates and hydrates its aggregate through the domain action', function (): 
 it('transitions insight snapshots across allowed lifecycle states and rejects invalid transitions', function (): void {
     Event::fake([InsightSnapshotTransitioned::class]);
 
-    $record = (new CreateInsightSnapshot)->execute([
+    $record = (new CreateInsightSnapshot())->execute([
         'tenant_id' => 'team-1',
         'idempotency_key' => 'transition-1',
         'name' => 'Snapshot A',
@@ -51,7 +51,7 @@ it('transitions insight snapshots across allowed lifecycle states and rejects in
         'metadata' => [],
     ]);
 
-    $transition = new TransitionInsightSnapshot;
+    $transition = new TransitionInsightSnapshot();
     $active = $transition->execute($record, LifecycleStatus::Active);
     expect($active->status)->toBe(LifecycleStatus::Active->value);
 

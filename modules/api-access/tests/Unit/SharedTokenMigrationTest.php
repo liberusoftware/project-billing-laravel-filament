@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Schema;
 
 beforeEach(function () {
     $this->previousApplication = Facade::getFacadeApplication();
-    $container = new Container;
+    $container = new Container();
     $this->database = new Capsule($container);
     $this->database->addConnection(['driver' => 'sqlite', 'database' => ':memory:']);
     $container->instance('db', $this->database->getDatabaseManager());

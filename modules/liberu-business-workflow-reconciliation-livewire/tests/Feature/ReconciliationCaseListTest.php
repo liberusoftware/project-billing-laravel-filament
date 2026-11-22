@@ -10,7 +10,7 @@ use Livewire\Livewire;
 
 it('renders tenant-scoped reconciliation cases, validates status filter, and exposes adapter status', function (): void {
     expect(class_exists(BusinessWorkflowReconciliationLivewireServiceProvider::class))->toBeTrue();
-    expect((new Status)->render())->toContain('BusinessWorkflowReconciliation');
+    expect((new Status())->render())->toContain('BusinessWorkflowReconciliation');
 
     $user = User::factory()->withPersonalTeam()->create();
     $otherUser = User::factory()->withPersonalTeam()->create();

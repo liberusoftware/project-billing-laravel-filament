@@ -10,7 +10,7 @@ use Livewire\Livewire;
 
 it('renders tenant-scoped care plans, validates status filter, and exposes adapter status', function (): void {
     expect(class_exists(RevenueAndCareOrchestrationLivewireServiceProvider::class))->toBeTrue();
-    expect((new Status)->render())->toContain('RevenueAndCareOrchestration');
+    expect((new Status())->render())->toContain('RevenueAndCareOrchestration');
 
     $user = User::factory()->withPersonalTeam()->create();
     $otherUser = User::factory()->withPersonalTeam()->create();

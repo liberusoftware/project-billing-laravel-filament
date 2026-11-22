@@ -14,6 +14,7 @@ use App\Models\Team;
 use App\Services\BillingService;
 use App\Services\CurrencyService;
 use App\Services\TaxService;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Cache;
 use Tests\TestCase;
@@ -278,7 +279,7 @@ class TaxCurrencyDiscountTest extends TestCase
 
         $relation = $discount->invoices();
 
-        $this->assertInstanceOf(\Illuminate\Database\Eloquent\Relations\HasMany::class, $relation);
+        $this->assertInstanceOf(HasMany::class, $relation);
         $this->assertSame(Invoice::class, $relation->getRelated()::class);
     }
 

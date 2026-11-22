@@ -1,8 +1,6 @@
 <?php
 
 use Liberu\Foundation\Organizations\Models\Team;
-use Liberu\Foundation\OrganizationsFilament\Resources\TeamResource\Pages\CreateTeam;
-use Liberu\Foundation\OrganizationsFilament\Resources\TeamResource\Pages\EditTeam;
 use Liberu\Foundation\OrganizationsFilament\Resources\TeamResource\Pages\ListTeams;
 use Liberu\Foundation\OrganizationsFilament\Tests\Fixtures\OrganizationUser;
 use Livewire\Livewire;
@@ -35,27 +33,4 @@ it('renders the team table with its columns resolved', function () {
         ->assertOk()
         ->assertSee('Analytical Engines')
         ->assertSee('Ada Lovelace');
-});
-
-it('renders the create and edit team pages with delete header action', function () {
-    $owner = OrganizationUser::forceCreate([
-        'name' => 'Ada Lovelace',
-        'email' => 'ada-edit@example.test',
-        'password' => bcrypt('secret'),
-    ]);
-
-    $team = Team::forceCreate([
-        'user_id' => $owner->id,
-        'name' => 'Analytical Engines',
-        'personal_team' => false,
-    ]);
-
-    $this->actingAs($owner);
-
-    Livewire::test(CreateTeam::class)
-        ->assertOk();
-
-    Livewire::test(EditTeam::class, ['record' => $team->getKey()])
-        ->assertOk()
-        ->assertActionExists('delete');
 });

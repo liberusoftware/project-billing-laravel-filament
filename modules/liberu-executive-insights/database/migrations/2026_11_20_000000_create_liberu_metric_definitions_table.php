@@ -17,11 +17,11 @@ return new class() extends Migration
         Schema::create('liberu_metric_definitions', function (Blueprint $table): void {
             $table->id();
             $table->unsignedBigInteger('team_id')->nullable()->index();
-            $table->string('key');
+            $table->string('key')->index();
             $table->string('name');
             $table->text('formula');
             $table->string('version');
-            $table->json('dimensions');
+            $table->json('dimensions')->nullable();
             $table->string('currency', 3);
             $table->string('timezone');
             $table->unsignedInteger('freshness_seconds');

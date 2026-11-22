@@ -25,7 +25,7 @@ final class OpenExchangeRateApiProvider implements ExchangeRateProvider
         }
 
         $rates = $this->rates($base->code);
-        if (! isset($rates['rates'][$quote->code]) || ! is_numeric($rates['rates'][$quote->code]) || (float) $rates['rates'][$quote->code] <= 0) {
+        if ($rates === null || ! isset($rates['rates'][$quote->code]) || ! is_numeric($rates['rates'][$quote->code]) || (float) $rates['rates'][$quote->code] <= 0) {
             return null;
         }
 
@@ -36,14 +36,14 @@ final class OpenExchangeRateApiProvider implements ExchangeRateProvider
             source: $rates['source'] ?? 'open.er-api.com',
             type: 'market',
             effectiveAt: isset($rates['time_last_update_unix'])
-                ? (new DateTimeImmutable)->setTimestamp((int) $rates['time_last_update_unix'])
+                ? (new DateTimeImmutable())->setTimestamp((int) $rates['time_last_update_unix'])
                 : $effectiveAt,
             precision: 6,
         );
     }
 
-    /** @return array{rates: array<string, mixed>, time_last_update_unix?: mixed, source?: string}|null */
-    private function rates(string $base): array
+    /** @return array{rates: array<string, float>, time_last_update_unix?: int, source?: string}|null */
+    private function rates(string $base): ?array
     {
         $ttl = (int) config('currency.stale_after_seconds', 86400);
 
@@ -68,7 +68,7 @@ final class OpenExchangeRateApiProvider implements ExchangeRateProvider
         return $rates;
     }
 
-    /** @return array{rates: array<string, mixed>, time_last_update_unix?: mixed, source?: string} */
+    /** @return array{rates: array<string, float>, time_last_update_unix?: int, source?: string} */
     private function fetch(string $url): array
     {
         try {

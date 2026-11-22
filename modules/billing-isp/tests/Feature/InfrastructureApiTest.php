@@ -4,9 +4,14 @@ declare(strict_types=1);
 
 namespace Tests\Feature;
 
+use App\Http\Controllers\Api\InfrastructureController;
+use App\Models\Customer;
 use App\Models\InfrastructureAsset;
+use App\Models\IspService;
+use App\Models\Subscription;
 use App\Models\Team;
 use App\Models\User;
+use App\Models\VoipAccount;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
@@ -93,16 +98,16 @@ class InfrastructureApiTest extends TestCase
             ->assertOk()
             ->assertJsonCount(1, 'data');
 
-        $customer = \App\Models\Customer::factory()->create(['team_id' => $team->id]);
-        $subscription = \App\Models\Subscription::factory()->create([
+        $customer = Customer::factory()->create(['team_id' => $team->id]);
+        $subscription = Subscription::factory()->create([
             'team_id' => $team->id,
             'customer_id' => $customer->id,
         ]);
-        $ispService = \App\Models\IspService::factory()->create([
+        $ispService = IspService::factory()->create([
             'team_id' => $team->id,
             'customer_id' => $customer->id,
         ]);
-        $voipAccount = \App\Models\VoipAccount::factory()->create([
+        $voipAccount = VoipAccount::factory()->create([
             'team_id' => $team->id,
             'customer_id' => $customer->id,
         ]);
@@ -124,7 +129,7 @@ class InfrastructureApiTest extends TestCase
             ->assertJsonCount(4, 'data');
 
         // Exercise default match arm in assignmentTarget
-        $controller = app(\App\Http\Controllers\Api\InfrastructureController::class);
+        $controller = app(InfrastructureController::class);
         $method = new \ReflectionMethod($controller, 'assignmentTarget');
         $this->expectException(\InvalidArgumentException::class);
         $method->invoke($controller, request(), 'unsupported_type', 1);

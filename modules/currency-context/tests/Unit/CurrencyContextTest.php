@@ -34,7 +34,7 @@ it('uses the fallback exchange-rate endpoint when the primary one fails', functi
     ]);
 
     $registry = app(CurrencyRegistry::class);
-    $rate = app(OpenExchangeRateApiProvider::class)->rate($registry->get('USD'), $registry->get('EUR'), new DateTimeImmutable);
+    $rate = app(OpenExchangeRateApiProvider::class)->rate($registry->get('USD'), $registry->get('EUR'), new DateTimeImmutable());
 
     expect($rate)->not->toBeNull()
         ->and($rate->rate)->toBe('0.9')
@@ -50,7 +50,7 @@ it('does not contact another provider unless a fallback is configured', function
     Http::fake(['primary.test/*' => Http::response([], 503)]);
 
     $registry = app(CurrencyRegistry::class);
-    $rate = app(OpenExchangeRateApiProvider::class)->rate($registry->get('USD'), $registry->get('EUR'), new DateTimeImmutable);
+    $rate = app(OpenExchangeRateApiProvider::class)->rate($registry->get('USD'), $registry->get('EUR'), new DateTimeImmutable());
 
     expect($rate)->toBeNull();
     Http::assertSentCount(1);

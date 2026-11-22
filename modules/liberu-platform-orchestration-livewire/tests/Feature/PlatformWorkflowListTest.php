@@ -10,7 +10,7 @@ use Livewire\Livewire;
 
 it('renders tenant-scoped platform workflows, validates status filter, and exposes adapter status', function (): void {
     expect(class_exists(PlatformOrchestrationLivewireServiceProvider::class))->toBeTrue();
-    expect((new Status)->render())->toContain('PlatformOrchestration');
+    expect((new Status())->render())->toContain('PlatformOrchestration');
 
     $user = User::factory()->withPersonalTeam()->create();
     $otherUser = User::factory()->withPersonalTeam()->create();

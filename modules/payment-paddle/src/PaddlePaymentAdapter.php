@@ -37,14 +37,7 @@ use Liberu\Payment\Contracts\DTOs\VaultedPaymentMethodDto;
 use Liberu\Payment\Contracts\DTOs\VoidPaymentCommand;
 use Liberu\Payment\Contracts\Enums\PaymentLifecycleState;
 
-final readonly class PaddlePaymentAdapter implements
-    PaymentGatewayAdapterContract,
-    PaymentIntentServiceContract,
-    PaymentCaptureAndRefundContract,
-    SavedPaymentMethodVaultContract,
-    MerchantWebhookVerifierContract,
-    DisputeAndChargebackHandlerContract,
-    PayoutAndSettlementReconcilerContract
+final readonly class PaddlePaymentAdapter implements DisputeAndChargebackHandlerContract, MerchantWebhookVerifierContract, PaymentCaptureAndRefundContract, PaymentGatewayAdapterContract, PaymentIntentServiceContract, PayoutAndSettlementReconcilerContract, SavedPaymentMethodVaultContract
 {
     public function providerKey(): string
     {

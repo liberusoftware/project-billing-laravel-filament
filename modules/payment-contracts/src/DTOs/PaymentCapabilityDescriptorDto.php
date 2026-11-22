@@ -7,8 +7,8 @@ namespace Liberu\Payment\Contracts\DTOs;
 final readonly class PaymentCapabilityDescriptorDto
 {
     /**
-     * @param list<string> $supportedMethods
-     * @param list<string> $supportedCurrencies
+     * @param  list<string>  $supportedMethods
+     * @param  list<string>  $supportedCurrencies
      */
     public function __construct(
         public string $providerKey,

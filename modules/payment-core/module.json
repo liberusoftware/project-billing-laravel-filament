@@ -3,14 +3,14 @@
   "name": "payment-core",
   "display_name": "Payment Core",
   "description": "Provider-neutral merchant payment orchestration, gateway registry, and webhook inbox.",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "category": "capability",
   "provider": "Liberu\\Payment\\Core\\PaymentCoreServiceProvider",
   "requires": {
     "php": "^8.5",
     "laravel": "^13.0",
     "packages": {
-      "liberusoftware/payment-contracts": "^1.0"
+      "liberusoftware/payment-contracts": "^1.1"
     }
   },
   "capabilities": [

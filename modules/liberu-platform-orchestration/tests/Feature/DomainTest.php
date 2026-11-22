@@ -32,7 +32,7 @@ foreach ([
 }
 
 it('creates and hydrates its aggregate through the domain action', function (): void {
-    $record = (new CreatePlatformWorkflow)->execute([
+    $record = (new CreatePlatformWorkflow())->execute([
         'tenant_id' => 'team-1',
         'idempotency_key' => 'request-1',
         'name' => 'Sample record',
@@ -51,7 +51,7 @@ it('creates and hydrates its aggregate through the domain action', function (): 
 it('transitions platform workflows across allowed lifecycle states and rejects invalid transitions', function (): void {
     Event::fake([PlatformWorkflowTransitioned::class]);
 
-    $record = (new CreatePlatformWorkflow)->execute([
+    $record = (new CreatePlatformWorkflow())->execute([
         'tenant_id' => 'team-1',
         'idempotency_key' => 'transition-1',
         'name' => 'Workflow A',
@@ -59,7 +59,7 @@ it('transitions platform workflows across allowed lifecycle states and rejects i
         'metadata' => [],
     ]);
 
-    $transition = new TransitionPlatformWorkflow;
+    $transition = new TransitionPlatformWorkflow();
     $active = $transition->execute($record, LifecycleStatus::Active);
     expect($active->status)->toBe(LifecycleStatus::Active->value);
 

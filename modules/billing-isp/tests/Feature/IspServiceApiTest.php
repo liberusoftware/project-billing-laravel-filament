@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tests\Feature;
 
 use App\Enums\BroadbandTechnology;
+use App\Enums\IspServiceStatus;
 use App\Enums\RadiusPlatform;
 use App\Models\Customer;
 use App\Models\IspService;
@@ -116,7 +117,7 @@ class IspServiceApiTest extends TestCase
             'team_id' => $team->id,
             'customer_id' => $customer->id,
             'radius_platform' => RadiusPlatform::FreeRadius,
-            'status' => \App\Enums\IspServiceStatus::Active,
+            'status' => IspServiceStatus::Active,
         ]);
 
         $this->getJson("/api/isp-services?status=active&customer_id={$customer->id}")

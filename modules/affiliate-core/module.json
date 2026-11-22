@@ -3,7 +3,7 @@
   "name": "affiliate-core",
   "display_name": "Affiliates and Referrals",
   "description": "Reusable affiliate program, referral attribution, commission, and payout capability.",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "category": "capability",
   "provider": "Liberu\\Affiliate\\Core\\AffiliateCoreServiceProvider",
   "requires": {

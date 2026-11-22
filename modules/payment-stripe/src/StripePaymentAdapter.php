@@ -6,11 +6,11 @@ namespace Liberu\Payment\Stripe;
 
 use Liberu\Payment\Contracts\Contracts\DisputeAndChargebackHandlerContract;
 use Liberu\Payment\Contracts\Contracts\MerchantWebhookVerifierContract;
-use Liberu\Payment\Contracts\Contracts\POSHardwareTerminalContract;
 use Liberu\Payment\Contracts\Contracts\PaymentCaptureAndRefundContract;
 use Liberu\Payment\Contracts\Contracts\PaymentGatewayAdapterContract;
 use Liberu\Payment\Contracts\Contracts\PaymentIntentServiceContract;
 use Liberu\Payment\Contracts\Contracts\PayoutAndSettlementReconcilerContract;
+use Liberu\Payment\Contracts\Contracts\POSHardwareTerminalContract;
 use Liberu\Payment\Contracts\Contracts\SavedPaymentMethodVaultContract;
 use Liberu\Payment\Contracts\DTOs\BeginPaymentMethodSetupCommand;
 use Liberu\Payment\Contracts\DTOs\CancelPaymentIntentCommand;
@@ -43,15 +43,7 @@ use Liberu\Payment\Contracts\Enums\PaymentLifecycleState;
 use Stripe\StripeClient;
 use Stripe\Webhook;
 
-final readonly class StripePaymentAdapter implements
-    PaymentGatewayAdapterContract,
-    PaymentIntentServiceContract,
-    PaymentCaptureAndRefundContract,
-    SavedPaymentMethodVaultContract,
-    MerchantWebhookVerifierContract,
-    DisputeAndChargebackHandlerContract,
-    PayoutAndSettlementReconcilerContract,
-    POSHardwareTerminalContract
+final readonly class StripePaymentAdapter implements DisputeAndChargebackHandlerContract, MerchantWebhookVerifierContract, PaymentCaptureAndRefundContract, PaymentGatewayAdapterContract, PaymentIntentServiceContract, PayoutAndSettlementReconcilerContract, POSHardwareTerminalContract, SavedPaymentMethodVaultContract
 {
     public const DEFAULT_API_VERSION = '2026-02-25.clover';
 

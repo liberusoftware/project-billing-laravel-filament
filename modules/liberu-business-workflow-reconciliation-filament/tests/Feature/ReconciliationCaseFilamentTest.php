@@ -55,14 +55,14 @@ it('registers the filament plugin and configures the reconciliation case resourc
     $schema = ReconciliationCaseResource::form(Schema::make());
     expect($schema->getComponents())->toHaveCount(2);
 
-    $listPage = new ListReconciliationCases;
+    $listPage = new ListReconciliationCases();
     $table = ReconciliationCaseResource::table(Table::make($listPage));
     expect($table->getColumns())->toHaveCount(3);
 
     $pages = ReconciliationCaseResource::getPages();
     expect(array_keys($pages))->toBe(['index', 'create', 'edit']);
 
-    $createPage = new CreateReconciliationCase;
+    $createPage = new CreateReconciliationCase();
     $mutate = Closure::bind(fn (array $data): array => $this->mutateFormDataBeforeCreate($data), $createPage, CreateReconciliationCase::class);
 
     expect($mutate(['name' => 'New Case', 'status' => 'draft']))
@@ -71,7 +71,7 @@ it('registers the filament plugin and configures the reconciliation case resourc
     Filament::setTenant(null);
     expect(fn () => $mutate(['name' => 'Blocked']))->toThrow(HttpException::class);
 
-    $editPage = new EditReconciliationCase;
+    $editPage = new EditReconciliationCase();
     $editActions = Closure::bind(fn (): array => $this->getHeaderActions(), $editPage, EditReconciliationCase::class)();
     $listActions = Closure::bind(fn (): array => $this->getHeaderActions(), $listPage, ListReconciliationCases::class)();
 

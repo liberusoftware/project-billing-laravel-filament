@@ -15,8 +15,6 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Validation\Rules\Password;
 use Illuminate\Validation\ValidationException;
 use Laravel\Jetstream\Contracts\DeletesTeams;
-use Liberu\Foundation\Identity\Contracts\InvitationValidator;
-use Liberu\Foundation\Identity\Contracts\RegistrationPolicy;
 use Liberu\Foundation\Identity\Events\IdentityEvent;
 use Liberu\Foundation\Identity\Support\ConfiguredRegistrationPolicy;
 use Liberu\Foundation\Identity\Support\IdentifierNormalizer;

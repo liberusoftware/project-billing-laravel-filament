@@ -5,11 +5,13 @@ declare(strict_types=1);
 namespace Liberu\Payment\Core\Services;
 
 use Liberu\Payment\Contracts\Contracts\MerchantWebhookVerifierContract;
+use Liberu\Payment\Contracts\Contracts\OutboundPaymentAdapterContract;
 use Liberu\Payment\Contracts\Contracts\PaymentCaptureAndRefundContract;
 use Liberu\Payment\Contracts\Contracts\PaymentGatewayRegistryContract;
 use Liberu\Payment\Contracts\Contracts\PaymentIntentServiceContract;
 use Liberu\Payment\Contracts\DTOs\CapturePaymentCommand;
 use Liberu\Payment\Contracts\DTOs\CreatePaymentIntentCommand;
+use Liberu\Payment\Contracts\DTOs\MerchantAccountContextDto;
 use Liberu\Payment\Contracts\DTOs\MerchantWebhookEventDto;
 use Liberu\Payment\Contracts\DTOs\PaymentCaptureResultDto;
 use Liberu\Payment\Contracts\DTOs\PaymentIntentResultDto;
@@ -49,6 +51,28 @@ final readonly class PaymentOrchestrator
         }
 
         return $adapter->refund($command);
+    }
+
+    /** @param array<string, mixed> $payment */
+    public function sendOutboundPayment(MerchantAccountContextDto $account, array $payment): array
+    {
+        return $this->outboundAdapter($account)->sendOutboundPayment($account, $payment);
+    }
+
+    /** @param list<array<string, mixed>> $payments */
+    public function sendOutboundBatch(MerchantAccountContextDto $account, string $title, array $payments, ?string $scheduleFor = null): array
+    {
+        return $this->outboundAdapter($account)->sendOutboundBatch($account, $title, $payments, $scheduleFor);
+    }
+
+    private function outboundAdapter(MerchantAccountContextDto $account): OutboundPaymentAdapterContract
+    {
+        $adapter = $this->registry->resolve($account->providerKey);
+        if (! $adapter instanceof OutboundPaymentAdapterContract) {
+            throw new \RuntimeException("Adapter [{$account->providerKey}] does not support outbound payments.");
+        }
+
+        return $adapter;
     }
 
     public function verifyWebhook(RawWebhookPayloadDto $payload): MerchantWebhookEventDto

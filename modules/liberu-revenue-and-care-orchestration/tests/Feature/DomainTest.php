@@ -11,7 +11,7 @@ use Liberu\Platform\RevenueAndCareOrchestration\Exceptions\InvalidLifecycleTrans
 use Liberu\Platform\RevenueAndCareOrchestration\Models\CarePlan;
 
 it('creates and hydrates its aggregate through the domain action', function (): void {
-    $record = (new CreateCarePlan)->execute([
+    $record = (new CreateCarePlan())->execute([
         'tenant_id' => 'team-1',
         'idempotency_key' => 'request-1',
         'name' => 'Sample record',
@@ -30,7 +30,7 @@ it('creates and hydrates its aggregate through the domain action', function (): 
 it('transitions care plans across allowed lifecycle states and rejects invalid transitions', function (): void {
     Event::fake([CarePlanTransitioned::class]);
 
-    $record = (new CreateCarePlan)->execute([
+    $record = (new CreateCarePlan())->execute([
         'tenant_id' => 'team-1',
         'idempotency_key' => 'transition-1',
         'name' => 'Plan A',
@@ -38,7 +38,7 @@ it('transitions care plans across allowed lifecycle states and rejects invalid t
         'metadata' => [],
     ]);
 
-    $transition = new TransitionCarePlan;
+    $transition = new TransitionCarePlan();
     $active = $transition->execute($record, LifecycleStatus::Active);
     expect($active->status)->toBe(LifecycleStatus::Active->value);
 
