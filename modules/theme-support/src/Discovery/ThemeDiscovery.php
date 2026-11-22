@@ -83,6 +83,9 @@ final class ThemeDiscovery
         if ($this->installedPaths !== null) {
             return $this->installedPaths;
         }
+        if (! class_exists(InstalledVersions::class)) {
+            return [];
+        }
 
         return array_values(array_filter(array_map(
             static fn (string $package): ?string => InstalledVersions::getInstallPath($package),

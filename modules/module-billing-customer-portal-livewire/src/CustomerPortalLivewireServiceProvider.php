@@ -16,9 +16,16 @@ final class CustomerPortalLivewireServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'billing-customer-portal-livewire');
-        Livewire::component('module-billing-customer-portal::items', PortalItems::class);
-        Livewire::component('module-billing-customer-portal::dashboard', PortalDashboard::class);
-        Livewire::component('module-billing-customer-portal::requests', PortalRequests::class);
-        Livewire::component('module-billing-customer-portal::billing', PortalBilling::class);
+        $components = [
+            'module-billing-customer-portal::items' => PortalItems::class,
+            'module-billing-customer-portal::dashboard' => PortalDashboard::class,
+            'module-billing-customer-portal::requests' => PortalRequests::class,
+            'module-billing-customer-portal::billing' => PortalBilling::class,
+        ];
+        foreach ($components as $name => $component) {
+            Livewire::component($name, $component);
+        }
+
+        Livewire::resolveMissingComponent(static fn (string $name): ?string => $components[$name] ?? null);
     }
 }

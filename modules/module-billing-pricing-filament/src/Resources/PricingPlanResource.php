@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Liberu\Billing\Pricing\Filament\Resources;
 
 use BackedEnum;
+use Carbon\Carbon;
 use Filament\Actions\Action;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Select;
@@ -63,7 +64,7 @@ final class PricingPlanResource extends Resource
                 DateTimePicker::make('end')->required(),
             ])->action(function (PricingPlan $record, array $data, CalculateUsageBasedPrice $calculate): void {
                 Gate::authorize('view', $record);
-                $result = $calculate->execute($record, (int) $data['meter_id'], $data['start'], $data['end'], isset($data['customer_id']) ? (int) $data['customer_id'] : null);
+                $result = $calculate->execute($record, (int) $data['meter_id'], Carbon::parse($data['start']), Carbon::parse($data['end']), isset($data['customer_id']) ? (int) $data['customer_id'] : null);
                 Notification::make()->title(__('Usage price: :amount', ['amount' => $result['amount_minor']]))->success()->send();
             }),
         ])->defaultSort('id', 'desc');

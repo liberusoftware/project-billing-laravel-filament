@@ -67,10 +67,7 @@ class ServiceProvisioningService
         // Implement domain provisioning logic
         // This would typically involve interacting with a domain registrar API
         // For now, we'll just return a success message
-        return [
-            'status' => 'success',
-            'message' => 'Domain provisioned successfully',
-        ];
+        return $this->serviceActionResponse('Domain', 'provisioned');
     }
 
     private function provisionEmail(): array
@@ -78,10 +75,7 @@ class ServiceProvisioningService
         // Implement email provisioning logic
         // This would typically involve creating email accounts on your mail server
         // For now, we'll just return a success message
-        return [
-            'status' => 'success',
-            'message' => 'Email service provisioned successfully',
-        ];
+        return $this->serviceActionResponse('Email service', 'provisioned');
     }
 
     private function generateUsername($customer): string
@@ -188,10 +182,7 @@ class ServiceProvisioningService
         // Implement domain management logic
         // This would typically involve interacting with a domain registrar API
         // For now, we'll just return a success message
-        return [
-            'status' => 'success',
-            'message' => "Domain {$action} successfully",
-        ];
+        return $this->serviceActionResponse('Domain', (string) $action);
     }
 
     private function manageEmail($action): array
@@ -199,9 +190,14 @@ class ServiceProvisioningService
         // Implement email management logic
         // This would typically involve managing email accounts on your mail server
         // For now, we'll just return a success message
+        return $this->serviceActionResponse('Email service', (string) $action);
+    }
+
+    private function serviceActionResponse(string $serviceLabel, string $action): array
+    {
         return [
             'status' => 'success',
-            'message' => "Email service {$action} successfully",
+            'message' => "{$serviceLabel} {$action} successfully",
         ];
     }
 }

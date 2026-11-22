@@ -13,6 +13,13 @@ final class CollectionsLivewireServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'module-billing-collections-livewire');
-        Livewire::component('module-billing-collections::case-list', CollectionCaseList::class);
+        $components = [
+            'module-billing-collections::case-list' => CollectionCaseList::class,
+        ];
+        foreach ($components as $name => $component) {
+            Livewire::component($name, $component);
+        }
+
+        Livewire::resolveMissingComponent(static fn (string $name): ?string => $components[$name] ?? null);
     }
 }

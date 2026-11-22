@@ -49,6 +49,7 @@ it('registers the filament plugin and configures the care plan resource and page
     Filament::setTenant(null);
     expect(fn () => CarePlanResource::getEloquentQuery())->toThrow(HttpException::class);
 
+    $this->actingAs($user);
     Filament::setTenant($team);
     expect(CarePlanResource::getEloquentQuery()->count())->toBe(1);
 

@@ -23,6 +23,13 @@ final class IspCapabilityPolicy
         return $this->access($user, 'read') && $team !== null && (int) $team === (int) $record->team_id;
     }
 
+    public function update(?object $user, object $record): bool
+    {
+        $team = data_get($user, 'current_team_id') ?? data_get($user, 'currentTeam.id');
+
+        return $this->access($user, 'write') && $team !== null && (int) $team === (int) $record->team_id;
+    }
+
     private function access(?object $user, string $action): bool
     {
         $ability = "billing.isp.$action";

@@ -240,13 +240,13 @@ it('deletes users with teams, profile photos, connected accounts, and tokens, an
 
         public Collection $tokens;
 
-        public function __construct(object $account, object $token, array &$log)
+        public function __construct(?object $account = null, ?object $token = null, array &$log = [])
         {
             parent::__construct();
             $this->log = &$log;
             $this->ownedTeams = collect(['team-a', 'team-b']);
-            $this->connectedAccounts = collect([$account]);
-            $this->tokens = collect([$token]);
+            $this->connectedAccounts = collect($account ? [$account] : []);
+            $this->tokens = collect($token ? [$token] : []);
         }
 
         public function teams(): object

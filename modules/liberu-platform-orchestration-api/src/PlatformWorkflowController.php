@@ -6,6 +6,7 @@ namespace Liberu\Platform\PlatformOrchestration\Api;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Liberu\Platform\PlatformOrchestration\Actions\CreatePlatformWorkflow;
 use Liberu\Platform\PlatformOrchestration\Actions\TransitionPlatformWorkflow;
 use Liberu\Platform\PlatformOrchestration\Enums\LifecycleStatus;
@@ -37,7 +38,7 @@ final class PlatformWorkflowController
             'idempotency_key' => $idempotencyKey,
             ...$request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'status' => ['sometimes', 'string', LifecycleStatus::class],
+            'status' => ['sometimes', 'string', Rule::enum(LifecycleStatus::class)],
             'metadata' => ['nullable', 'array'],
             ]),
         ]);
@@ -57,7 +58,7 @@ final class PlatformWorkflowController
         $this->assertTenant($request, $record);
         $attributes = $request->validate([
             'name' => ['sometimes', 'string', 'max:255'],
-            'status' => ['sometimes', 'string', LifecycleStatus::class],
+            'status' => ['sometimes', 'string', Rule::enum(LifecycleStatus::class)],
             'metadata' => ['nullable', 'array'],
         ]);
         $status = $attributes['status'] ?? null;

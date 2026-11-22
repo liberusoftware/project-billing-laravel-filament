@@ -49,6 +49,7 @@ it('registers the filament plugin and configures the platform workflow resource 
     Filament::setTenant(null);
     expect(fn () => PlatformWorkflowResource::getEloquentQuery())->toThrow(HttpException::class);
 
+    $this->actingAs($user);
     Filament::setTenant($team);
     expect(PlatformWorkflowResource::getEloquentQuery()->count())->toBe(1);
 

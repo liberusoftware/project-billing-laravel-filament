@@ -137,6 +137,8 @@ class Team extends FoundationTeam
      */
     protected static function booted(): void
     {
+        parent::booted();
+
         static::saving(function (Team $team): void {
             if ($team->is_default_for_registration) {
                 static::query()

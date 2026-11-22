@@ -3,11 +3,14 @@
 declare(strict_types=1);
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Liberu\Foundation\Audit\Contracts\AuditRecorder;
+use Liberu\Foundation\Audit\Models\ActivityLogEntry;
 use Liberu\Foundation\Audit\Support\AuditContext;
 use Liberu\Foundation\Audit\Support\DatabaseAuditRecorder;
 use Liberu\Foundation\Audit\Support\ModelAuditListener;
@@ -102,4 +105,32 @@ it('handles genealogy model lifecycle events and ignores unrelated events', func
     expect($events)->toBe(['genealogy_created', 'genealogy_updated', 'genealogy_deleted'])
         ->and(DB::table('activity_log')->first()->correlation_id)->toBe('req-xyz')
         ->and(DB::table('activity_log')->first()->causer_id)->toBe(77);
+});
+
+it('casts attributes and exposes subject and causer morph relations on ActivityLogEntry', function () {
+    config()->set('app.key', 'base64:'.base64_encode(random_bytes(32)));
+
+    $retainUntil = now()->addYear()->startOfSecond();
+
+    $entry = ActivityLogEntry::create([
+        'log_name' => 'audit',
+        'description' => 'Created person',
+        'subject_type' => ActivityLogEntry::class,
+        'subject_id' => 42,
+        'event' => 'created',
+        'causer_type' => ActivityLogEntry::class,
+        'causer_id' => 7,
+        'attribute_changes' => ['before' => [], 'after' => ['name' => 'Ada']],
+        'properties' => ['reason' => 'import'],
+        'retain_until' => $retainUntil,
+    ]);
+
+    $fresh = ActivityLogEntry::findOrFail($entry->id);
+
+    expect($fresh->attribute_changes)->toBe(['before' => [], 'after' => ['name' => 'Ada']])
+        ->and($fresh->properties)->toBe(['reason' => 'import'])
+        ->and($fresh->retain_until)->toBeInstanceOf(Carbon::class)
+        ->and($fresh->retain_until->equalTo($retainUntil))->toBeTrue()
+        ->and($fresh->subject())->toBeInstanceOf(MorphTo::class)
+        ->and($fresh->causer())->toBeInstanceOf(MorphTo::class);
 });

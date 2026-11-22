@@ -6,7 +6,6 @@ namespace Liberu\Billing\Pricing\Api\Http\Controllers;
 
 use Carbon\Carbon;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
@@ -105,7 +104,7 @@ final class PricingSupportController extends Controller
 
     private function paginated(LengthAwarePaginator $results): JsonResponse
     {
-        return response()->json(['data' => $results->getCollection()->map(fn (Model $model): array => $this->resource($model))->values(), 'links' => ['next' => $results->nextPageUrl(), 'prev' => $results->previousPageUrl()], 'meta' => ['current_page' => $results->currentPage(), 'last_page' => $results->lastPage(), 'per_page' => $results->perPage(), 'total' => $results->total()]]);
+        return response()->json(['data' => $results->getCollection()->map(fn (PricingContract|PricingDiscount|PricingSnapshot $model): array => $this->resource($model))->values(), 'links' => ['next' => $results->nextPageUrl(), 'prev' => $results->previousPageUrl()], 'meta' => ['current_page' => $results->currentPage(), 'last_page' => $results->lastPage(), 'per_page' => $results->perPage(), 'total' => $results->total()]]);
     }
 
     private function pageSize(Request $request): int
@@ -113,13 +112,12 @@ final class PricingSupportController extends Controller
         return min(max((int) $request->input('page.size', $request->integer('per_page', 25)), 1), 100);
     }
 
-    private function resource(Model $model): array
+    private function resource(PricingContract|PricingDiscount|PricingSnapshot $model): array
     {
-        $attributes = match (true) {
-            $model instanceof PricingContract => $model->only(['team_id', 'pricing_plan_id', 'customer_id', 'starts_at', 'ends_at', 'terms', 'status', 'created_at', 'updated_at']),
-            $model instanceof PricingDiscount => $model->only(['team_id', 'code', 'kind', 'value', 'currency', 'starts_at', 'ends_at', 'max_redemptions', 'redemptions', 'active', 'created_at', 'updated_at']),
-            $model instanceof PricingSnapshot => $model->only(['team_id', 'pricing_plan_id', 'version', 'payload', 'captured_at', 'created_at', 'updated_at']),
-            default => [],
+        $attributes = match ($model::class) {
+            PricingContract::class => $model->only(['team_id', 'pricing_plan_id', 'customer_id', 'starts_at', 'ends_at', 'terms', 'status', 'created_at', 'updated_at']),
+            PricingDiscount::class => $model->only(['team_id', 'code', 'kind', 'value', 'currency', 'starts_at', 'ends_at', 'max_redemptions', 'redemptions', 'active', 'created_at', 'updated_at']),
+            PricingSnapshot::class => $model->only(['team_id', 'pricing_plan_id', 'version', 'payload', 'captured_at', 'created_at', 'updated_at']),
         };
 
         return ['id' => (string) $model->getKey(), 'type' => str($model::class)->classBasename()->kebab()->toString(), 'attributes' => $attributes];

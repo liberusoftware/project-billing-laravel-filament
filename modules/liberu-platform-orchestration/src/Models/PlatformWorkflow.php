@@ -17,6 +17,8 @@ final class PlatformWorkflow extends Model
 
     protected $fillable = ['tenant_id', 'idempotency_key', 'name', 'status', 'metadata'];
 
+    protected $attributes = ['status' => 'draft'];
+
     public function scopeForTenant($query, string|int $tenantId): void
     {
         $query->where($this->qualifyColumn('tenant_id'), (string) $tenantId);

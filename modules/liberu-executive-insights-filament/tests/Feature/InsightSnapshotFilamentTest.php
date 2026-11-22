@@ -49,6 +49,7 @@ it('registers the filament plugin and configures the insight snapshot resource a
     Filament::setTenant(null);
     expect(fn () => InsightSnapshotResource::getEloquentQuery())->toThrow(HttpException::class);
 
+    $this->actingAs($user);
     Filament::setTenant($team);
     expect(InsightSnapshotResource::getEloquentQuery()->count())->toBe(1);
 

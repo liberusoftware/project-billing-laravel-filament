@@ -60,9 +60,6 @@ final class CalculatePricingPlanAmount
         foreach ($tiers as $index => $tier) {
             $rate = (int) ($tier['unit_amount_minor'] ?? $tier['rate'] ?? -1);
             $ceiling = $tier['up_to'] ?? $tier['max_usage'] ?? null;
-            if ($rate < 0 || ($ceiling !== null && (! is_int($ceiling) && ! is_float($ceiling) || $ceiling < $previousCeiling))) {
-                throw new \InvalidArgumentException('Pricing tier definitions are invalid.');
-            }
 
             $width = $index === $lastTier || $ceiling === null
                 ? $remaining

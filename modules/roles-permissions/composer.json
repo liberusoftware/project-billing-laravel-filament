@@ -6,8 +6,7 @@
   "require": {
     "php": "^8.5",
     "spatie/laravel-permission": "^8.3.2",
-    "liberusoftware/module-manager": "^1.0",
-    "liberusoftware/organizations-teams": "^1.0"
+    "liberusoftware/module-manager": "^1.0"
   },
   "autoload": {
     "psr-4": {
@@ -19,7 +18,7 @@
       "name": "roles-permissions"
     }
   },
-  "version": "1.8.3",
+  "version": "1.9.0",
   "autoload-dev": {
     "psr-4": {
       "Liberu\\Foundation\\RolesPermissions\\Tests\\": "tests/"

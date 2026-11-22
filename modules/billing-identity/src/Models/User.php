@@ -180,7 +180,7 @@ class User extends Authenticatable implements ConnectedAccountOwner, FilamentUse
 
     public function canAccessTenant(Model $tenant): bool
     {
-        return $tenant instanceof FoundationTeam && $this->belongsToTeam($tenant);
+        return $tenant instanceof FoundationTeam && ! $tenant->isArchived() && $this->belongsToTeam($tenant);
     }
 
     public function canAccessPanel(Panel $panel): bool

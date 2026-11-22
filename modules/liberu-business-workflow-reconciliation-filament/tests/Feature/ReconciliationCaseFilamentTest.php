@@ -49,6 +49,7 @@ it('registers the filament plugin and configures the reconciliation case resourc
     Filament::setTenant(null);
     expect(fn () => ReconciliationCaseResource::getEloquentQuery())->toThrow(HttpException::class);
 
+    $this->actingAs($user);
     Filament::setTenant($team);
     expect(ReconciliationCaseResource::getEloquentQuery()->count())->toBe(1);
 

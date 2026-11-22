@@ -16,7 +16,7 @@ final readonly class CapturePricingSnapshot
 
     public function execute(PricingPlan $plan): PricingSnapshot
     {
-        for ($attempt = 0; $attempt < 3; $attempt++) {
+        for ($attempt = 0; ; $attempt++) {
             try {
                 return $this->database->transaction(function () use ($plan): PricingSnapshot {
                     $version = ((int) PricingSnapshot::query()->where('pricing_plan_id', $plan->getKey())->lockForUpdate()->max('version')) + 1;
@@ -27,12 +27,10 @@ final readonly class CapturePricingSnapshot
                     return $snapshot;
                 });
             } catch (QueryException $exception) {
-                if ($attempt === 2 || ! str_contains(strtolower($exception->getMessage()), 'unique')) {
+                if ($attempt >= 2 || ! str_contains(strtolower($exception->getMessage()), 'unique')) {
                     throw $exception;
                 }
             }
         }
-
-        throw new \LogicException('Unable to capture a pricing snapshot.');
     }
 }

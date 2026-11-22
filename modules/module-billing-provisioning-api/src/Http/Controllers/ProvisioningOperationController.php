@@ -91,11 +91,9 @@ final class ProvisioningOperationController extends Controller
 
     private function resource(Model $model): array
     {
-        $attributes = match (true) {
-            $model instanceof ProvisionedService => $model->only(['team_id', 'customer_id', 'subscription_id', 'provider', 'external_id', 'state', 'last_error', 'metadata', 'last_reconciled_at', 'created_at', 'updated_at']),
-            $model instanceof ProvisioningOperation => $model->only(['team_id', 'provisioned_service_id', 'operation', 'status', 'attempts', 'next_poll_at', 'payload', 'last_error', 'created_at', 'updated_at']),
-            default => [],
-        };
+        $attributes = $model instanceof ProvisionedService
+            ? $model->only(['team_id', 'customer_id', 'subscription_id', 'provider', 'external_id', 'state', 'last_error', 'metadata', 'last_reconciled_at', 'created_at', 'updated_at'])
+            : $model->only(['team_id', 'provisioned_service_id', 'operation', 'status', 'attempts', 'next_poll_at', 'payload', 'error', 'created_at', 'updated_at']);
 
         return ['id' => (string) $model->getKey(), 'type' => $model instanceof ProvisionedService ? 'provisioned-service' : 'provisioning-operation', 'attributes' => $attributes];
     }

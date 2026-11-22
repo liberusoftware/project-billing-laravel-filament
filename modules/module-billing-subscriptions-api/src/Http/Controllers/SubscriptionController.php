@@ -28,7 +28,7 @@ final class SubscriptionController extends Controller
         Gate::authorize('viewAny', Subscription::class);
         $teamId = data_get($request->user(), 'current_team_id') ?? data_get($request->user(), 'currentTeam.id');
         $data = $request->validate(['customer_id' => ['nullable', 'integer', 'min:1'], 'status' => ['nullable', 'string', 'in:trialing,active,paused,cancelled,expired']]);
-        $subscriptions = $query->execute($teamId === null ? null : (int) $teamId, $this->pageSize($request), $data['customer_id'] ?? null, isset($data['status']) ? SubscriptionStatus::from($data['status']) : null);
+        $subscriptions = $query->execute($teamId === null ? null : (int) $teamId, $this->pageSize($request), isset($data['customer_id']) ? (int) $data['customer_id'] : null, isset($data['status']) ? SubscriptionStatus::from($data['status']) : null);
 
         return response()->json([
             'data' => $subscriptions->getCollection()->map(fn (Subscription $subscription): array => $this->resource($subscription))->values(),

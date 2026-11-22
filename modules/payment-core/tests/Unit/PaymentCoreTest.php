@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use Liberu\Payment\Contracts\Contracts\MerchantWebhookVerifierContract;
+use Liberu\Payment\Contracts\Contracts\OutboundPaymentAdapterContract;
 use Liberu\Payment\Contracts\Contracts\PaymentCaptureAndRefundContract;
 use Liberu\Payment\Contracts\Contracts\PaymentGatewayAdapterContract;
 use Liberu\Payment\Contracts\Contracts\PaymentGatewayRegistryContract;
@@ -55,7 +56,7 @@ function makeMinimalAdapter(string $key): PaymentGatewayAdapterContract
 
 function makeFullAdapter(string $key): PaymentGatewayAdapterContract
 {
-    return new readonly class($key) implements MerchantWebhookVerifierContract, PaymentCaptureAndRefundContract, PaymentGatewayAdapterContract, PaymentIntentServiceContract
+    return new readonly class($key) implements MerchantWebhookVerifierContract, OutboundPaymentAdapterContract, PaymentCaptureAndRefundContract, PaymentGatewayAdapterContract, PaymentIntentServiceContract
     {
         public function __construct(private string $key) {}
 
@@ -108,6 +109,16 @@ function makeFullAdapter(string $key): PaymentGatewayAdapterContract
         {
             return new MerchantWebhookEventDto($this->key, 'evt_1', 'payment.captured', 'pi_1', PaymentLifecycleState::Captured);
         }
+
+        public function sendOutboundPayment(MerchantAccountContextDto $account, array $payment): array
+        {
+            return ['provider' => $this->key, 'status' => 'sent', 'payment' => $payment];
+        }
+
+        public function sendOutboundBatch(MerchantAccountContextDto $account, string $title, array $payments, ?string $scheduleFor = null): array
+        {
+            return ['provider' => $this->key, 'title' => $title, 'count' => count($payments), 'schedule_for' => $scheduleFor];
+        }
     };
 }
 
@@ -158,11 +169,15 @@ it('delegates createIntent, capture, refund, and verifyWebhook through PaymentOr
     $capture = $orchestrator->capture(new CapturePaymentCommand($account, $intent->providerIntentId, 'idem_2', $amount));
     $refund = $orchestrator->refund(new RefundPaymentCommand($account, $intent->providerIntentId, $amount, 'idem_3'));
     $webhook = $orchestrator->verifyWebhook(new RawWebhookPayloadDto('demo', '{}', [], 'secret'));
+    $outbound = $orchestrator->sendOutboundPayment($account, ['amount' => 1000, 'currency' => 'USD']);
+    $batch = $orchestrator->sendOutboundBatch($account, 'May Payouts', [['amount' => 1000]], '2026-05-01');
 
     expect($intent->providerIntentId)->toBe('pi_idem_1')
         ->and($capture->providerCaptureId)->toBe('cap_1')
         ->and($refund->providerRefundId)->toBe('ref_1')
-        ->and($webhook->providerEventId)->toBe('evt_1');
+        ->and($webhook->providerEventId)->toBe('evt_1')
+        ->and($outbound)->toBe(['provider' => 'demo', 'status' => 'sent', 'payment' => ['amount' => 1000, 'currency' => 'USD']])
+        ->and($batch)->toBe(['provider' => 'demo', 'title' => 'May Payouts', 'count' => 1, 'schedule_for' => '2026-05-01']);
 });
 
 it('throws RuntimeException when resolved adapter does not implement required capability contracts', function () {
@@ -184,4 +199,10 @@ it('throws RuntimeException when resolved adapter does not implement required ca
 
     expect(fn () => $orchestrator->verifyWebhook(new RawWebhookPayloadDto('bare', '{}', [], 'secret')))
         ->toThrow(RuntimeException::class, 'Adapter [bare] does not support webhook verification.');
+
+    expect(fn () => $orchestrator->sendOutboundPayment($account, ['amount' => 100]))
+        ->toThrow(RuntimeException::class, 'Adapter [bare] does not support outbound payments.');
+
+    expect(fn () => $orchestrator->sendOutboundBatch($account, 'Batch', [['amount' => 100]]))
+        ->toThrow(RuntimeException::class, 'Adapter [bare] does not support outbound payments.');
 });
