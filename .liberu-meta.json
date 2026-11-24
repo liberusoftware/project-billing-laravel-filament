@@ -18,8 +18,8 @@
         }
     },
     "additionalPackages": {
-        "liberusoftware/analytics-contracts": "analytics-contracts",
-        "liberusoftware/localization-contracts": "localization-contracts",
+        "liberusoftware/analytics-contracts": "module-analytics-contracts",
+        "liberusoftware/localization-contracts": "module-localization-contracts",
         "liberusoftware/composer-installer": "composer-installer"
     }
 }

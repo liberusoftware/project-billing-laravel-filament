@@ -55,6 +55,7 @@ class ClientPanelProvider extends PanelProvider
                     DispatchServingFilamentEvent::class,
                 ]
             )
+            ->plugins(app(ModulePlugins::class)->forPanel('client'))
             ->authMiddleware(
                 [
                     Authenticate::class,

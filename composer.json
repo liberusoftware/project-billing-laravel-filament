@@ -377,7 +377,22 @@
     },
     "extra": {
         "laravel": {
-            "dont-discover": []
+            "dont-discover": [
+                "liberusoftware/affiliate-contracts",
+                "liberusoftware/affiliate-core",
+                "liberusoftware/passkeys",
+                "liberusoftware/payment-adyen",
+                "liberusoftware/payment-contracts",
+                "liberusoftware/payment-core",
+                "liberusoftware/payment-gocardless",
+                "liberusoftware/payment-mollie",
+                "liberusoftware/payment-paddle",
+                "liberusoftware/payment-paypal",
+                "liberusoftware/payment-square",
+                "liberusoftware/payment-stripe",
+                "liberusoftware/tenancy",
+                "liberusoftware/users-roles"
+            ]
         }
     },
     "config": {
@@ -502,84 +517,84 @@
         },
         {
             "type": "git",
-            "url": "https://github.com/liberusoftware/payment-contracts.git",
+            "url": "https://github.com/liberusoftware/module-payment-contracts.git",
             "only": [
                 "liberusoftware/payment-contracts"
             ]
         },
         {
             "type": "git",
-            "url": "https://github.com/liberusoftware/payment-core.git",
+            "url": "https://github.com/liberusoftware/module-payment-core.git",
             "only": [
                 "liberusoftware/payment-core"
             ]
         },
         {
             "type": "git",
-            "url": "https://github.com/liberusoftware/payment-stripe.git",
+            "url": "https://github.com/liberusoftware/module-payment-stripe.git",
             "only": [
                 "liberusoftware/payment-stripe"
             ]
         },
         {
             "type": "git",
-            "url": "https://github.com/liberusoftware/payment-paypal.git",
+            "url": "https://github.com/liberusoftware/module-payment-paypal.git",
             "only": [
                 "liberusoftware/payment-paypal"
             ]
         },
         {
             "type": "git",
-            "url": "https://github.com/liberusoftware/payment-paddle.git",
+            "url": "https://github.com/liberusoftware/module-payment-paddle.git",
             "only": [
                 "liberusoftware/payment-paddle"
             ]
         },
         {
             "type": "git",
-            "url": "https://github.com/liberusoftware/payment-adyen.git",
+            "url": "https://github.com/liberusoftware/module-payment-adyen.git",
             "only": [
                 "liberusoftware/payment-adyen"
             ]
         },
         {
             "type": "git",
-            "url": "https://github.com/liberusoftware/payment-mollie.git",
+            "url": "https://github.com/liberusoftware/module-payment-mollie.git",
             "only": [
                 "liberusoftware/payment-mollie"
             ]
         },
         {
             "type": "git",
-            "url": "https://github.com/liberusoftware/payment-square.git",
+            "url": "https://github.com/liberusoftware/module-payment-square.git",
             "only": [
                 "liberusoftware/payment-square"
             ]
         },
         {
             "type": "git",
-            "url": "https://github.com/liberusoftware/payment-gocardless.git",
+            "url": "https://github.com/liberusoftware/module-payment-gocardless.git",
             "only": [
                 "liberusoftware/payment-gocardless"
             ]
         },
         {
             "type": "git",
-            "url": "https://github.com/liberusoftware/affiliate-contracts.git",
+            "url": "https://github.com/liberusoftware/module-affiliate-contracts.git",
             "only": [
                 "liberusoftware/affiliate-contracts"
             ]
         },
         {
             "type": "git",
-            "url": "https://github.com/liberusoftware/affiliate-core.git",
+            "url": "https://github.com/liberusoftware/module-affiliate-core.git",
             "only": [
                 "liberusoftware/affiliate-core"
             ]
         },
         {
             "type": "git",
-            "url": "https://github.com/liberusoftware/passkeys.git",
+            "url": "https://github.com/liberusoftware/module-passkeys.git",
             "only": [
                 "liberusoftware/passkeys"
             ]
