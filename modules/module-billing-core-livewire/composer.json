@@ -14,7 +14,15 @@
       "Liberu\\Billing\\Core\\Livewire\\": "src/"
     }
   },
-  "extra": {"liberu": {"name": "module-billing-core-livewire"}},
-  "version": "0.1.3",
-  "config": {"allow-plugins": {"pestphp/pest-plugin": true}}
+  "extra": {
+    "liberu": {
+      "name": "module-billing-core-livewire"
+    }
+  },
+  "version": "0.1.4",
+  "config": {
+    "allow-plugins": {
+      "pestphp/pest-plugin": true
+    }
+  }
 }

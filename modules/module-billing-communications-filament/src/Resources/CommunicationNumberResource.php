@@ -26,6 +26,8 @@ final class CommunicationNumberResource extends Resource
 
     protected static ?string $model = CommunicationNumber::class;
 
+    protected static bool $isScopedToTenant = false;
+
     public static function form(Schema $schema): Schema
     {
         return $schema->components([TextInput::make('number')->required(), TextInput::make('type')->required()]);

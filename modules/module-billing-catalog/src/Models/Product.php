@@ -13,6 +13,11 @@ class Product extends Model
 {
     protected $table = 'billing_catalog_products';
 
+    /** @var array<string, mixed> */
+    protected $attributes = [
+        'status' => ProductStatus::Draft->value,
+    ];
+
     protected function casts(): array
     {
         return [

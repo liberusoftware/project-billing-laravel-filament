@@ -3,7 +3,7 @@
   "name": "module-billing-isp-filament",
   "display_name": "Billing ISP Filament",
   "description": "Filament adapter for Billing ISP.",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "category": "presentation",
   "provider": "Liberu\\Billing\\Isp\\Filament\\IspFilamentServiceProvider",
   "requires": {
@@ -22,5 +22,11 @@
   "features": [
     "ISP Filament integration"
   ],
-  "presentation": {"filament": {"admin": ["Liberu\\Billing\\Isp\\Filament\\IspFilamentPlugin"]}}
+  "presentation": {
+    "filament": {
+      "admin": [
+        "Liberu\\Billing\\Isp\\Filament\\IspFilamentPlugin"
+      ]
+    }
+  }
 }

@@ -24,7 +24,14 @@ final readonly class ExportReportingMetrics
         $handle = fopen('php://temp', 'r+');
         fputcsv($handle, ['metric', 'period_start', 'period_end', 'value', 'currency', 'source'], escape: '\\');
         foreach ($rows as $row) {
-            fputcsv($handle, [(string) $row->metric, (string) $row->period_start, (string) $row->period_end, (string) $row->value, (string) ($row->currency ?? ''), (string) ($row->source ?? '')], escape: '\\');
+            fputcsv($handle, [
+                (string) $row->metric,
+                substr((string) $row->period_start, 0, 10),
+                substr((string) $row->period_end, 0, 10),
+                (string) $row->value,
+                (string) ($row->currency ?? ''),
+                (string) ($row->source ?? ''),
+            ], escape: '\\');
         }
         rewind($handle);
         $csv = stream_get_contents($handle);

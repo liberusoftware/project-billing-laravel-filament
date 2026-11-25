@@ -16,9 +16,16 @@ final class CommunicationsLivewireServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'billing-communications-livewire');
-        Livewire::component('module-billing-communications::inventory', CommunicationInventory::class);
-        Livewire::component('module-billing-communications::providers', CommunicationProviders::class);
-        Livewire::component('module-billing-communications::services', CommunicationServices::class);
-        Livewire::component('module-billing-communications::voice-accounts', VoiceAccounts::class);
+        $components = [
+            'module-billing-communications::inventory' => CommunicationInventory::class,
+            'module-billing-communications::providers' => CommunicationProviders::class,
+            'module-billing-communications::services' => CommunicationServices::class,
+            'module-billing-communications::voice-accounts' => VoiceAccounts::class,
+        ];
+        foreach ($components as $name => $component) {
+            Livewire::component($name, $component);
+        }
+
+        Livewire::resolveMissingComponent(static fn (string $name): ?string => $components[$name] ?? null);
     }
 }

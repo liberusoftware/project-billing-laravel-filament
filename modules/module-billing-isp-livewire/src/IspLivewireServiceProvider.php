@@ -14,7 +14,14 @@ final class IspLivewireServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'module-billing-isp-livewire');
-        Livewire::component('module-billing-isp::capabilities', IspCapabilities::class);
-        Livewire::component('module-billing-isp::access-services', AccessServices::class);
+        $components = [
+            'module-billing-isp::capabilities' => IspCapabilities::class,
+            'module-billing-isp::access-services' => AccessServices::class,
+        ];
+        foreach ($components as $name => $component) {
+            Livewire::component($name, $component);
+        }
+
+        Livewire::resolveMissingComponent(static fn (string $name): ?string => $components[$name] ?? null);
     }
 }

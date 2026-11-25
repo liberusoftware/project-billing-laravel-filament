@@ -21,6 +21,7 @@ return new class() extends Migration
     {
         if (Schema::hasColumn('billing_payment_methods', 'status')) {
             Schema::table('billing_payment_methods', function (Blueprint $table): void {
+                $table->dropIndex(['status']);
                 $table->dropColumn('status');
             });
         }

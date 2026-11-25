@@ -26,6 +26,8 @@
         "laravel/socialite": "^5.31.0",
         "laravel/tinker": "^3.0.2",
         "liberusoftware/activity-comments": "^1.0",
+        "liberusoftware/affiliate-contracts": "^1.0",
+        "liberusoftware/affiliate-core": "^1.0",
         "liberusoftware/analytics-contracts": "^1.0",
         "liberusoftware/analytics-core": "^1.0",
         "liberusoftware/analytics-google": "^1.0",
@@ -37,10 +39,8 @@
         "liberusoftware/billing-directadmin": "^0.1.0",
         "liberusoftware/billing-enom": "^0.1.0",
         "liberusoftware/billing-liberu-control-panel": "^0.1.0",
-        "liberusoftware/billing-paddle": "^0.1.0",
         "liberusoftware/billing-plesk": "^0.1.0",
         "liberusoftware/billing-resellerclub": "^0.1.0",
-        "liberusoftware/billing-stripe": "^0.1.0",
         "liberusoftware/billing-virtualmin": "^0.1.0",
         "liberusoftware/composer-installer": "^1.1",
         "liberusoftware/currency-context": "^1.0",
@@ -49,14 +49,14 @@
         "liberusoftware/files-media": "^1.0",
         "liberusoftware/identity-core": "^1.0",
         "liberusoftware/identity-core-filament": "^1.0",
-        "liberusoftware/identity-socialstream": "^1.0",
+        "liberusoftware/identity-socialstream": "^1.8.2",
         "liberusoftware/import-export": "^1.0",
-        "liberusoftware/integrations": "^1.0",
+        "liberusoftware/integrations": "^1.8.2",
         "liberusoftware/jetstream-bridge": "^1.0",
         "liberusoftware/localization-contracts": "^1.0",
-        "liberusoftware/localization-core": "^1.0",
-        "liberusoftware/localization-core-livewire": "^1.0",
-        "liberusoftware/localization-mymemory": "^1.0",
+        "liberusoftware/localization-core": "^1.5.1",
+        "liberusoftware/localization-core-livewire": "^1.5.3",
+        "liberusoftware/localization-mymemory": "^1.5.1",
         "liberusoftware/module-billing-billing-core": "^0.1.3",
         "liberusoftware/module-billing-catalog": "^0.1.1",
         "liberusoftware/module-billing-catalog-api": "^0.1.0",
@@ -137,21 +137,31 @@
         "liberusoftware/module-liberu-revenue-and-care-orchestration-api": "^1.0",
         "liberusoftware/module-liberu-revenue-and-care-orchestration-filament": "^1.0",
         "liberusoftware/module-liberu-revenue-and-care-orchestration-livewire": "^1.0",
-        "liberusoftware/module-manager": "^1.9",
-        "liberusoftware/module-manager-filament": "^1.11",
+        "liberusoftware/module-manager": "^1.9.2",
+        "liberusoftware/module-manager-filament": "^1.12",
         "liberusoftware/notifications": "^1.0",
         "liberusoftware/observability": "^1.0",
-        "liberusoftware/organizations-teams": "^1.0",
+        "liberusoftware/organizations-teams": "^1.10.3",
         "liberusoftware/organizations-teams-filament": "^1.0",
+        "liberusoftware/passkeys": "^1.0",
+        "liberusoftware/payment-adyen": "^1.0",
+        "liberusoftware/payment-contracts": "^1.0",
+        "liberusoftware/payment-core": "^1.0",
+        "liberusoftware/payment-gocardless": "^1.0",
+        "liberusoftware/payment-mollie": "^1.0",
+        "liberusoftware/payment-paddle": "^1.0",
+        "liberusoftware/payment-paypal": "^1.0",
+        "liberusoftware/payment-square": "^1.0",
+        "liberusoftware/payment-stripe": "^1.0",
         "liberusoftware/profiles": "^1.0",
-        "liberusoftware/roles-permissions": "^1.0",
+        "liberusoftware/roles-permissions": "^1.7.2",
         "liberusoftware/roles-permissions-filament": "^1.0",
         "liberusoftware/scheduler-queues": "^1.0",
         "liberusoftware/search": "^1.0",
         "liberusoftware/search-api": "^1.0",
-        "liberusoftware/sessions-devices": "^1.0",
+        "liberusoftware/sessions-devices": "^1.5.2",
         "liberusoftware/sessions-devices-filament": "^1.1",
-        "liberusoftware/settings": "^1.0",
+        "liberusoftware/settings": "^1.5.3",
         "liberusoftware/settings-filament": "^1.0",
         "liberusoftware/tenancy": "^1.0.1",
         "liberusoftware/theme-base": "^2.0",
@@ -159,9 +169,9 @@
         "liberusoftware/theme-clear-signal": "^1.0",
         "liberusoftware/theme-dark": "^1.0",
         "liberusoftware/theme-default": "^1.0",
-        "liberusoftware/theme-support": "^1.0",
-        "liberusoftware/theme-support-livewire": "^1.1",
-        "liberusoftware/two-factor-authentication": "^1.0",
+        "liberusoftware/theme-support": "^1.8.4",
+        "liberusoftware/theme-support-livewire": "^1.6.2",
+        "liberusoftware/two-factor-authentication": "^1.4.7",
         "liberusoftware/users-roles": "^1.0",
         "liberusoftware/webhooks": "^1.0",
         "livewire/livewire": "^4.4.8",
@@ -175,8 +185,7 @@
         "spatie/laravel-permission": "^8.3.2",
         "spiral/roadrunner-cli": "^3.0.1",
         "spiral/roadrunner-http": "^4.2.1",
-        "square/square": "^47.0.0.20260916",
-        "stripe/stripe-php": "^23.0"
+        "square/square": "^47.0.0.20260916"
     },
     "require-dev": {
         "fakerphp/faker": "^1.24.1",
@@ -189,6 +198,7 @@
         "laravel/sail": "^1.69.0",
         "laravel/telescope": "^5.26.0",
         "liberusoftware/boilerplate-scripts": "^1.1",
+        "liberusoftware/package-testbench": "^1.8",
         "mockery/mockery": "^1.6.15",
         "nunomaduro/collision": "^8.9.5",
         "pestphp/pest": "^5.3.3",
@@ -198,14 +208,154 @@
     },
     "autoload": {
         "psr-4": {
-            "App\\": "app/",
-            "Database\\Factories\\": "database/factories/",
-            "Database\\Seeders\\": "database/seeders/"
-        }
+            "App\\": "modules/billing-application/src/",
+            "App\\Modules\\": "modules/billing-extensions/src/",
+            "Database\\Factories\\": "modules/billing-application/database/factories/",
+            "Database\\Seeders\\": "modules/billing-application/database/seeders/"
+        },
+        "classmap": [
+            "modules/billing-audit/src/",
+            "modules/billing-catalog/database/factories/",
+            "modules/billing-catalog/src/",
+            "modules/billing-collections/src/",
+            "modules/billing-communications/database/factories/",
+            "modules/billing-communications/database/seeders/",
+            "modules/billing-communications/src/",
+            "modules/billing-customer-portal/database/factories/",
+            "modules/billing-customer-portal/src/",
+            "modules/billing-domains/src/",
+            "modules/billing-extensions/src/",
+            "modules/billing-filament/src/",
+            "modules/billing-files/src/",
+            "modules/billing-hosting/database/factories/",
+            "modules/billing-hosting/src/",
+            "modules/billing-identity/database/factories/",
+            "modules/billing-identity/database/seeders/",
+            "modules/billing-identity/src/",
+            "modules/billing-integrations/database/factories/",
+            "modules/billing-integrations/src/",
+            "modules/billing-invoicing/database/factories/",
+            "modules/billing-invoicing/src/",
+            "modules/billing-isp/database/factories/",
+            "modules/billing-isp/src/",
+            "modules/billing-licensing/database/factories/",
+            "modules/billing-licensing/src/",
+            "modules/billing-money/src/",
+            "modules/billing-orders/database/factories/",
+            "modules/billing-orders/src/",
+            "modules/billing-payments/database/factories/",
+            "modules/billing-payments/src/",
+            "modules/billing-pricing/src/",
+            "modules/billing-projects/database/factories/",
+            "modules/billing-projects/src/",
+            "modules/billing-provisioning/src/",
+            "modules/billing-referrals/src/",
+            "modules/billing-reporting/src/",
+            "modules/billing-search/src/",
+            "modules/billing-settings/src/",
+            "modules/billing-subscriptions/database/factories/",
+            "modules/billing-subscriptions/src/",
+            "modules/billing-support/database/factories/",
+            "modules/billing-support/src/",
+            "modules/billing-usage/src/"
+        ]
     },
     "autoload-dev": {
         "psr-4": {
-            "Tests\\": "tests/"
+            "Liberu\\Analytics\\Core\\Tests\\": "modules/analytics-core/tests/",
+            "Liberu\\Analytics\\Google\\Tests\\": "modules/analytics-google/tests/",
+            "Liberu\\Analytics\\Meta\\Tests\\": "modules/analytics-meta/tests/",
+            "Liberu\\Billing\\Core\\Tests\\": "modules/module-billing-billing-core/tests/",
+            "Liberu\\Foundation\\ActivityComments\\Tests\\": "modules/activity-comments/tests/",
+            "Liberu\\Foundation\\ApiAccess\\Tests\\": "modules/api-access/tests/",
+            "Liberu\\Foundation\\ApplicationCore\\Tests\\": "modules/application/tests/",
+            "Liberu\\Foundation\\Audit\\Tests\\": "modules/audit/tests/",
+            "Liberu\\Foundation\\Currency\\Tests\\": "modules/currency-context/tests/",
+            "Liberu\\Foundation\\DeveloperExperience\\Tests\\": "modules/developer-experience/tests/",
+            "Liberu\\Foundation\\FeatureFlags\\Tests\\": "modules/feature-flags/tests/",
+            "Liberu\\Foundation\\Files\\Tests\\": "modules/files-media/tests/",
+            "Liberu\\Foundation\\IdentityFilament\\Tests\\": "modules/identity-core-filament/tests/",
+            "Liberu\\Foundation\\Identity\\Socialstream\\Tests\\": "modules/identity-socialstream/tests/",
+            "Liberu\\Foundation\\Identity\\Tests\\": "modules/identity-core/tests/",
+            "Liberu\\Foundation\\ImportExport\\Tests\\": "modules/import-export/tests/",
+            "Liberu\\Foundation\\Integrations\\Tests\\": "modules/integrations/tests/",
+            "Liberu\\Foundation\\JetstreamBridge\\Tests\\": "modules/jetstream-bridge/tests/",
+            "Liberu\\Foundation\\LocalizationLivewire\\Tests\\": "modules/localization-core-livewire/tests/",
+            "Liberu\\Foundation\\Localization\\MyMemory\\Tests\\": "modules/localization-mymemory/tests/",
+            "Liberu\\Foundation\\Localization\\Tests\\": "modules/localization-core/tests/",
+            "Liberu\\Foundation\\ModuleManagerFilament\\Tests\\": "modules/module-manager-filament/tests/",
+            "Liberu\\Foundation\\ModuleManager\\Tests\\": "modules/module-manager/tests/",
+            "Liberu\\Foundation\\Notifications\\Tests\\": "modules/notifications/tests/",
+            "Liberu\\Foundation\\Observability\\Tests\\": "modules/observability/tests/",
+            "Liberu\\Foundation\\OrganizationsFilament\\Tests\\": "modules/organizations-teams-filament/tests/",
+            "Liberu\\Foundation\\Organizations\\Tests\\": "modules/organizations-teams/tests/",
+            "Liberu\\Foundation\\Profiles\\Tests\\": "modules/profiles/tests/",
+            "Liberu\\Foundation\\RolesPermissionsFilament\\Tests\\": "modules/roles-permissions-filament/tests/",
+            "Liberu\\Foundation\\RolesPermissions\\Tests\\": "modules/roles-permissions/tests/",
+            "Liberu\\Foundation\\SchedulerQueues\\Tests\\": "modules/scheduler-queues/tests/",
+            "Liberu\\Foundation\\SearchApi\\Tests\\": "modules/search-api/tests/",
+            "Liberu\\Foundation\\Search\\Tests\\": "modules/search/tests/",
+            "Liberu\\Foundation\\SessionsDevicesFilament\\Tests\\": "modules/sessions-devices-filament/tests/",
+            "Liberu\\Foundation\\Sessions\\Tests\\": "modules/sessions-devices/tests/",
+            "Liberu\\Foundation\\SettingsFilament\\Tests\\": "modules/settings-filament/tests/",
+            "Liberu\\Foundation\\Settings\\Tests\\": "modules/settings/tests/",
+            "Liberu\\Foundation\\Tenancy\\Tests\\": "modules/tenancy/tests/",
+            "Liberu\\Foundation\\ThemeSupportLivewire\\Tests\\": "modules/theme-support-livewire/tests/",
+            "Liberu\\Foundation\\Theme\\Tests\\": "modules/theme-support/tests/",
+            "Liberu\\Foundation\\TwoFactor\\Tests\\": "modules/two-factor-authentication/tests/",
+            "Liberu\\Foundation\\Webhooks\\Tests\\": "modules/webhooks/tests/",
+            "Liberu\\Payment\\Contracts\\Tests\\": "modules/payment-contracts/tests/",
+            "Liberu\\Platform\\BusinessWorkflowReconciliation\\Api\\Tests\\": "modules/liberu-business-workflow-reconciliation-api/tests/",
+            "Liberu\\Platform\\BusinessWorkflowReconciliation\\Filament\\Tests\\": "modules/liberu-business-workflow-reconciliation-filament/tests/",
+            "Liberu\\Platform\\BusinessWorkflowReconciliation\\Livewire\\Tests\\": "modules/liberu-business-workflow-reconciliation-livewire/tests/",
+            "Liberu\\Platform\\BusinessWorkflowReconciliation\\Tests\\": "modules/liberu-business-workflow-reconciliation/tests/",
+            "Liberu\\Platform\\ExecutiveInsights\\Api\\Tests\\": "modules/liberu-executive-insights-api/tests/",
+            "Liberu\\Platform\\ExecutiveInsights\\Filament\\Tests\\": "modules/liberu-executive-insights-filament/tests/",
+            "Liberu\\Platform\\ExecutiveInsights\\Livewire\\Tests\\": "modules/liberu-executive-insights-livewire/tests/",
+            "Liberu\\Platform\\ExecutiveInsights\\Tests\\": "modules/liberu-executive-insights/tests/",
+            "Liberu\\Platform\\PlatformOrchestration\\Api\\Tests\\": "modules/liberu-platform-orchestration-api/tests/",
+            "Liberu\\Platform\\PlatformOrchestration\\Filament\\Tests\\": "modules/liberu-platform-orchestration-filament/tests/",
+            "Liberu\\Platform\\PlatformOrchestration\\Livewire\\Tests\\": "modules/liberu-platform-orchestration-livewire/tests/",
+            "Liberu\\Platform\\PlatformOrchestration\\Tests\\": "modules/liberu-platform-orchestration/tests/",
+            "Liberu\\Platform\\RevenueAndCareOrchestration\\Api\\Tests\\": "modules/liberu-revenue-and-care-orchestration-api/tests/",
+            "Liberu\\Platform\\RevenueAndCareOrchestration\\Filament\\Tests\\": "modules/liberu-revenue-and-care-orchestration-filament/tests/",
+            "Liberu\\Platform\\RevenueAndCareOrchestration\\Livewire\\Tests\\": "modules/liberu-revenue-and-care-orchestration-livewire/tests/",
+            "Liberu\\Platform\\RevenueAndCareOrchestration\\Tests\\": "modules/liberu-revenue-and-care-orchestration/tests/",
+            "Tests\\": [
+                "tests/",
+                "modules/billing-application/tests/",
+                "modules/billing-audit/tests/",
+                "modules/billing-catalog/tests/",
+                "modules/billing-collections/tests/",
+                "modules/billing-communications/tests/",
+                "modules/billing-customer-portal/tests/",
+                "modules/billing-domains/tests/",
+                "modules/billing-extensions/tests/",
+                "modules/billing-filament/tests/",
+                "modules/billing-hosting/tests/",
+                "modules/billing-identity/tests/",
+                "modules/billing-integrations/tests/",
+                "modules/billing-invoicing/tests/",
+                "modules/billing-isp/tests/",
+                "modules/billing-licensing/tests/",
+                "modules/billing-money/tests/",
+                "modules/billing-orders/tests/",
+                "modules/billing-payments/tests/",
+                "modules/billing-pricing/tests/",
+                "modules/billing-projects/tests/",
+                "modules/billing-provisioning/tests/",
+                "modules/billing-referrals/tests/",
+                "modules/billing-reporting/tests/",
+                "modules/billing-search/tests/",
+                "modules/billing-settings/tests/",
+                "modules/billing-subscriptions/tests/",
+                "modules/billing-support/tests/",
+                "modules/billing-usage/tests/",
+                "modules/integrations/tests/",
+                "modules/organizations-teams/tests/",
+                "modules/roles-permissions/tests/",
+                "modules/scheduler-queues/tests/"
+            ]
         }
     },
     "scripts": {
@@ -227,7 +377,22 @@
     },
     "extra": {
         "laravel": {
-            "dont-discover": []
+            "dont-discover": [
+                "liberusoftware/affiliate-contracts",
+                "liberusoftware/affiliate-core",
+                "liberusoftware/passkeys",
+                "liberusoftware/payment-adyen",
+                "liberusoftware/payment-contracts",
+                "liberusoftware/payment-core",
+                "liberusoftware/payment-gocardless",
+                "liberusoftware/payment-mollie",
+                "liberusoftware/payment-paddle",
+                "liberusoftware/payment-paypal",
+                "liberusoftware/payment-square",
+                "liberusoftware/payment-stripe",
+                "liberusoftware/tenancy",
+                "liberusoftware/users-roles"
+            ]
         }
     },
     "config": {
@@ -250,5 +415,189 @@
     "support": {
         "issues": "https://github.com/liberusoftware/project-billing-laravel-filament/issues",
         "source": "https://github.com/liberusoftware/project-billing-laravel-filament"
-    }
+    },
+    "repositories": [
+        {
+            "type": "git",
+            "url": "https://github.com/liberusoftware/module-module-manager-filament.git",
+            "only": [
+                "liberusoftware/module-manager-filament"
+            ]
+        },
+        {
+            "type": "git",
+            "url": "https://github.com/liberusoftware/module-localization-mymemory.git",
+            "only": [
+                "liberusoftware/localization-mymemory"
+            ]
+        },
+        {
+            "type": "git",
+            "url": "https://github.com/liberusoftware/module-settings.git",
+            "only": [
+                "liberusoftware/settings"
+            ]
+        },
+        {
+            "type": "git",
+            "url": "https://github.com/liberusoftware/module-theme-support.git",
+            "only": [
+                "liberusoftware/theme-support"
+            ]
+        },
+        {
+            "type": "git",
+            "url": "https://github.com/liberusoftware/module-localization-core.git",
+            "only": [
+                "liberusoftware/localization-core"
+            ]
+        },
+        {
+            "type": "git",
+            "url": "https://github.com/liberusoftware/module-localization-core-livewire.git",
+            "only": [
+                "liberusoftware/localization-core-livewire"
+            ]
+        },
+        {
+            "type": "git",
+            "url": "https://github.com/liberusoftware/module-theme-support-livewire.git",
+            "only": [
+                "liberusoftware/theme-support-livewire"
+            ]
+        },
+        {
+            "type": "git",
+            "url": "https://github.com/liberusoftware/module-organizations-teams.git",
+            "only": [
+                "liberusoftware/organizations-teams"
+            ]
+        },
+        {
+            "type": "git",
+            "url": "https://github.com/liberusoftware/module-roles-permissions.git",
+            "only": [
+                "liberusoftware/roles-permissions"
+            ]
+        },
+        {
+            "type": "git",
+            "url": "https://github.com/liberusoftware/module-integrations.git",
+            "only": [
+                "liberusoftware/integrations"
+            ]
+        },
+        {
+            "type": "git",
+            "url": "https://github.com/liberusoftware/module-module-manager.git",
+            "only": [
+                "liberusoftware/module-manager"
+            ]
+        },
+        {
+            "type": "git",
+            "url": "https://github.com/liberusoftware/module-sessions-devices.git",
+            "only": [
+                "liberusoftware/sessions-devices"
+            ]
+        },
+        {
+            "type": "git",
+            "url": "https://github.com/liberusoftware/module-two-factor-authentication.git",
+            "only": [
+                "liberusoftware/two-factor-authentication"
+            ]
+        },
+        {
+            "type": "git",
+            "url": "https://github.com/liberusoftware/module-identity-socialstream.git",
+            "only": [
+                "liberusoftware/identity-socialstream"
+            ]
+        },
+        {
+            "type": "git",
+            "url": "https://github.com/liberusoftware/module-payment-contracts.git",
+            "only": [
+                "liberusoftware/payment-contracts"
+            ]
+        },
+        {
+            "type": "git",
+            "url": "https://github.com/liberusoftware/module-payment-core.git",
+            "only": [
+                "liberusoftware/payment-core"
+            ]
+        },
+        {
+            "type": "git",
+            "url": "https://github.com/liberusoftware/module-payment-stripe.git",
+            "only": [
+                "liberusoftware/payment-stripe"
+            ]
+        },
+        {
+            "type": "git",
+            "url": "https://github.com/liberusoftware/module-payment-paypal.git",
+            "only": [
+                "liberusoftware/payment-paypal"
+            ]
+        },
+        {
+            "type": "git",
+            "url": "https://github.com/liberusoftware/module-payment-paddle.git",
+            "only": [
+                "liberusoftware/payment-paddle"
+            ]
+        },
+        {
+            "type": "git",
+            "url": "https://github.com/liberusoftware/module-payment-adyen.git",
+            "only": [
+                "liberusoftware/payment-adyen"
+            ]
+        },
+        {
+            "type": "git",
+            "url": "https://github.com/liberusoftware/module-payment-mollie.git",
+            "only": [
+                "liberusoftware/payment-mollie"
+            ]
+        },
+        {
+            "type": "git",
+            "url": "https://github.com/liberusoftware/module-payment-square.git",
+            "only": [
+                "liberusoftware/payment-square"
+            ]
+        },
+        {
+            "type": "git",
+            "url": "https://github.com/liberusoftware/module-payment-gocardless.git",
+            "only": [
+                "liberusoftware/payment-gocardless"
+            ]
+        },
+        {
+            "type": "git",
+            "url": "https://github.com/liberusoftware/module-affiliate-contracts.git",
+            "only": [
+                "liberusoftware/affiliate-contracts"
+            ]
+        },
+        {
+            "type": "git",
+            "url": "https://github.com/liberusoftware/module-affiliate-core.git",
+            "only": [
+                "liberusoftware/affiliate-core"
+            ]
+        },
+        {
+            "type": "git",
+            "url": "https://github.com/liberusoftware/module-passkeys.git",
+            "only": [
+                "liberusoftware/passkeys"
+            ]
+        }
+    ]
 }

@@ -3,7 +3,7 @@
   "name": "module-billing-communications",
   "display_name": "Billing Communications",
   "description": "Provider-neutral Billing Communications domain module.",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "category": "capability",
   "provider": "Liberu\\Billing\\Communications\\CommunicationsServiceProvider",
   "requires": {
@@ -25,4 +25,3 @@
     "provider-adapters"
   ]
 }
-

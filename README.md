@@ -113,6 +113,8 @@ Themes contain `composer.json`, `theme.json`, source assets, compatibility metad
 
 ## Testing and quality
 
+Project code and its tests are grouped by capability under [modules/](modules/billing-application/README.md). The root Pest configuration runs the project tests and reusable package suites.
+
 ```bash
 composer validate --strict
 vendor/bin/pest
@@ -131,11 +133,10 @@ green before branch promotion:
 XDEBUG_MODE=coverage php -d memory_limit=1G vendor/bin/pest --coverage --min=100 --coverage-clover=coverage.xml
 ```
 
-Each independently released package owns its own source scope and coverage gate.
-The current refactor is still in progress: the latest host unit run passed 844
-tests with 3 skipped and measured 46.5% line coverage. The full host scope is
-not yet a passing 100% result. A failing coverage run blocks release and
-promotion.
+Each independently released package owns its source scope and coverage gate.
+Focused integration runs measured 100% line coverage for Billing Core and its
+HTTP adapter, the Usage host code and released Usage packages, and the code
+remaining in `app/Modules`. The full release scope still has coverage gaps.
 
 ### Publishing the component repositories
 

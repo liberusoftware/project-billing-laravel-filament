@@ -23,6 +23,11 @@ final class PaymentMandatePolicy
         return $this->access($user, 'write');
     }
 
+    public function update(object $user, PaymentMandate $mandate): bool
+    {
+        return $this->access($user, 'write') && $this->sameTeam($user, $mandate->team_id);
+    }
+
     private function access(object $user, string $ability): bool
     {
         return ! method_exists($user, 'tokenCan') || $user->tokenCan("billing.payments.$ability") || $user->tokenCan('*');

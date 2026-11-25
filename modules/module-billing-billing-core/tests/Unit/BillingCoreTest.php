@@ -30,3 +30,20 @@ it('defines explicit account lifecycle states', function (): void {
     expect(BillingAccountStatus::cases())->toHaveCount(3)
         ->and(BillingAccountStatus::Active->value)->toBe('active');
 });
+
+it('subtracts amounts in integer minor units', function (): void {
+    expect((new BillingAmount(2000, 'USD'))->subtract(new BillingAmount(1999, 'USD'))->minorUnits)->toBe(1);
+});
+
+it('rejects invalid or unnormalized currency codes', function (string $code, string $message): void {
+    expect(fn () => new BillingAmount(1, $code))->toThrow(InvalidArgumentException::class, $message);
+})->with([
+    ['US', 'Currency must be a three-letter ISO code.'],
+    ['usd', 'Currency must be normalized to uppercase.'],
+]);
+
+it('rejects a billing period that ends before it starts', function (): void {
+    $start = CarbonImmutable::parse('2026-08-01');
+
+    expect(fn () => new BillingPeriod($start, $start->subSecond()))->toThrow(InvalidArgumentException::class);
+});

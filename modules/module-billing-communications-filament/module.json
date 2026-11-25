@@ -3,7 +3,7 @@
   "name": "module-billing-communications-filament",
   "display_name": "Billing Communications Filament",
   "description": "Filament adapter for Billing Communications.",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "category": "presentation",
   "provider": "Liberu\\Billing\\Communications\\Filament\\CommunicationsFilamentServiceProvider",
   "requires": {
@@ -22,5 +22,11 @@
   "features": [
     "Communications Filament integration"
   ],
-  "presentation": {"filament": {"admin": ["Liberu\\Billing\\Communications\\Filament\\CommunicationsFilamentPlugin"]}}
+  "presentation": {
+    "filament": {
+      "admin": [
+        "Liberu\\Billing\\Communications\\Filament\\CommunicationsFilamentPlugin"
+      ]
+    }
+  }
 }

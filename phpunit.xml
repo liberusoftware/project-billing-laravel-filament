@@ -6,21 +6,23 @@
 >
     <testsuites>
         <testsuite name="Unit">
-            <directory>tests/Unit</directory>
+            <directory>modules/billing-*/tests/Unit</directory>
         </testsuite>
         <testsuite name="Feature">
-            <directory>tests/Feature</directory>
+            <directory>modules/billing-*/tests/Feature</directory>
         </testsuite>
         <testsuite name="Architecture">
-            <directory>tests/Architecture</directory>
+            <directory>modules/billing-application/tests/Architecture</directory>
+        </testsuite>
+        <testsuite name="Modules">
+            <directory suffix="Test.php">modules/*/tests</directory>
+            <exclude>modules/billing-*/tests</exclude>
         </testsuite>
     </testsuites>
-    <!-- The host measures the host. Each package runs and measures itself, against its
-         own phpunit.xml and its own coverage threshold — a package's numbers are not
-         the composition's to report. -->
     <source>
         <include>
             <directory>app</directory>
+            <directory>modules/*/src</directory>
         </include>
     </source>
     <php>

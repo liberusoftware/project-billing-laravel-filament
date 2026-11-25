@@ -8,9 +8,15 @@ This runbook is for operators and maintainers of the billing modules listed in W
     composer install --no-interaction --prefer-dist
     php artisan migrate --force
     php artisan package:discover --ansi
+    php artisan module:list
     php artisan route:list --path=api/v1/billing
 
 Publish API contracts with the corresponding `*-openapi` tag for each module API package.
+
+Billing Core is installed as `liberusoftware/module-billing-billing-core` in
+`modules/module-billing-billing-core`. Keep its manifest, provider and migrations
+in that directory. The architecture suite checks that each discovered manifest
+and its provider resolve from the same Composer installation.
 
 ## Diagnose a failed operation
 
@@ -24,6 +30,10 @@ Provider adapters must be registered through the module registry. Core modules m
 ## Rollback
 
 Stop workers before rolling back a release that changes operation payloads or database columns. Take a database snapshot first, deploy the previous application version, and run only the explicitly documented down migration. Never delete tenant records to recover from a failed billing operation.
+
+## Application ownership
+
+The root Laravel bootstrap composes the [Billing capability directories](../../modules/billing-application/README.md). Capability code, database files, views, and tests live together. Run Artisan, Vite and Pest from the project root. Existing migration filenames and route names remain valid across upgrades.
 
 ## Contract and compatibility checks
 

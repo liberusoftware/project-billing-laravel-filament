@@ -22,6 +22,8 @@ final class CommunicationUsageImportResource extends Resource
 
     protected static ?string $model = CommunicationUsageImport::class;
 
+    protected static bool $isScopedToTenant = false;
+
     public static function form(Schema $schema): Schema
     {
         return $schema->components([TextInput::make('provider')->required()->maxLength(100), TextInput::make('rows')->required()->integer()->minValue(1), TextInput::make('total_amount_minor')->integer()->minValue(0), TextInput::make('currency')->length(3)->default('USD')]);

@@ -1,0 +1,26 @@
+{
+  "$schema": "https://schemas.liberu.dev/module/v1.json",
+  "name": "affiliate-contracts",
+  "display_name": "Affiliate Contracts",
+  "description": "Product-neutral affiliate program, attribution, commission, conversion, fraud, and payout contracts.",
+  "version": "1.0.0",
+  "category": "contracts",
+  "provider": "Liberu\\Affiliate\\Contracts\\AffiliateContractsServiceProvider",
+  "requires": {
+    "php": "^8.5",
+    "laravel": "^13.0",
+    "packages": {}
+  },
+  "capabilities": [
+    "affiliates.contracts"
+  ],
+  "default_enabled": true,
+  "features": [
+    "AffiliateProgramContract",
+    "ReferralAttributionContract",
+    "ConversionRecorderContract",
+    "CommissionCalculatorContract",
+    "FraudAndSelfReferralPolicyContract",
+    "PayoutSettlementContract"
+  ]
+}

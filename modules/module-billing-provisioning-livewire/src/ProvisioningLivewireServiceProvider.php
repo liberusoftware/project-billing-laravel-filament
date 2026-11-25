@@ -13,6 +13,14 @@ final class ProvisioningLivewireServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'module-billing-provisioning-livewire');
-        Livewire::component('module-billing-provisioning::operations', ProvisioningOperations::class);
+        $components = [
+            'module-billing-provisioning::operations' => ProvisioningOperations::class,
+        ];
+        foreach ($components as $name => $component) {
+            Livewire::component($name, $component);
+        }
+
+        // Livewire 4 resolves namespaced aliases before its explicit component map.
+        Livewire::resolveMissingComponent(static fn (string $name): ?string => $components[$name] ?? null);
     }
 }

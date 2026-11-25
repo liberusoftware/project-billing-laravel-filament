@@ -26,6 +26,8 @@ final class ProductResource extends Resource
 
     protected static ?string $model = Product::class;
 
+    protected static bool $isScopedToTenant = false;
+
     protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-cube';
 
     protected static string|\UnitEnum|null $navigationGroup = 'Catalog & Pricing';

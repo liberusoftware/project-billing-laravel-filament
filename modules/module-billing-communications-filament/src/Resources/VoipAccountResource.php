@@ -25,6 +25,8 @@ final class VoipAccountResource extends Resource
 
     protected static ?string $model = VoipAccount::class;
 
+    protected static bool $isScopedToTenant = false;
+
     public static function form(Schema $schema): Schema
     {
         return $schema->components([

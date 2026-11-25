@@ -25,6 +25,8 @@ final class HostingCapabilityResource extends Resource
 
     use ScopesCurrentTeam;
 
+    protected static bool $isScopedToTenant = false;
+
     protected static ?string $model = HostingCapability::class;
 
     public static function form(Schema $schema): Schema

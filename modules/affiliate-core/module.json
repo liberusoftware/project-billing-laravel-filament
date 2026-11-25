@@ -1,0 +1,28 @@
+{
+  "$schema": "https://schemas.liberu.dev/module/v1.json",
+  "name": "affiliate-core",
+  "display_name": "Affiliates and Referrals",
+  "description": "Reusable affiliate program, referral attribution, commission, and payout capability.",
+  "version": "1.0.1",
+  "category": "capability",
+  "provider": "Liberu\\Affiliate\\Core\\AffiliateCoreServiceProvider",
+  "requires": {
+    "php": "^8.5",
+    "laravel": "^13.0",
+    "packages": {
+      "liberusoftware/affiliate-contracts": "^1.0"
+    }
+  },
+  "capabilities": [
+    "affiliates.core"
+  ],
+  "default_enabled": true,
+  "features": [
+    "Affiliate programs",
+    "Partner enrollment",
+    "Referral attribution",
+    "Commission ledger",
+    "Clawbacks",
+    "Payout batches"
+  ]
+}

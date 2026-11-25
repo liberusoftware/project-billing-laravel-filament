@@ -40,7 +40,7 @@ final class PaymentOperations extends Component
 
     public function allocate(AllocatePayment $allocate): void
     {
-        $this->validate(['selectedPaymentId' => ['required', 'integer'], 'amountMinor' => ['required', 'integer', 'min:1'], 'invoiceId' => ['nullable', 'integer', 'min:1']]);
+        $this->validate(['selectedPaymentId' => ['required', 'integer'], 'amountMinor' => ['required', 'integer', 'min:1'], 'invoiceId' => ['nullable', 'integer', 'min:0']]);
         $payment = $this->paymentForCurrentTeam();
         Gate::authorize('update', $payment);
         $allocate->execute($payment, $this->amountMinor, $this->invoiceId > 0 ? $this->invoiceId : null);

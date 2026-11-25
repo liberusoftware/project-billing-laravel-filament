@@ -1,0 +1,30 @@
+{
+  "$schema": "https://schemas.liberu.dev/module/v1.json",
+  "name": "payment-stripe",
+  "display_name": "Payment Stripe Adapter",
+  "description": "Unified Stripe merchant payment adapter extending liberusoftware/payment-contracts.",
+  "version": "1.0.0",
+  "category": "adapter",
+  "provider": "Liberu\\Payment\\Stripe\\StripePaymentServiceProvider",
+  "requires": {
+    "php": "^8.5",
+    "laravel": "^13.0",
+    "packages": {
+      "liberusoftware/payment-contracts": "^1.0"
+    }
+  },
+  "capabilities": [
+    "payments.gateway.stripe"
+  ],
+  "default_enabled": false,
+  "features": [
+    "PaymentIntents",
+    "SetupIntents",
+    "CustomerSession",
+    "Captures & Refunds",
+    "Webhook verification",
+    "Disputes",
+    "Settlements",
+    "Terminal POS"
+  ]
+}

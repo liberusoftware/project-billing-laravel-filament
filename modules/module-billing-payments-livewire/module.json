@@ -3,13 +3,33 @@
   "name": "module-billing-payments-livewire",
   "display_name": "Billing Payments Livewire",
   "description": "Livewire 4 adapter for Liberu Billing Payments.",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "category": "presentation",
   "provider": "Liberu\\Billing\\Payments\\Livewire\\PaymentsLivewireServiceProvider",
-  "requires": {"php": "^8.5", "laravel": "^13.0", "packages": {"liberusoftware/module-billing-payments": "^0.1", "liberusoftware/module-manager": "^1.0"}},
+  "requires": {
+    "php": "^8.5",
+    "laravel": "^13.0",
+    "packages": {
+      "liberusoftware/module-billing-payments": "^0.1",
+      "liberusoftware/module-manager": "^1.0"
+    }
+  },
   "suggests": [],
-  "capabilities": ["billing.payments.livewire"],
+  "capabilities": [
+    "billing.payments.livewire"
+  ],
   "default_enabled": true,
-  "features": ["Payment list", "Payment creation"],
-  "presentation": {"livewire": {"components": ["module-billing-payments::payment-list", "module-billing-payments::methods", "module-billing-payments::operations"]}}
+  "features": [
+    "Payment list",
+    "Payment creation"
+  ],
+  "presentation": {
+    "livewire": {
+      "components": [
+        "module-billing-payments::payment-list",
+        "module-billing-payments::methods",
+        "module-billing-payments::operations"
+      ]
+    }
+  }
 }

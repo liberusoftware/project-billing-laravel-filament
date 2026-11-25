@@ -21,6 +21,8 @@ final class PricingContractResource extends Resource
 
     use ScopesCurrentTeam;
 
+    protected static bool $isScopedToTenant = false;
+
     protected static ?string $model = PricingContract::class;
 
     public static function form(Schema $schema): Schema

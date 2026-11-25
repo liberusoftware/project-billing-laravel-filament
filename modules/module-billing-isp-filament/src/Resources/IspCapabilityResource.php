@@ -24,6 +24,8 @@ final class IspCapabilityResource extends Resource
 
     use ScopesCurrentTeam;
 
+    protected static bool $isScopedToTenant = false;
+
     protected static ?string $model = IspCapability::class;
 
     public static function form(Schema $schema): Schema

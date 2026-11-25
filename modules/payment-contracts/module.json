@@ -1,0 +1,29 @@
+{
+  "$schema": "https://schemas.liberu.dev/module/v1.json",
+  "name": "payment-contracts",
+  "display_name": "Payment Contracts",
+  "description": "Provider-neutral merchant payment gateway interfaces, DTOs, and canonical lifecycle states.",
+  "version": "1.1.0",
+  "category": "contracts",
+  "provider": "Liberu\\Payment\\Contracts\\PaymentContractsServiceProvider",
+  "requires": {
+    "php": "^8.5",
+    "laravel": "^13.0",
+    "packages": {}
+  },
+  "capabilities": [
+    "payments.contracts"
+  ],
+  "default_enabled": true,
+  "features": [
+    "PaymentGatewayAdapterContract",
+    "OutboundPaymentAdapterContract",
+    "PaymentIntentServiceContract",
+    "PaymentCaptureAndRefundContract",
+    "SavedPaymentMethodVaultContract",
+    "MerchantWebhookVerifierContract",
+    "DisputeAndChargebackHandlerContract",
+    "PayoutAndSettlementReconcilerContract",
+    "POSHardwareTerminalContract"
+  ]
+}

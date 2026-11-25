@@ -22,6 +22,8 @@ final class CommunicationProviderResource extends Resource
 
     protected static ?string $model = CommunicationProvider::class;
 
+    protected static bool $isScopedToTenant = false;
+
     public static function form(Schema $schema): Schema
     {
         return $schema->components([

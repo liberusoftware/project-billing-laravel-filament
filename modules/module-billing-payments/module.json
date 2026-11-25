@@ -3,16 +3,33 @@
   "name": "module-billing-payments",
   "display_name": "Billing Payments",
   "description": "Provider-neutral payment methods, mandates, capture, partial invoice payments, allocation, refunds, disputes, and reconciliation.",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "category": "capability",
   "provider": "Liberu\\Billing\\Payments\\PaymentsServiceProvider",
   "requires": {
     "php": "^8.5",
     "laravel": "^13.0",
-    "packages": {"liberusoftware/module-manager": "^1.0"}
+    "packages": {
+      "liberusoftware/module-manager": "^1.0",
+      "liberusoftware/payment-contracts": "^1.0",
+      "liberusoftware/payment-core": "^1.0"
+    }
   },
   "suggests": [],
-  "capabilities": ["billing.payments"],
+  "capabilities": [
+    "billing.payments"
+  ],
   "default_enabled": true,
-  "features": ["Methods", "Mandates", "Method and mandate lifecycle", "Gateway drivers", "Capture", "Partial invoice payments", "Allocation", "Refunds", "Disputes", "Reconciliation"]
+  "features": [
+    "Methods",
+    "Mandates",
+    "Method and mandate lifecycle",
+    "Gateway drivers",
+    "Capture",
+    "Partial invoice payments",
+    "Allocation",
+    "Refunds",
+    "Disputes",
+    "Reconciliation"
+  ]
 }

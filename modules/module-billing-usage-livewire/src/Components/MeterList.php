@@ -55,7 +55,7 @@ final class MeterList extends Component
         session()->flash('module-billing-usage-message', __('Usage recorded.'));
     }
 
-    public function transition(int $meterId, TransitionMeter $transition): void
+    public function transitionMeter(int $meterId, TransitionMeter $transition): void
     {
         $teamId = data_get(auth()->user(), 'current_team_id') ?? data_get(auth()->user(), 'currentTeam.id');
         $meter = Meter::query()->whereKey($meterId)->when($teamId !== null, fn ($query) => $query->where(fn ($query) => $query->whereNull('team_id')->orWhere('team_id', (int) $teamId)))->firstOrFail();

@@ -1,0 +1,28 @@
+{
+  "name": "liberusoftware/affiliate-core",
+  "description": "Reusable affiliate program, referral attribution, commission ledger, clawback, and payout engine extending liberusoftware/affiliate-contracts.",
+  "type": "liberu-module",
+  "license": "MIT",
+  "require": {
+    "php": "^8.5",
+    "illuminate/database": "^13.0",
+    "illuminate/events": "^13.0",
+    "illuminate/support": "^13.0",
+    "liberusoftware/affiliate-contracts": "^1.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "Liberu\\Affiliate\\Core\\": "src/"
+    }
+  },
+  "extra": {
+    "liberu": {
+      "name": "affiliate-core"
+    },
+    "laravel": {
+      "providers": [
+        "Liberu\\Affiliate\\Core\\AffiliateCoreServiceProvider"
+      ]
+    }
+  }
+}

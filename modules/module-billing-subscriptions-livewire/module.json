@@ -3,7 +3,7 @@
   "name": "module-billing-subscriptions-livewire",
   "display_name": "Billing Subscriptions Livewire",
   "description": "Livewire 4 adapter for Billing Subscriptions.",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "category": "presentation",
   "provider": "Liberu\\Billing\\Subscriptions\\Livewire\\SubscriptionsLivewireServiceProvider",
   "requires": {
@@ -15,8 +15,20 @@
     }
   },
   "suggests": [],
-  "capabilities": ["billing.subscriptions.livewire"],
+  "capabilities": [
+    "billing.subscriptions.livewire"
+  ],
   "default_enabled": true,
-  "features": ["Subscription list", "Activation and lifecycle controls"],
-  "presentation": {"livewire": {"components": ["module-billing-subscriptions::subscription-list", "module-billing-subscriptions::entitlements"]}}
+  "features": [
+    "Subscription list",
+    "Activation and lifecycle controls"
+  ],
+  "presentation": {
+    "livewire": {
+      "components": [
+        "module-billing-subscriptions::subscription-list",
+        "module-billing-subscriptions::entitlements"
+      ]
+    }
+  }
 }
