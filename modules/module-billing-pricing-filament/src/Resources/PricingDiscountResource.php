@@ -19,6 +19,8 @@ final class PricingDiscountResource extends Resource
 
     use ScopesCurrentTeam;
 
+    protected static bool $isScopedToTenant = false;
+
     protected static ?string $model = PricingDiscount::class;
 
     public static function table(Table $table): Table

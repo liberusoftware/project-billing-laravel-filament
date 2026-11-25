@@ -139,6 +139,22 @@ namespace App\Models {
             }
         }
     }
+
+    if (! class_exists(ConnectedAccount::class)) {
+        class ConnectedAccount
+        {
+            /** @var list<array<string, mixed>> */
+            public static array $records = [];
+
+            public static function updateOrCreate(array $attributes, array $values = []): array
+            {
+                $record = array_merge($attributes, $values);
+                self::$records[] = $record;
+
+                return $record;
+            }
+        }
+    }
 }
 
 namespace App\Filament\Concerns {

@@ -80,4 +80,9 @@ it('runs full ISP access service and capability lifecycle through the API', func
     $this->patchJson(route('billing.isp.capabilities.lifecycle', $capabilityId), ['status' => 'active'])
         ->assertOk()
         ->assertJsonPath('data.attributes.status', 'active');
+
+    $controller = app(\Liberu\Billing\Isp\Api\Http\Controllers\IspCapabilityController::class);
+    $method = new ReflectionMethod($controller, 'resource');
+    $unknown = $method->invoke($controller, $user);
+    expect($unknown['attributes'])->toBe([]);
 });

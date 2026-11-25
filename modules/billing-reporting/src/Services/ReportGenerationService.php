@@ -116,7 +116,7 @@ class ReportGenerationService
         }
 
         foreach ($data as $row => $rowData) {
-            foreach ($rowData as $col => $value) {
+            foreach (array_values($rowData) as $col => $value) {
                 $sheet->setCellValue([$col + 1, $row + 2], $value);
             }
         }

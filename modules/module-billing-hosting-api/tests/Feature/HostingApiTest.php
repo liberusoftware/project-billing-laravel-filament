@@ -73,4 +73,9 @@ it('runs full hosting account and capability lifecycle through the API', functio
     $this->patchJson(route('billing.hosting.capabilities.lifecycle', $capabilityId), ['status' => 'active'])
         ->assertOk()
         ->assertJsonPath('data.attributes.status', 'active');
+
+    $controller = app(\Liberu\Billing\Hosting\Api\Http\Controllers\HostingCapabilityController::class);
+    $method = new ReflectionMethod($controller, 'resource');
+    $unknown = $method->invoke($controller, $user);
+    expect($unknown['attributes'])->toBe([]);
 });

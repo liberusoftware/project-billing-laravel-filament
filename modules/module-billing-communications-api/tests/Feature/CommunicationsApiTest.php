@@ -63,4 +63,17 @@ it('manages communication services, numbers, providers, and usage imports throug
     $this->getJson(route('usage-imports'))
         ->assertOk()
         ->assertJsonPath('data.0.id', $importId);
+
+    $this->getJson(route('billing.communications.voice.accounts.index'))
+        ->assertOk()
+        ->assertJsonPath('data', []);
+
+    $this->getJson(route('billing.communications.voice.rates.index'))
+        ->assertOk()
+        ->assertJsonPath('data', []);
+
+    $controller = app(\Liberu\Billing\Communications\Api\Http\Controllers\CommunicationsController::class);
+    $method = new ReflectionMethod($controller, 'resource');
+    $unknown = $method->invoke($controller, $user);
+    expect($unknown['attributes'])->toBe([]);
 });

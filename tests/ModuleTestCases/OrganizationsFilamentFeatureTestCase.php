@@ -11,11 +11,23 @@ use Liberu\Foundation\OrganizationsFilament\Tests\Fixtures\TestPanelProvider;
 
 abstract class OrganizationsFilamentFeatureTestCase extends FilamentModulePackageTestCase
 {
+    private string $previousJetstreamUserModel = '';
+
     protected function setUp(): void
     {
         parent::setUp();
 
+        $this->previousJetstreamUserModel = Jetstream::userModel();
         Jetstream::useUserModel(OrganizationUser::class);
+    }
+
+    protected function tearDown(): void
+    {
+        if ($this->previousJetstreamUserModel !== '') {
+            Jetstream::useUserModel($this->previousJetstreamUserModel);
+        }
+
+        parent::tearDown();
     }
 
     protected function defineEnvironment($app): void

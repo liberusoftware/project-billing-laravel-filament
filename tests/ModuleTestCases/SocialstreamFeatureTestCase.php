@@ -23,11 +23,30 @@ abstract class SocialstreamFeatureTestCase extends ModulePackageTestCase
         $app['config']->set('jetstream.features', []);
     }
 
+    private string $previousSocialstreamUserModel = '';
+
+    private string $previousJetstreamUserModel = '';
+
     protected function setUp(): void
     {
         parent::setUp();
 
+        $this->previousSocialstreamUserModel = Socialstream::userModel();
+        $this->previousJetstreamUserModel = Jetstream::userModel();
         Socialstream::useUserModel(SocialstreamActor::class);
         Jetstream::useUserModel(SocialstreamActor::class);
+    }
+
+    protected function tearDown(): void
+    {
+        if ($this->previousSocialstreamUserModel !== '') {
+            Socialstream::useUserModel($this->previousSocialstreamUserModel);
+        }
+
+        if ($this->previousJetstreamUserModel !== '') {
+            Jetstream::useUserModel($this->previousJetstreamUserModel);
+        }
+
+        parent::tearDown();
     }
 }

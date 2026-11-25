@@ -11,6 +11,7 @@ use Filament\Tables\Table;
 use Illuminate\Support\Facades\Gate;
 use Liberu\Billing\Provisioning\Actions\RunProvisioningOperation;
 use Liberu\Billing\Provisioning\Filament\Concerns\ScopesCurrentTeam;
+use Liberu\Billing\Provisioning\Filament\Resources\ProvisioningOperationResource\Pages\ListProvisioningOperations;
 use Liberu\Billing\Provisioning\Models\ProvisioningOperation;
 
 final class ProvisioningOperationResource extends Resource
@@ -18,6 +19,8 @@ final class ProvisioningOperationResource extends Resource
     protected static string|\UnitEnum|null $navigationGroup = 'Service Delivery';
 
     use ScopesCurrentTeam;
+
+    protected static bool $isScopedToTenant = false;
 
     protected static ?string $model = ProvisioningOperation::class;
 
@@ -39,5 +42,10 @@ final class ProvisioningOperationResource extends Resource
                     $run->execute($record);
                 }),
         ]);
+    }
+
+    public static function getPages(): array
+    {
+        return ['index' => ListProvisioningOperations::route('/')];
     }
 }

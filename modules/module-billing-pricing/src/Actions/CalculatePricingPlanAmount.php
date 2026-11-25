@@ -28,7 +28,7 @@ final class CalculatePricingPlanAmount
             return (int) $plan->unit_amount_minor;
         }
 
-        if ($plan->pricing_model === PricingModel::Usage && $plan->tiers === []) {
+        if ($plan->pricing_model === PricingModel::Usage && ($plan->tiers === null || $plan->tiers === [])) {
             return (int) round($quantity * (int) $plan->unit_amount_minor);
         }
 

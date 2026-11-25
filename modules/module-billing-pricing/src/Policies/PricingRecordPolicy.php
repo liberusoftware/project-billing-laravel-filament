@@ -34,6 +34,14 @@ final class PricingRecordPolicy
 
     private function writeAccess(object $user): bool
     {
-        return ! method_exists($user, 'tokenCan') || $user->tokenCan('billing.pricing.write') || $user->tokenCan('*');
+        if (! method_exists($user, 'tokenCan')) {
+            return true;
+        }
+
+        if (method_exists($user, 'currentAccessToken') && $user->currentAccessToken() === null) {
+            return true;
+        }
+
+        return $user->tokenCan('billing.pricing.write') || $user->tokenCan('*');
     }
 }

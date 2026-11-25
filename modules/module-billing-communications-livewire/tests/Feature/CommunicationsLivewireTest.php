@@ -69,8 +69,17 @@ it('manages communications services, inventory, providers, and voice accounts vi
         ->call('importUsage')
         ->assertHasNoErrors();
 
+    $customerId = 1;
+    if (Illuminate\Support\Facades\Schema::hasTable('customers')) {
+        $customerId = (int) Illuminate\Support\Facades\DB::table('customers')->insertGetId([
+            'name' => 'Livewire Comm Customer',
+            'email' => 'comm-livewire-customer@example.test',
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+    }
     $voice = Livewire::test(VoiceAccounts::class)
-        ->set('customerId', '1')
+        ->set('customerId', (string) $customerId)
         ->set('platform', 'lw-sip')
         ->set('sipUsername', 'lw-sip-user')
         ->set('sipSecret', 'lw-secret')

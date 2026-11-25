@@ -45,8 +45,13 @@ class WebhookServiceAndControllerTest extends TestCase
         $newSecret = $service->regenerateSecret($updated);
         $this->assertNotSame($originalSecret, $newSecret);
 
-        // Success delivery via dispatch
-        Http::fake(['https://hooks.example.com/events' => Http::response(['ok' => true], 200)]);
+        // Success, HTTP failure, and exception deliveries via sequence
+        Http::fake([
+            'https://hooks.example.com/events' => Http::sequence()
+                ->push(['ok' => true], 200)
+                ->push('fail', 500)
+                ->pushFailedConnection('network timeout'),
+        ]);
         $service->dispatch('contact.created', ['id' => 1]);
         $this->assertDatabaseHas('crm_webhook_deliveries', [
             'webhook_id' => $updated->id,
@@ -55,13 +60,11 @@ class WebhookServiceAndControllerTest extends TestCase
         ]);
 
         // HTTP failure delivery
-        Http::fake(['https://hooks.example.com/events' => Http::response('fail', 500)]);
         $this->assertFalse($service->send($updated->fresh(), 'contact.created', ['id' => 2]));
         $this->assertSame(1, $updated->fresh()->failure_count);
 
         // Exception delivery + auto-disable at 10 failures + null secret sign branch
         $updated->update(['failure_count' => 9, 'secret' => null]);
-        Http::fake(fn () => throw new RuntimeException('network timeout'));
         $this->assertFalse($service->send($updated->fresh(), 'contact.created', ['id' => 3]));
         $this->assertFalse($updated->fresh()->is_active);
         $this->assertSame(10, $updated->fresh()->failure_count);

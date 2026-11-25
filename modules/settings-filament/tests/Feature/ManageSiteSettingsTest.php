@@ -70,4 +70,6 @@ it('offers every discovered theme in the theme select', function () {
     Livewire::test(ManageSiteSettings::class)
         ->assertOk()
         ->assertFormFieldExists('active_theme');
+
+    expect(ManageSiteSettings::getNavigationLabel())->toBe(__('filament.pages.manage_site_settings'));
 });

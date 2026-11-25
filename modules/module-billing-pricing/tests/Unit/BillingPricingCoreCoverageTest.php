@@ -241,6 +241,7 @@ it('enforces PricingPlanPolicy and PricingRecordPolicy access rules', function (
     $foreignRecord = (object) ['team_id' => 20];
     $sharedRecord = (object) ['team_id' => null];
     $plainUser = User::factory()->withPersonalTeam()->create();
+    $noTokenUser = (object) ['current_team_id' => 10];
 
     expect($recordPolicy->viewAny(null))->toBeFalse()
         ->and($recordPolicy->viewAny($readUser))->toBeTrue()
@@ -248,6 +249,7 @@ it('enforces PricingPlanPolicy and PricingRecordPolicy access rules', function (
         ->and($recordPolicy->create($readUser))->toBeFalse()
         ->and($recordPolicy->create($writeUser))->toBeTrue()
         ->and($recordPolicy->create($plainUser))->toBeTrue()
+        ->and($recordPolicy->create($noTokenUser))->toBeTrue()
         ->and($recordPolicy->view(null, $ownRecord))->toBeFalse()
         ->and($recordPolicy->view($readUser, $ownRecord))->toBeTrue()
         ->and($recordPolicy->view($readUser, $foreignRecord))->toBeFalse()

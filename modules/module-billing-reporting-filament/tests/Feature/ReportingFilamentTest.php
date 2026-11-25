@@ -48,7 +48,8 @@ it('manages metric snapshots and reporting metrics through the published Filamen
     Livewire::test(ListMetricSnapshots::class)
         ->assertCanSeeTableRecords([$snapshot])
         ->assertCanNotSeeTableRecords([$foreignSnapshot])
-        ->callTableAction('customerSummary', $snapshot, data: ['customer_id' => 5, 'currency' => 'USD']);
+        ->callTableAction('customerSummary', $snapshot, data: ['customer_id' => 5, 'currency' => 'USD'])
+        ->assertHasNoTableActionErrors();
 
     expect(session('module-billing-reporting-summary'))
         ->toBe('Invoiced: 0 | Paid: 0 | Outstanding: 0 | Overdue: 0');

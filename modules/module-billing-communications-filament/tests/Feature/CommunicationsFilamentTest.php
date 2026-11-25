@@ -87,8 +87,17 @@ it('manages communication resources through Filament', function (): void {
     $import = CommunicationUsageImport::query()->latest('id')->firstOrFail();
     Livewire::test(ListCommunicationUsageImports::class)->assertCanSeeTableRecords([$import]);
 
+    $customerId = 1;
+    if (Illuminate\Support\Facades\Schema::hasTable('customers')) {
+        $customerId = (int) Illuminate\Support\Facades\DB::table('customers')->insertGetId([
+            'name' => 'Filament Comm Customer',
+            'email' => 'comm-filament-customer@example.test',
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+    }
     Livewire::test(CreateVoipAccount::class)->fillForm([
-        'customer_id' => 1,
+        'customer_id' => $customerId,
         'platform' => 'filament-sip',
         'sip_username' => 'fil-sip-user',
         'sip_secret' => 'fil-secret',

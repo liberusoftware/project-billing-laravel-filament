@@ -22,6 +22,8 @@ final class MetricSnapshotResource extends Resource
 
     use ScopesCurrentTeam;
 
+    protected static bool $isScopedToTenant = false;
+
     protected static ?string $model = MetricSnapshot::class;
 
     public static function form(Schema $schema): Schema
@@ -37,7 +39,7 @@ final class MetricSnapshotResource extends Resource
             ])->action(function (array $data): void {
                 $team = (int) (data_get(auth()->user(), 'current_team_id') ?? data_get(auth()->user(), 'currentTeam.id'));
                 $summary = app(GenerateCustomerBillingSummary::class)->execute($team, (int) $data['customer_id'], $data['currency'] ?? null);
-                session()->flash('module-billing-reporting-summary', implode(' | ', ["Invoiced: {$summary['total_invoiced']}", "Paid: {$summary['total_paid']}", "Outstanding: {$summary['total_outstanding']}", "Overdue: {$summary['overdue_amount']}"]));
+                session()->put('module-billing-reporting-summary', implode(' | ', ["Invoiced: {$summary['total_invoiced']}", "Paid: {$summary['total_paid']}", "Outstanding: {$summary['total_outstanding']}", "Overdue: {$summary['overdue_amount']}"]));
             }),
         ]);
     }

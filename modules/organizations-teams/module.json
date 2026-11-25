@@ -3,7 +3,7 @@
   "name": "organizations-teams",
   "display_name": "Organizations and Teams",
   "description": "Teams, memberships, invitations, ownership, switching, and current-context boundaries.",
-  "version": "1.13.0",
+  "version": "1.11.3",
   "category": "foundation",
   "provider": "Liberu\\Foundation\\Organizations\\OrganizationsServiceProvider",
   "requires": {
@@ -11,7 +11,6 @@
     "laravel": "^13.0",
     "packages": {
       "liberusoftware/module-manager": "^1.0",
-      "liberusoftware/roles-permissions": "^1.0",
       "liberusoftware/tenancy": "^1.0"
     }
   },

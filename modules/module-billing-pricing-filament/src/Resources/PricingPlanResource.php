@@ -27,6 +27,8 @@ final class PricingPlanResource extends Resource
 {
     use ScopesCurrentTeam;
 
+    protected static bool $isScopedToTenant = false;
+
     protected static ?string $model = PricingPlan::class;
 
     protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-banknotes';

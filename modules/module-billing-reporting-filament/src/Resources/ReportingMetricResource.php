@@ -27,6 +27,8 @@ final class ReportingMetricResource extends Resource
 
     use ScopesCurrentTeam;
 
+    protected static bool $isScopedToTenant = false;
+
     protected static ?string $model = ReportingMetric::class;
 
     protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-chart-bar';

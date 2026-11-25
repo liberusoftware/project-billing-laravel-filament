@@ -26,6 +26,8 @@ abstract class TestCase extends PackageTestCase
 {
     use UsesTestUser;
 
+    private string $previousJetstreamUserModel = '';
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -37,7 +39,17 @@ abstract class TestCase extends PackageTestCase
         // Team extends Jetstream's, whose owner() resolves Jetstream::userModel().
         // That is a static property defaulting to App\Models\User — a class no
         // package may depend on — so config alone does not redirect it.
+        $this->previousJetstreamUserModel = Jetstream::userModel();
         Jetstream::useUserModel(OrganizationUser::class);
+    }
+
+    protected function tearDown(): void
+    {
+        if ($this->previousJetstreamUserModel !== '') {
+            Jetstream::useUserModel($this->previousJetstreamUserModel);
+        }
+
+        parent::tearDown();
     }
 
     protected function defineEnvironment($app): void

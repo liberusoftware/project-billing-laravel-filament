@@ -84,13 +84,40 @@ it('manages communication providers, services, numbers, usage imports, and queri
 });
 
 it('validates voice actions, raises fraud alerts on CDR ingestion, and enforces provider registry uniqueness', function (): void {
+    $teamId = 10;
+    $customerId = 1;
+    if (Illuminate\Support\Facades\Schema::hasTable('teams')) {
+        $ownerId = Illuminate\Support\Facades\DB::table('users')->insertGetId([
+            'name' => 'Comm Owner',
+            'email' => 'comm-domain-owner@example.test',
+            'password' => bcrypt('password'),
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+        Illuminate\Support\Facades\DB::table('teams')->insert([
+            'id' => $teamId,
+            'user_id' => $ownerId,
+            'name' => 'Comm Team',
+            'personal_team' => true,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+    }
+    if (Illuminate\Support\Facades\Schema::hasTable('customers')) {
+        $customerId = (int) Illuminate\Support\Facades\DB::table('customers')->insertGetId([
+            'name' => 'Comm Customer',
+            'email' => 'comm-domain-customer@example.test',
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+    }
     expect(fn () => (new CreateCallRateRule())->handle(0, []))
         ->toThrow(InvalidArgumentException::class);
-    expect(fn () => (new CreateVoipAccount())->handle(10, ['platform' => 'sip']))
+    expect(fn () => (new CreateVoipAccount())->handle($teamId, ['platform' => 'sip']))
         ->toThrow(InvalidArgumentException::class);
 
-    $account = (new CreateVoipAccount())->handle(10, [
-        'customer_id' => 1,
+    $account = (new CreateVoipAccount())->handle($teamId, [
+        'customer_id' => $customerId,
         'platform' => 'sip',
         'sip_username' => 'sipuser',
         'sip_secret' => 'secret123',

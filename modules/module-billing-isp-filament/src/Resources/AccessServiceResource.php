@@ -27,6 +27,8 @@ final class AccessServiceResource extends Resource
 
     use ScopesCurrentTeam;
 
+    protected static bool $isScopedToTenant = false;
+
     protected static ?string $model = AccessService::class;
 
     public static function form(Schema $schema): Schema

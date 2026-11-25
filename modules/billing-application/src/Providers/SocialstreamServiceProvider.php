@@ -25,7 +25,7 @@ class SocialstreamServiceProvider extends ServiceProvider
     public function boot(): void
     {
         if (! class_exists(Socialstream::class)) {
-            return;
+            return; // @codeCoverageIgnore
         }
 
         Socialstream::resolvesSocialiteUsersUsing(

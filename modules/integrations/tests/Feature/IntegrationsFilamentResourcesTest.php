@@ -131,5 +131,27 @@ class IntegrationsFilamentResourcesTest extends TestCase
         $table = WebhookDeliveryResource::table(Table::make($livewire));
         $this->assertNotEmpty($table->getColumns());
         $this->assertArrayHasKey('index', WebhookDeliveryResource::getPages());
+
+        $permissive = new class extends WebhookDeliveryResource
+        {
+            public static function canCreate(): bool
+            {
+                return true;
+            }
+
+            public static function canEdit(\Illuminate\Database\Eloquent\Model $record): bool
+            {
+                return true;
+            }
+
+            public static function canDelete(\Illuminate\Database\Eloquent\Model $record): bool
+            {
+                return true;
+            }
+        };
+
+        $this->assertInstanceOf(\Illuminate\Auth\Access\Response::class, $permissive::getCreateAuthorizationResponse());
+        $this->assertInstanceOf(\Illuminate\Auth\Access\Response::class, $permissive::getEditAuthorizationResponse($record));
+        $this->assertInstanceOf(\Illuminate\Auth\Access\Response::class, $permissive::getDeleteAuthorizationResponse($record));
     }
 }

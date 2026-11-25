@@ -143,10 +143,12 @@ class OAuthAndAccountingControllersTest extends TestCase
             $driver->shouldReceive('user')->twice()->andReturn($socialiteUser);
             Socialite::shouldReceive('driver')->with($provider)->twice()->andReturn($driver);
 
+            Http::swap(new \Illuminate\Http\Client\Factory());
             Http::fake(fn () => Http::response(['data' => [['id' => 'p1']], 'elements' => [['id' => 'o1']], 'items' => [['id' => 'c1']]], 200));
             $res = $controller->callback($provider);
             $this->assertInstanceOf(RedirectResponse::class, $res);
 
+            Http::swap(new \Illuminate\Http\Client\Factory());
             Http::fake(fn () => throw new RuntimeException('network error'));
             $res2 = $controller->callback($provider);
             $this->assertInstanceOf(RedirectResponse::class, $res2);
@@ -239,6 +241,16 @@ class OAuthAndAccountingControllersTest extends TestCase
         $cbRes = $controller->callback('google');
         $this->assertInstanceOf(RedirectResponse::class, $cbRes);
         $this->assertTrue($config->fresh()->is_active);
+
+        // callback success with null expiresIn
+        session(['oauth_config_id' => $config->id, 'oauth_config_service' => 'google']);
+        $socialiteUserNoExpiry = clone $socialiteUser;
+        $socialiteUserNoExpiry->expiresIn = null;
+        $cbDriverNoExpiry = Mockery::mock();
+        $cbDriverNoExpiry->shouldReceive('user')->once()->andReturn($socialiteUserNoExpiry);
+        Socialite::shouldReceive('driver')->with('google')->once()->andReturn($cbDriverNoExpiry);
+        $cbNoExpiryRes = $controller->callback('google');
+        $this->assertInstanceOf(RedirectResponse::class, $cbNoExpiryRes);
 
         // callback non-SocialiteUser branch (triggers catch)
         session(['oauth_config_id' => $config->id, 'oauth_config_service' => 'google']);

@@ -5,7 +5,6 @@ namespace Liberu\Foundation\Organizations\Policies;
 use Illuminate\Auth\Access\HandlesAuthorization;
 use Liberu\Foundation\Organizations\Contracts\OrganizationActor;
 use Liberu\Foundation\Organizations\Models\Team;
-use Liberu\Foundation\Organizations\Models\TeamInvitation;
 
 class TeamPolicy
 {
@@ -73,10 +72,5 @@ class TeamPolicy
     public function delete(OrganizationActor $user, Team $team): bool
     {
         return $user->ownsTeam($team);
-    }
-
-    public function deleteTeamInvitation(OrganizationActor $user, TeamInvitation $invitation): bool
-    {
-        return $user->ownsTeam($invitation->team);
     }
 }

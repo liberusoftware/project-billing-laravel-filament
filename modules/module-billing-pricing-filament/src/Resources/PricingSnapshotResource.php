@@ -16,6 +16,8 @@ final class PricingSnapshotResource extends Resource
 
     use ScopesCurrentTeam;
 
+    protected static bool $isScopedToTenant = false;
+
     protected static ?string $model = PricingSnapshot::class;
 
     public static function table(Table $table): Table
