@@ -329,7 +329,7 @@ class FortifyActionsChunk14CoverageTest extends TestCase
             'email_verified_at' => now(),
         ]);
 
-        $verifiableUser = new class extends User implements MustVerifyEmail
+        $verifiableUser = new class() extends User implements MustVerifyEmail
         {
             protected $table = 'users';
 
@@ -388,7 +388,7 @@ class FortifyActionsChunk14CoverageTest extends TestCase
 
     private function makeSaveFailingUser(User $baseUser): User
     {
-        $failingUser = new class extends User
+        $failingUser = new class() extends User
         {
             protected $table = 'users';
 

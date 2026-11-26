@@ -33,7 +33,7 @@ it('renders and manages domains, search, support, and TLDs through Livewire comp
         'updated_at' => now(),
     ]);
 
-    app(RegistrarManager::class)->register('lw-reg', new class implements RegistrarClient
+    app(RegistrarManager::class)->register('lw-reg', new class() implements RegistrarClient
     {
         public function registerDomain(string $domainName, mixed $customerId): ?array
         {
@@ -162,11 +162,19 @@ it('renders and manages domains, search, support, and TLDs through Livewire comp
         ->set('eppCode', '1000')
         ->set('eppPayload', '{"ok":true}')
         ->call('recordEppOperation')
+        ->assertHasNoErrors()
+        ->set('domainId', (string) $domain->id)
+        ->set('eppOperation', 'info')
+        ->set('eppStatus', 'pending')
+        ->set('eppCode', '')
+        ->set('eppPayload', '')
+        ->call('recordEppOperation')
         ->assertHasNoErrors();
 
     expect(DomainContact::query()->where('handle', 'LW-CON-1')->exists())->toBeTrue()
         ->and(DnsRecord::query()->where('domain_id', $domain->id)->exists())->toBeTrue()
-        ->and(EppOperation::query()->where('domain_id', $domain->id)->where('operation', 'check')->exists())->toBeTrue();
+        ->and(EppOperation::query()->where('domain_id', $domain->id)->where('operation', 'check')->exists())->toBeTrue()
+        ->and(EppOperation::query()->where('domain_id', $domain->id)->where('operation', 'info')->exists())->toBeTrue();
 
     // DomainTldList
     Livewire::test(DomainTldList::class)
@@ -179,4 +187,13 @@ it('renders and manages domains, search, support, and TLDs through Livewire comp
         ->assertHasNoErrors();
 
     expect(DomainTld::query()->where('name', '.org')->exists())->toBeTrue();
+});
+
+it('forbids Livewire domain components when the user has no current team', function (): void {
+    $user = User::factory()->create();
+    $this->actingAs($user, 'web');
+    Sanctum::actingAs($user, ['billing.domains.read', 'billing.domains.write']);
+
+    Livewire::test(DomainList::class)->assertForbidden();
+    Livewire::test(DomainSupport::class)->assertForbidden();
 });

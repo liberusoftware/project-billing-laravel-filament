@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Models\User;
 use Laravel\Sanctum\Sanctum;
+use Liberu\Billing\Hosting\Api\Http\Controllers\HostingCapabilityController;
 use Liberu\Billing\Hosting\Contracts\HostingDriver;
 use Liberu\Billing\Hosting\Services\HostingDriverRegistry;
 
@@ -74,7 +75,7 @@ it('runs full hosting account and capability lifecycle through the API', functio
         ->assertOk()
         ->assertJsonPath('data.attributes.status', 'active');
 
-    $controller = app(\Liberu\Billing\Hosting\Api\Http\Controllers\HostingCapabilityController::class);
+    $controller = app(HostingCapabilityController::class);
     $method = new ReflectionMethod($controller, 'resource');
     $unknown = $method->invoke($controller, $user);
     expect($unknown['attributes'])->toBe([]);

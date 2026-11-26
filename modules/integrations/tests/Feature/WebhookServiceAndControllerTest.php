@@ -163,10 +163,18 @@ class WebhookServiceAndControllerTest extends TestCase
         $teamlessReq->setUserResolver(fn () => $teamless);
         $this->assertSame([], $controller->index($teamlessReq)->getData(true));
 
-        // Production SSRF validation
+        // Production SSRF validation (valid public HTTPS + blocked private IP)
         $previousEnv = $this->app['env'];
         try {
             $this->app['env'] = 'production';
+            $goodProdReq = Request::create('/api/webhooks', 'POST', [
+                'name' => 'Prod Hook',
+                'url' => 'https://8.8.8.8/prod-hook',
+                'events' => ['contact.created'],
+            ]);
+            $goodProdReq->setUserResolver(fn () => $user);
+            $this->assertSame(201, $controller->store($goodProdReq)->getStatusCode());
+
             $badReq = Request::create('/api/webhooks', 'POST', [
                 'name' => 'Bad Hook',
                 'url' => 'http://127.0.0.1/hook',

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Models\User;
 use Laravel\Sanctum\Sanctum;
+use Liberu\Billing\Isp\Api\Http\Controllers\IspCapabilityController;
 use Liberu\Billing\Isp\Contracts\NetworkAdapter;
 use Liberu\Billing\Isp\Services\NetworkAdapterRegistry;
 
@@ -81,7 +82,7 @@ it('runs full ISP access service and capability lifecycle through the API', func
         ->assertOk()
         ->assertJsonPath('data.attributes.status', 'active');
 
-    $controller = app(\Liberu\Billing\Isp\Api\Http\Controllers\IspCapabilityController::class);
+    $controller = app(IspCapabilityController::class);
     $method = new ReflectionMethod($controller, 'resource');
     $unknown = $method->invoke($controller, $user);
     expect($unknown['attributes'])->toBe([]);

@@ -18,6 +18,8 @@ final class InvoiceLineResource extends Resource
 
     protected static ?string $model = InvoiceLine::class;
 
+    protected static bool $isScopedToTenant = false;
+
     public static function table(Table $table): Table
     {
         return $table->columns([TextColumn::make('invoice_id'), TextColumn::make('description')->searchable(), TextColumn::make('quantity'), TextColumn::make('amount_minor')]);

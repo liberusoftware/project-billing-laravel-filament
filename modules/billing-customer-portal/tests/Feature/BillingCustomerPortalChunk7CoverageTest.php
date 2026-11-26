@@ -44,7 +44,7 @@ describe('ClientController', function (): void {
             'status' => 'inactive',
         ]);
 
-        $controller = new ClientController;
+        $controller = new ClientController();
 
         // Unfiltered index
         $allView = $controller->index(Request::create('/clients', 'GET'));
@@ -71,7 +71,7 @@ describe('ClientController', function (): void {
     });
 
     it('returns create and edit views and handles store, update, and destroy', function (): void {
-        $controller = new ClientController;
+        $controller = new ClientController();
 
         expect($controller->create()->getName())->toBe('clients.create');
 
@@ -226,7 +226,7 @@ describe('ClientNoteController', function (): void {
             'content' => 'Invoice payment confirmed',
         ]);
 
-        $controller = new ClientNoteController;
+        $controller = new ClientNoteController();
         $response = $controller->suggestions(Request::create('/api/search-suggestions', 'GET', [
             'query' => 'Invoice',
         ]));
@@ -362,7 +362,7 @@ describe('CustomerPolicy', function (): void {
     it('delegates all 12 policy methods to the matching user abilities', function (): void {
         $user = User::factory()->withPersonalTeam()->create();
         $customer = Customer::factory()->create(['team_id' => $user->currentTeam->id]);
-        $policy = new CustomerPolicy;
+        $policy = new CustomerPolicy();
 
         // Without abilities granted, all checks return false
         expect($policy->viewAny($user))->toBeFalse()
@@ -415,7 +415,7 @@ describe('ClientContactService', function (): void {
     it('demotes existing primary contacts when updateContact promotes another contact to primary', function (): void {
         $user = User::factory()->withPersonalTeam()->create();
         $customer = Customer::factory()->create(['team_id' => $user->currentTeam->id]);
-        $service = new ClientContactService;
+        $service = new ClientContactService();
 
         $existingPrimary = $service->createContact($customer, [
             'first_name' => 'Alice',

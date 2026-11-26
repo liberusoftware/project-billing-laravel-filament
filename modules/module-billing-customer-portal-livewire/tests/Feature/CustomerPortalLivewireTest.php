@@ -77,3 +77,14 @@ it('renders and manages customer portal Livewire components', function (): void 
 
     expect($request->fresh()->status)->toBe('closed');
 });
+
+it('forbids customer portal Livewire components when no current team is active', function (): void {
+    $user = User::factory()->create();
+    $this->actingAs($user, 'web');
+    Sanctum::actingAs($user, ['billing.customer-portal.read', 'billing.customer-portal.write']);
+
+    Livewire::test(PortalItems::class)->assertForbidden();
+    Livewire::test(PortalRequests::class)->assertForbidden();
+    Livewire::test(PortalDashboard::class)->assertForbidden();
+    Livewire::test(PortalBilling::class, ['customerId' => 1])->assertForbidden();
+});

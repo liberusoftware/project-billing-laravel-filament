@@ -15,8 +15,15 @@ final class OrdersLivewireServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'module-billing-orders-livewire');
-        Livewire::component('module-billing-orders::order-list', OrderList::class);
-        Livewire::component('module-billing-orders::order-support', OrderSupport::class);
-        Livewire::component('module-billing-orders::quote-list', QuoteList::class);
+        $components = [
+            'module-billing-orders::order-list' => OrderList::class,
+            'module-billing-orders::order-support' => OrderSupport::class,
+            'module-billing-orders::quote-list' => QuoteList::class,
+        ];
+        foreach ($components as $name => $component) {
+            Livewire::component($name, $component);
+        }
+
+        Livewire::resolveMissingComponent(static fn (string $name): ?string => $components[$name] ?? null);
     }
 }

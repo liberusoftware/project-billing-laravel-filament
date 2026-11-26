@@ -5,9 +5,12 @@ declare(strict_types=1);
 namespace Liberu\Foundation\Integrations\Tests\Feature;
 
 use App\Models\User;
+use Filament\Facades\Filament;
 use Filament\Schemas\Schema;
 use Filament\Tables\Contracts\HasTable;
 use Filament\Tables\Table;
+use Illuminate\Auth\Access\Response;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Liberu\Foundation\Integrations\Filament\App\Resources\OAuthConfigurationResource;
 use Liberu\Foundation\Integrations\Filament\App\Resources\OAuthConfigurationResource\Pages\EditOAuthConfiguration;
@@ -16,9 +19,9 @@ use Liberu\Foundation\Integrations\Filament\App\Resources\WebhookDeliveryResourc
 use Liberu\Foundation\Integrations\Models\OAuthConfiguration;
 use Liberu\Foundation\Integrations\Models\WebhookDelivery;
 use Liberu\Foundation\Organizations\Models\Team;
+use Liberu\Foundation\RolesPermissions\Models\Role;
 use Mockery;
 use ReflectionMethod;
-use Spatie\Permission\Models\Role;
 use Tests\TestCase;
 
 require_once dirname(__DIR__).'/Stubs.php';
@@ -29,10 +32,24 @@ class IntegrationsFilamentResourcesTest extends TestCase
 
     public function test_oauth_configuration_resource_authorization_schema_table_and_pages(): void
     {
-        $regular = User::factory()->create();
-        $superAdmin = User::factory()->create();
-        $role = Role::firstOrCreate(['name' => 'super_admin', 'guard_name' => 'web']);
-        $superAdmin->assignRole($role);
+        $regular = User::factory()->withPersonalTeam()->create();
+        $superAdmin = User::factory()->withPersonalTeam()->create();
+        $team = $superAdmin->currentTeam;
+
+        setPermissionsTeamId($team->id);
+        Role::firstOrCreate([
+            'name' => 'super_admin',
+            'guard_name' => 'web',
+            'team_id' => $team->id,
+        ]);
+        $superAdmin->assignRole('super_admin');
+
+        $this->actingAs($superAdmin);
+
+        $panel = Filament::getPanel('admin');
+        Filament::setCurrentPanel($panel);
+        $panel->boot();
+        Filament::setTenant($team);
 
         $record = new OAuthConfiguration();
 
@@ -132,26 +149,26 @@ class IntegrationsFilamentResourcesTest extends TestCase
         $this->assertNotEmpty($table->getColumns());
         $this->assertArrayHasKey('index', WebhookDeliveryResource::getPages());
 
-        $permissive = new class extends WebhookDeliveryResource
+        $permissive = new class() extends WebhookDeliveryResource
         {
             public static function canCreate(): bool
             {
                 return true;
             }
 
-            public static function canEdit(\Illuminate\Database\Eloquent\Model $record): bool
+            public static function canEdit(Model $record): bool
             {
                 return true;
             }
 
-            public static function canDelete(\Illuminate\Database\Eloquent\Model $record): bool
+            public static function canDelete(Model $record): bool
             {
                 return true;
             }
         };
 
-        $this->assertInstanceOf(\Illuminate\Auth\Access\Response::class, $permissive::getCreateAuthorizationResponse());
-        $this->assertInstanceOf(\Illuminate\Auth\Access\Response::class, $permissive::getEditAuthorizationResponse($record));
-        $this->assertInstanceOf(\Illuminate\Auth\Access\Response::class, $permissive::getDeleteAuthorizationResponse($record));
+        $this->assertInstanceOf(Response::class, $permissive::getCreateAuthorizationResponse());
+        $this->assertInstanceOf(Response::class, $permissive::getEditAuthorizationResponse($record));
+        $this->assertInstanceOf(Response::class, $permissive::getDeleteAuthorizationResponse($record));
     }
 }

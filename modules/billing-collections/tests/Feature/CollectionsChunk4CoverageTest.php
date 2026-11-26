@@ -42,7 +42,7 @@ it('executes all paths of ProcessInvoiceReminders command', function (): void {
 
     // 1. Lock already held
     Cache::put('processing_invoice_reminders', true, 60);
-    $lockedOutput = new BufferedOutput;
+    $lockedOutput = new BufferedOutput();
     $lockedExit = $command->run(new ArrayInput([]), $lockedOutput);
 
     expect($lockedExit)->toBe(Command::FAILURE)
@@ -55,7 +55,7 @@ it('executes all paths of ProcessInvoiceReminders command', function (): void {
     $billingMock->shouldReceive('sendOverdueReminders')->once()->andReturn(3);
     $billingProp->setValue($command, $billingMock);
 
-    $successOutput = new BufferedOutput;
+    $successOutput = new BufferedOutput();
     $successExit = $command->run(new ArrayInput([]), $successOutput);
     $successText = $successOutput->fetch();
 
@@ -70,7 +70,7 @@ it('executes all paths of ProcessInvoiceReminders command', function (): void {
     $failingMock->shouldReceive('sendUpcomingInvoiceReminders')->once()->andThrow(new Exception('Mail service down'));
     $billingProp->setValue($command, $failingMock);
 
-    $errorOutput = new BufferedOutput;
+    $errorOutput = new BufferedOutput();
     $errorExit = $command->run(new ArrayInput([]), $errorOutput);
 
     expect($errorExit)->toBe(Command::FAILURE)
@@ -107,7 +107,7 @@ it('executes all paths of SuspendOverdueServices command', function (): void {
     $command->setLaravel($this->app);
 
     Cache::put('suspending_overdue_services', true, 60);
-    $lockedOutput = new BufferedOutput;
+    $lockedOutput = new BufferedOutput();
     $lockedExit = $command->run(new ArrayInput(['--days' => '10']), $lockedOutput);
 
     expect($lockedExit)->toBe(Command::FAILURE)
@@ -120,7 +120,7 @@ it('executes all paths of SuspendOverdueServices command', function (): void {
     $successCommand = new SuspendOverdueServices($successMock);
     $successCommand->setLaravel($this->app);
 
-    $successOutput = new BufferedOutput;
+    $successOutput = new BufferedOutput();
     $successExit = $successCommand->run(new ArrayInput(['--days' => '10']), $successOutput);
     $successText = $successOutput->fetch();
 
@@ -135,7 +135,7 @@ it('executes all paths of SuspendOverdueServices command', function (): void {
     $failingCommand = new SuspendOverdueServices($failingMock);
     $failingCommand->setLaravel($this->app);
 
-    $errorOutput = new BufferedOutput;
+    $errorOutput = new BufferedOutput();
     $errorExit = $failingCommand->run(new ArrayInput([]), $errorOutput);
 
     expect($errorExit)->toBe(Command::FAILURE)

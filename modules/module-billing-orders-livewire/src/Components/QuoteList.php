@@ -17,7 +17,7 @@ final class QuoteList extends Component
 
     public string $status = 'sent';
 
-    public function transition(TransitionQuote $transition): void
+    public function transitionQuote(TransitionQuote $transition): void
     {
         $this->validate(['selectedQuoteId' => ['required', 'integer'], 'status' => ['required', 'in:sent,viewed,accepted,declined']]);
         $quote = $this->quote();

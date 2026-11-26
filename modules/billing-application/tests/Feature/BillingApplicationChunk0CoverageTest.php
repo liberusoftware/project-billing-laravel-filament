@@ -30,7 +30,6 @@ it('logs stack overflow and container recursion errors and guards against recurs
     Log::spy();
 
     $handler = new Handler(app());
-    $handler->register();
 
     $handler->report(new Error('Maximum call stack size of 8339456 bytes reached'));
     $handler->report(new Error('Fatal error in Container.php line 1048'));

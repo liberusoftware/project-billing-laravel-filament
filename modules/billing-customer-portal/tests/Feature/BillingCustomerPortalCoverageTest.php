@@ -72,7 +72,7 @@ it('covers Client, Customer, and Lead model relations and Customer::transitionTo
 it('covers CustomerPolicy methods', function (): void {
     $user = User::factory()->create();
     $customer = Customer::factory()->create();
-    $policy = new CustomerPolicy;
+    $policy = new CustomerPolicy();
 
     expect($policy->viewAny($user))->toBeBool()
         ->and($policy->view($user, $customer))->toBeBool()
@@ -184,7 +184,7 @@ it('covers Api CustomerController status change, invoices, and subscriptions', f
     $user = User::factory()->create(['current_team_id' => $team->id]);
     $customer = Customer::factory()->create([
         'team_id' => $team->id,
-        'lifecycle_status' => CustomerStatus::Lead,
+        'lifecycle_status' => CustomerStatus::Prospect,
     ]);
 
     Gate::before(fn () => true);
@@ -212,10 +212,13 @@ it('covers ClientController full CRUD and search/status filters', function (): v
     file_put_contents($tmpViews.'/clients/index.blade.php', 'clients-index');
     file_put_contents($tmpViews.'/clients/create.blade.php', 'clients-create');
     file_put_contents($tmpViews.'/clients/edit.blade.php', 'clients-edit');
-    View::addLocation($tmpViews);
+    $finder = View::getFinder();
+    $originalPaths = $finder->getPaths();
+    $finder->prependLocation($tmpViews);
+    $finder->flush();
 
     try {
-        $controller = new ClientController;
+        $controller = new ClientController();
 
         // store
         $storeReq = Request::create('/clients', 'POST', [
@@ -253,6 +256,8 @@ it('covers ClientController full CRUD and search/status filters', function (): v
         expect($controller->destroy($client)->getStatusCode())->toBe(302)
             ->and(Client::find($client->id))->toBeNull();
     } finally {
+        $finder->setPaths($originalPaths);
+        $finder->flush();
         @unlink($tmpViews.'/clients/index.blade.php');
         @unlink($tmpViews.'/clients/create.blade.php');
         @unlink($tmpViews.'/clients/edit.blade.php');
@@ -276,7 +281,7 @@ it('covers ClientNoteController content search, dateRange branches, and suggesti
         'content' => 'Follow up on invoice',
     ]);
 
-    $controller = new ClientNoteController;
+    $controller = new ClientNoteController();
 
     foreach (['today', 'week', 'month', 'custom'] as $range) {
         $params = [
@@ -334,7 +339,10 @@ it('covers Client ServiceManagementController index, show, downgrade, cancel, an
     mkdir($tmpViews.'/client/services', 0700, true);
     file_put_contents($tmpViews.'/client/services/index.blade.php', 'client-services-index');
     file_put_contents($tmpViews.'/client/services/show.blade.php', 'client-services-show');
-    View::addLocation($tmpViews);
+    $finder = View::getFinder();
+    $originalPaths = $finder->getPaths();
+    $finder->prependLocation($tmpViews);
+    $finder->flush();
 
     try {
         $team = Team::factory()->create();
@@ -344,7 +352,7 @@ it('covers Client ServiceManagementController index, show, downgrade, cancel, an
         $customer = Customer::factory()->create(['team_id' => $team->id]);
         $customer->forceFill(['user_id' => $user->id])->save();
 
-        $server = HostingServer::factory()->create(['team_id' => $team->id]);
+        $server = HostingServer::factory()->create();
 
         $higherPlan = Products_Service::factory()->create([
             'team_id' => $team->id,
@@ -392,11 +400,14 @@ it('covers Client ServiceManagementController index, show, downgrade, cancel, an
             ->and($subscription->fresh()->scheduled_change['type'])->toBe('downgrade');
 
         // Clear scheduled_change so cancel can proceed
+        $subscription->refresh();
         $subscription->update(['scheduled_change' => null]);
         $cancelRes = $controller->cancel($subscription->fresh());
         expect($cancelRes->getStatusCode())->toBe(302)
             ->and($subscription->fresh()->scheduled_change['type'])->toBe('cancel');
     } finally {
+        $finder->setPaths($originalPaths);
+        $finder->flush();
         @unlink($tmpViews.'/client/services/index.blade.php');
         @unlink($tmpViews.'/client/services/show.blade.php');
         @rmdir($tmpViews.'/client/services');

@@ -252,6 +252,7 @@ it('upserts domain TLDs, calculates pricing, syncs TLDs, and searches domains', 
 
     $registrars = app(RegistrarManager::class);
     $registrars->register('search-reg', makeFakeRegistrarClient());
+    $registrars->register('unavail-reg', makeFakeRegistrarClient(available: false));
 
     $pricing = app(DomainPricingService::class);
     expect(fn () => $pricing->syncTlds('search-reg', -5))
@@ -259,7 +260,8 @@ it('upserts domain TLDs, calculates pricing, syncs TLDs, and searches domains', 
         ->and(fn () => $pricing->calculateDomainPrice('localhost'))
         ->toThrow(InvalidArgumentException::class);
 
-    expect($pricing->syncTlds('search-reg', 10))->toBe(2);
+    expect($pricing->syncTlds('search-reg', 10))->toBe(2)
+        ->and($pricing->calculateDomainPrice('example.com'))->toBe(10.99);
 
     $search = app(SearchDomains::class);
     expect(fn () => $search->execute('not a valid domain!', 'search-reg'))
@@ -270,6 +272,12 @@ it('upserts domain TLDs, calculates pricing, syncs TLDs, and searches domains', 
         ->and($result['available'])->toBeTrue()
         ->and($result['price'])->toBe(9.99)
         ->and($result['suggestions'])->toHaveCount(2);
+
+    $unavailable = $search->execute('taken.com', 'unavail-reg', ['com']);
+    expect($unavailable['domain'])->toBe('taken.com')
+        ->and($unavailable['available'])->toBeFalse()
+        ->and($unavailable['price'])->toBeNull()
+        ->and($unavailable['suggestions'])->toBe([]);
 });
 
 it('enforces DomainPolicy and DomainSupportPolicy rules', function (): void {

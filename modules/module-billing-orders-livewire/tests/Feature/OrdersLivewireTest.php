@@ -13,7 +13,6 @@ use Liberu\Billing\Orders\Livewire\Components\OrderSupport;
 use Liberu\Billing\Orders\Livewire\Components\QuoteList;
 use Liberu\Billing\Orders\Models\Cart;
 use Liberu\Billing\Orders\Models\Order;
-use Liberu\Billing\Orders\Models\Quote;
 use Livewire\Livewire;
 
 it('renders and manages OrderList and QuoteList Livewire components', function (): void {
@@ -57,7 +56,7 @@ it('renders and manages OrderList and QuoteList Livewire components', function (
         ->assertOk()
         ->set('selectedQuoteId', $quote->id)
         ->set('status', 'accepted')
-        ->call('transition')
+        ->call('transitionQuote')
         ->assertHasNoErrors()
         ->call('convert')
         ->assertHasNoErrors();
@@ -92,7 +91,7 @@ it('renders and manages OrderSupport Livewire component', function (): void {
         ->set('quoteTotalMinor', 1800)
         ->set('quoteItems', '"not-an-array"')
         ->call('createQuote'))
-        ->toThrow(\InvalidArgumentException::class);
+        ->toThrow(InvalidArgumentException::class);
 
     $cart = Cart::query()->where('team_id', $team->id)->latest('id')->firstOrFail();
 

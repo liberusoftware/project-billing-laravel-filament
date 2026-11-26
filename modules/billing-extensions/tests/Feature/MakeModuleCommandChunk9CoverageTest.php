@@ -228,7 +228,7 @@ it('scaffolds a modular layout module under app-modules with composer.json and c
             ->assertExitCode(0);
     } finally {
         File::deleteDirectory($modulePath);
-        if (! $appModulesExisted) {
+        if (! $appModulesExisted && File::isDirectory($appModulesDir) && File::directories($appModulesDir) === []) {
             File::deleteDirectory($appModulesDir);
         }
     }

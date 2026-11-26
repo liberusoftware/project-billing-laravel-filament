@@ -7,6 +7,7 @@ namespace App\Actions\Socialstream;
 use App\Models\User;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Support\Carbon;
+use InvalidArgumentException;
 use JoelButcher\Socialstream\ConnectedAccount as SocialstreamConnectedAccount;
 use JoelButcher\Socialstream\Contracts\CreatesConnectedAccounts;
 use Laravel\Socialite\Contracts\User as ProviderUser;
@@ -17,7 +18,9 @@ class CreateConnectedAccount implements CreatesConnectedAccounts
 {
     public function create(Authenticatable $user, string $provider, ProviderUser $providerUser): SocialstreamConnectedAccount
     {
-        assert($user instanceof User);
+        if (! $user instanceof User) {
+            throw new InvalidArgumentException('Expected user to be an instance of '.User::class.'.');
+        }
 
         /** @var SocialstreamConnectedAccount $account */
         $account = $user->connectedAccounts()->create(

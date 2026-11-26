@@ -13,9 +13,14 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use Filament\Actions\Testing\TestAction;
 use Filament\Facades\Filament;
 use Livewire\Livewire;
+use Spatie\Permission\Models\Permission;
 
 beforeEach(function (): void {
     $this->user = User::factory()->create();
+    foreach (['view_any_partial::payment', 'view_partial::payment'] as $permission) {
+        Permission::findOrCreate($permission, 'web');
+        $this->user->givePermissionTo($permission);
+    }
     $this->customer = Customer::factory()->create(['user_id' => $this->user->id]);
 
     $this->actingAs($this->user);
@@ -67,7 +72,7 @@ it('covers client InvoiceResource table columns, filters, actions, canCreate, an
     $otherCustomer = Customer::factory()->create(['user_id' => User::factory()->create()->id]);
     $foreign = Invoice::factory()->create(['customer_id' => $otherCustomer->id]);
 
-    $pdfMock = Mockery::mock(\Barryvdh\DomPDF\PDF::class);
+    $pdfMock = Mockery::mock(Barryvdh\DomPDF\PDF::class);
     $pdfMock->shouldReceive('output')->once()->andReturn('%PDF-1.4-bytes');
     Pdf::shouldReceive('loadView')
         ->once()

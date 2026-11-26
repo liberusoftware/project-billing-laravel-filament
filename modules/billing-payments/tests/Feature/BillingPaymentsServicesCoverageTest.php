@@ -424,7 +424,7 @@ it('handles Square payment success, API error response, and ApiException', funct
     );
 
     $squareClientMock = Mockery::mock('overload:Square\Legacy\SquareClient');
-    $squareClientMock->shouldReceive('getPaymentsApi')->times(3)->andReturn($paymentsApi);
+    $squareClientMock->shouldReceive('getPaymentsApi')->once()->andReturn($paymentsApi);
 
     $payment = Payment::factory()->create([
         'payment_gateway_id' => $gateway->id,

@@ -52,7 +52,7 @@ it('shows a client service with available upgrades and downgrades', function ():
         'team_id' => $this->team->id,
         'user_id' => $this->user->id,
     ]);
-    $server = HostingServer::factory()->create(['team_id' => $this->team->id]);
+    $server = HostingServer::factory()->create();
 
     $lowerPlan = Products_Service::factory()->create([
         'team_id' => $this->team->id,
@@ -132,7 +132,7 @@ it('schedules a downgrade at end of billing period and rejects invalid downgrade
         'team_id' => $this->team->id,
         'user_id' => $this->user->id,
     ]);
-    $server = HostingServer::factory()->create(['team_id' => $this->team->id]);
+    $server = HostingServer::factory()->create();
 
     $currentPlan = Products_Service::factory()->create([
         'team_id' => $this->team->id,

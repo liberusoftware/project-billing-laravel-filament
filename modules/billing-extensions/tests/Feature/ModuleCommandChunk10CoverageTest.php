@@ -5,6 +5,7 @@ declare(strict_types=1);
 use App\Modules\Contracts\ModuleInterface;
 use App\Modules\ModuleManager;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\File;
 
 $makeStubModule = static fn (
@@ -85,10 +86,12 @@ it('lists empty modules in both table and json formats', function (): void {
         ->expectsOutput('Count: 0')
         ->assertExitCode(0);
 
-    $this->artisan('module', ['action' => 'list', '--format' => 'json'])
-        ->expectsOutputToContain('"modules": []')
-        ->expectsOutputToContain('"count": 0')
-        ->assertExitCode(0);
+    $exitCode = Artisan::call('module', ['action' => 'list', '--format' => 'json']);
+    $output = Artisan::output();
+
+    expect($exitCode)->toBe(0)
+        ->and($output)->toContain('"modules": []')
+        ->and($output)->toContain('"count": 0');
 });
 
 it('lists populated modules in both table and json formats', function () use ($makeStubModule): void {
@@ -100,23 +103,27 @@ it('lists populated modules in both table and json formats', function () use ($m
 
     $manager->shouldReceive('all')->twice()->andReturn(new Collection([$alpha, $beta]));
 
-    $this->artisan('module', ['action' => 'list'])
-        ->expectsOutputToContain('Alpha')
-        ->expectsOutputToContain('1.2.0')
-        ->expectsOutputToContain('Enabled')
-        ->expectsOutputToContain('Core, Auth')
-        ->expectsOutputToContain('Beta')
-        ->expectsOutputToContain('Disabled')
-        ->expectsOutputToContain('—')
-        ->assertExitCode(0);
+    $tableExitCode = Artisan::call('module', ['action' => 'list']);
+    $tableOutput = Artisan::output();
 
-    $this->artisan('module', ['action' => 'list', '--format' => 'json'])
-        ->expectsOutputToContain('"name": "Alpha"')
-        ->expectsOutputToContain('"status": "enabled"')
-        ->expectsOutputToContain('"dependencies": "Core, Auth"')
-        ->expectsOutputToContain('"name": "Beta"')
-        ->expectsOutputToContain('"status": "disabled"')
-        ->assertExitCode(0);
+    expect($tableExitCode)->toBe(0)
+        ->and($tableOutput)->toContain('Alpha')
+        ->and($tableOutput)->toContain('1.2.0')
+        ->and($tableOutput)->toContain('Enabled')
+        ->and($tableOutput)->toContain('Core, Auth')
+        ->and($tableOutput)->toContain('Beta')
+        ->and($tableOutput)->toContain('Disabled')
+        ->and($tableOutput)->toContain('—');
+
+    $jsonExitCode = Artisan::call('module', ['action' => 'list', '--format' => 'json']);
+    $jsonOutput = Artisan::output();
+
+    expect($jsonExitCode)->toBe(0)
+        ->and($jsonOutput)->toContain('"name": "Alpha"')
+        ->and($jsonOutput)->toContain('"status": "enabled"')
+        ->and($jsonOutput)->toContain('"dependencies": "Core, Auth"')
+        ->and($jsonOutput)->toContain('"name": "Beta"')
+        ->and($jsonOutput)->toContain('"status": "disabled"');
 });
 
 it('handles enable, disable, and install actions including missing name, not found, and exception branches', function (): void {
@@ -267,10 +274,12 @@ it('handles info action for missing name, not found, default format, and json fo
         ->expectsOutput('Tags: —')
         ->assertExitCode(0);
 
-    $this->artisan('module', ['action' => 'info', 'name' => 'Alpha', '--format' => 'json'])
-        ->expectsOutputToContain('"name": "Alpha"')
-        ->expectsOutputToContain('"version": "1.2.0"')
-        ->assertExitCode(0);
+    $jsonExitCode = Artisan::call('module', ['action' => 'info', 'name' => 'Alpha', '--format' => 'json']);
+    $jsonOutput = Artisan::output();
+
+    expect($jsonExitCode)->toBe(0)
+        ->and($jsonOutput)->toContain('"name": "Alpha"')
+        ->and($jsonOutput)->toContain('"version": "1.2.0"');
 });
 
 it('handles health action for single module, all modules, json format, warnings, and issues fallback', function (): void {

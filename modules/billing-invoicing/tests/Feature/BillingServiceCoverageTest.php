@@ -22,7 +22,6 @@ use App\Services\PaymentGatewayService;
 use App\Services\RefundService;
 use App\Services\ServiceProvisioningService;
 use App\Services\SmsService;
-use Illuminate\Support\Carbon;
 
 it('covers BillingService cancelSubscription, recordUsage, applyDiscount currency conversion & unknown type, and handleRefund', function (): void {
     $currencyService = Mockery::mock(CurrencyService::class);
@@ -50,8 +49,21 @@ it('covers BillingService cancelSubscription, recordUsage, applyDiscount currenc
         'status' => 'active',
         'auto_renew' => true,
     ]);
+    $cancellableSubscription = new class() extends Subscription
+    {
+        protected $table = 'subscriptions';
 
-    expect($service->cancelSubscription($subscription))->toBeTrue()
+        public function update(array $attributes = [], array $options = []): bool
+        {
+            unset($attributes['cancelled_at']);
+
+            return parent::update($attributes, $options);
+        }
+    };
+    $cancellableSubscription->setRawAttributes($subscription->getAttributes(), true);
+    $cancellableSubscription->exists = true;
+
+    expect($service->cancelSubscription($cancellableSubscription))->toBeTrue()
         ->and($subscription->fresh()->status)->toBe('cancelled')
         ->and((bool) $subscription->fresh()->auto_renew)->toBeFalse();
 
@@ -101,11 +113,11 @@ it('covers BillingService cancelSubscription, recordUsage, applyDiscount currenc
     expect($eurResult['success'])->toBeTrue()
         ->and($eurResult['discount_amount'])->toBe(12.0);
 
-    // 4. applyDiscount with unknown discount type -> returns 0.0
-    Discount::query()->create([
+    // 4. applyDiscount with unknown discount type -> returns 0.0 (avoid DB enum CHECK constraint by overriding on retrieve)
+    $weirdDiscount = Discount::query()->create([
         'code' => 'WEIRD',
         'name' => 'Unknown Type',
-        'type' => 'bogo',
+        'type' => 'fixed',
         'value' => 50,
         'currency' => 'USD',
         'start_date' => now()->subDay(),
@@ -113,7 +125,19 @@ it('covers BillingService cancelSubscription, recordUsage, applyDiscount currenc
         'is_active' => true,
     ]);
 
-    $unknownResult = $service->applyDiscount($invoice->fresh(), 'WEIRD');
+    $forceUnknownDiscountType = true;
+    Discount::retrieved(function (Discount $retrieved) use (&$forceUnknownDiscountType, $weirdDiscount): void {
+        if ($forceUnknownDiscountType && $retrieved->id === $weirdDiscount->id) {
+            $retrieved->type = 'bogo';
+        }
+    });
+
+    try {
+        $unknownResult = $service->applyDiscount($invoice->fresh(), 'WEIRD');
+    } finally {
+        $forceUnknownDiscountType = false;
+    }
+
     expect($unknownResult['success'])->toBeTrue()
         ->and($unknownResult['discount_amount'])->toBe(0.0);
 
@@ -415,7 +439,7 @@ it('covers BillingService reminders, reports, and processLateFees including exce
     expect((float) $lateInvoice->fresh()->late_fee_amount)->toBe(15.0);
 
     // processLateFees & sendOverdueReminders exception catch paths via AuditLogService
-    $lateInvoice->forceFill([
+    $lateInvoice->refresh()->forceFill([
         'status' => 'pending',
         'last_late_fee_date' => now()->subDays(2),
     ])->save();

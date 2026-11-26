@@ -36,6 +36,7 @@ class OAuthManagerAndMessageServiceTest extends TestCase
         parent::setUp();
 
         Route::get('/_test/oauth/{provider}/callback', fn () => 'ok')->name('oauth.callback');
+        app('router')->getRoutes()->refreshNameLookups();
 
         Builder::macro('ofType', function (string $type) {
             /** @var Builder $this */
@@ -133,9 +134,11 @@ class OAuthManagerAndMessageServiceTest extends TestCase
             $this->assertStringContainsString('Failed to exchange code', $e->getMessage());
         }
 
-        // saveConnectedAccount (mailchimp with metadata)
+        // saveConnectedAccount (mailchimp with metadata, with explicit userId and with Auth::id() + expires_in)
         $saved = $mgr->saveConnectedAccount('mailchimp', $mcData, $user->id);
         $this->assertSame('mailchimp', $saved->provider);
+        $savedWithExpiry = $mgr->saveConnectedAccount('mailchimp', array_merge($mcData, ['expires_in' => 3600]));
+        $this->assertNotNull($savedWithExpiry->expires_at);
 
         // needsRefresh
         $this->assertFalse($mgr->needsRefresh(new ConnectedAccount(['expires_at' => null])));
@@ -148,6 +151,7 @@ class OAuthManagerAndMessageServiceTest extends TestCase
             'provider' => 'google',
             'provider_id' => 'p-noref',
             'token' => 't1',
+            'refresh_token' => null,
         ]);
         $this->assertFalse($mgr->refreshToken($noRef));
 
@@ -169,9 +173,10 @@ class OAuthManagerAndMessageServiceTest extends TestCase
             $this->assertTrue(true);
         }
 
-        // refreshToken: success and failure
+        // refreshToken: success (with and without expires_in/refresh_token) and failure
         $refMgr = $this->managerWithResponses([
             new Response(200, [], json_encode(['access_token' => 'new-tok', 'refresh_token' => 'new-ref', 'expires_in' => 1800])),
+            new Response(200, [], json_encode(['access_token' => 'new-tok-2'])),
             new RuntimeException('refresh fail'),
         ]);
         $acc = ConnectedAccount::create([
@@ -183,7 +188,9 @@ class OAuthManagerAndMessageServiceTest extends TestCase
         ]);
         $this->assertTrue($refMgr->refreshToken($acc));
         $this->assertSame('new-tok', $acc->fresh()->token);
-        $this->assertFalse($refMgr->refreshToken($acc));
+        $this->assertTrue($refMgr->refreshToken($acc->fresh()));
+        $this->assertSame('new-tok-2', $acc->fresh()->token);
+        $this->assertFalse($refMgr->refreshToken($acc->fresh()));
     }
 
     public function test_message_service_unread_get_and_reply_across_channels(): void

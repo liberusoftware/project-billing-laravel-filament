@@ -136,10 +136,8 @@ class BillingService
 
         // Handle any refunds if necessary
         if ($subscription->end_date->isFuture()) {
-            $refundAmount = $this->calculateRefundAmount($subscription);
-            if ($refundAmount > 0) {
-                // $this->processRefund($subscription->lastPayment, $refundAmount);
-            }
+            $this->calculateRefundAmount($subscription);
+            // if ($refundAmount > 0) { $this->processRefund($subscription->lastPayment, $refundAmount); }
         }
 
         return true;

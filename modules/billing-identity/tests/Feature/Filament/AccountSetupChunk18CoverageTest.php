@@ -14,7 +14,7 @@ use Livewire\Livewire;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 $makeTestableAccountSetup = static function (): AccountSetup {
-    return new class extends AccountSetup
+    return new class() extends AccountSetup
     {
         public ?string $team_name = null;
 
@@ -121,7 +121,7 @@ it('forbids mounting account setup when the user has no current workspace or doe
     $this->actingAs($userWithoutTeam);
 
     try {
-        (new AccountSetup)->mount();
+        (new AccountSetup())->mount();
         $this->fail('Expected HttpException when user has no current workspace.');
     } catch (HttpException $exception) {
         expect($exception->getStatusCode())->toBe(403)
@@ -137,7 +137,7 @@ it('forbids mounting account setup when the user has no current workspace or doe
     $this->actingAs($nonOwner);
 
     try {
-        (new AccountSetup)->mount();
+        (new AccountSetup())->mount();
         $this->fail('Expected HttpException when user does not own the current workspace.');
     } catch (HttpException $exception) {
         expect($exception->getStatusCode())->toBe(403);

@@ -9,6 +9,7 @@ use App\Actions\Socialstream\HandleInvalidState;
 use App\Actions\Socialstream\ResolveSocialiteUser;
 use App\Actions\Socialstream\UpdateConnectedAccount;
 use App\Models\User;
+use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
@@ -77,6 +78,17 @@ it('creates a connected account from an OAuth 1 provider user without expiry', f
         ->and($account->secret)->toBe('oauth1-secret')
         ->and($account->refresh_token)->toBeNull()
         ->and($account->expires_at)->toBeNull();
+});
+
+it('rejects non-User Authenticatable instances when creating a connected account', function (): void {
+    $nonUser = Mockery::mock(Authenticatable::class);
+    $providerUser = TwoUser::fake([
+        'id' => 'invalid-user-1',
+        'email' => 'invalid@example.com',
+    ]);
+
+    expect(fn () => (new CreateConnectedAccount())->create($nonUser, 'github', $providerUser))
+        ->toThrow(InvalidArgumentException::class);
 });
 
 it('creates a user from a provider with avatar import and connected account', function (): void {

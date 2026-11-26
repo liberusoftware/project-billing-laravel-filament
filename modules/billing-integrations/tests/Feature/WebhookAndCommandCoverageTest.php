@@ -9,6 +9,7 @@ use App\Models\WebhookEndpoint;
 use App\Models\WebhookEvent;
 use App\Services\WebhookService;
 use Illuminate\Console\Command;
+use Illuminate\Http\Client\Factory as HttpFactory;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Http;
@@ -62,11 +63,13 @@ it('manages webhook endpoints through store, update, destroy, events, event type
         ->assertJsonPath('data.description', 'Updated billing notifications');
 
     // Event types list
-    $this->getJson('/api/webhook-event-types')
+    $eventTypes = $this->getJson('/api/webhook-event-types')
         ->assertOk()
-        ->assertJsonPath('data.'.WebhookService::EVENT_INVOICE_CREATED, 'Invoice Created');
+        ->json('data');
+    expect($eventTypes[WebhookService::EVENT_INVOICE_CREATED] ?? null)->toBe('Invoice Created');
 
     // Test endpoint (success)
+    Http::swap(new HttpFactory());
     Http::fake(['*' => Http::response('ok', 200)]);
     $this->postJson("/api/webhooks/{$endpointId}/test")
         ->assertOk()
@@ -74,6 +77,7 @@ it('manages webhook endpoints through store, update, destroy, events, event type
         ->assertJsonPath('message', 'Test webhook sent successfully');
 
     // Test endpoint (failure)
+    Http::swap(new HttpFactory());
     Http::fake(['*' => Http::response('error', 500)]);
     $this->postJson("/api/webhooks/{$endpointId}/test")
         ->assertOk()
@@ -100,7 +104,16 @@ it('manages webhook endpoints through store, update, destroy, events, event type
         ->assertStatus(400)
         ->assertJsonPath('message', 'Event has already been sent successfully');
 
+    // Retry a failed event when remote still fails
+    Http::swap(new HttpFactory());
+    Http::fake(['*' => Http::response('still failing', 500)]);
+    $this->postJson("/api/webhook-events/{$failedEvent->id}/retry")
+        ->assertOk()
+        ->assertJsonPath('success', false)
+        ->assertJsonPath('message', 'Event resend failed');
+
     // Retry a failed event succeeds
+    Http::swap(new HttpFactory());
     Http::fake(['*' => Http::response('ok', 200)]);
     $this->postJson("/api/webhook-events/{$failedEvent->id}/retry")
         ->assertOk()
@@ -154,8 +167,8 @@ it('covers team-scoped dispatch, unresolvable host rejection, and exhausted retr
     expect(WebhookEvent::query()->count())->toBe(1)
         ->and(WebhookEvent::query()->first()->webhook_endpoint_id)->toBe($endpointA->id);
 
-    // Unresolvable host (.invalid TLD per RFC 2606)
-    expect(fn () => WebhookService::assertSafeUrl('https://nonexistent.invalid/webhook'))
+    // Unresolvable host (syntactically invalid DNS name fails gethostbynamel deterministically)
+    expect(fn () => WebhookService::assertSafeUrl('https://invalid..host/webhook'))
         ->toThrow(Exception::class, 'Webhook URL host could not be resolved');
 
     // Exhausted retries branch (max_retries = 0 -> shouldRetry returns false)

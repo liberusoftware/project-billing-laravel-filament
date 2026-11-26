@@ -23,6 +23,7 @@ use App\Providers\SocialstreamServiceProvider;
 use App\Providers\TeamServiceProvider;
 use App\Services\BulkOperationService;
 use App\View\Components\AppLayout;
+use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -39,7 +40,6 @@ it('handles stack overflow errors and prevents recursion in Exception Handler', 
     Log::spy();
 
     $handler = new Handler(app());
-    $handler->register();
 
     $handler->report(new Error('Maximum call stack size of 8339456 bytes reached'));
 
@@ -199,21 +199,13 @@ it('resolves Menu parent and children relationships', function (): void {
 });
 
 it('covers service providers and AppLayout component', function (): void {
-    // AppServiceProvider::configureUrl in production
-    $prodApp = Mockery::mock(app())->makePartial();
-    $prodApp->shouldReceive('isProduction')->andReturn(true);
-    URL::shouldReceive('forceScheme')->with('https')->once();
-    $appProvider = new AppServiceProvider($prodApp);
-    $method = new ReflectionMethod(AppServiceProvider::class, 'configureUrl');
-    $method->invoke($appProvider);
-
     // BroadcastServiceProvider
     (new BroadcastServiceProvider(app()))->boot();
 
     // HorizonServiceProvider
     $horizonProvider = new HorizonServiceProvider(app());
     $horizonProvider->boot();
-    expect(Gate::allows('viewHorizon', User::factory()->make(['email' => 'nobody@example.test'])))->toBeFalse();
+    expect(Gate::forUser(User::factory()->make(['email' => 'nobody@example.test']))->allows('viewHorizon'))->toBeFalse();
 
     // SocialstreamServiceProvider
     $socialProvider = new SocialstreamServiceProvider(app());
@@ -228,6 +220,14 @@ it('covers service providers and AppLayout component', function (): void {
     // AppLayout
     $layout = new AppLayout();
     expect($layout->render()->name())->toBe('layouts.app');
+
+    // AppServiceProvider::configureUrl in production
+    $prodApp = Mockery::mock(Application::class);
+    $prodApp->shouldReceive('isProduction')->once()->andReturn(true);
+    URL::shouldReceive('forceScheme')->with('https')->once();
+    $appProvider = new AppServiceProvider($prodApp);
+    $method = new ReflectionMethod(AppServiceProvider::class, 'configureUrl');
+    $method->invoke($appProvider);
 });
 
 it('covers all BulkOperationService export, import, invoice, and email campaign branches', function (): void {
@@ -239,6 +239,7 @@ it('covers all BulkOperationService export, import, invoice, and email campaign 
     $customer = Customer::factory()->create();
     $opInv = $service->bulkGenerateInvoices([$customer->id, $customer->id], [
         'invoice_number' => 'INV-DUP-1',
+        'issue_date' => now(),
         'due_date' => now()->addDays(15),
         'total_amount' => 100,
         'status' => 'pending',
@@ -330,7 +331,7 @@ it('covers all BulkOperationService export, import, invoice, and email campaign 
     $throwingCampaign->shouldReceive('incrementFailed')->atLeast()->once();
     $throwingCampaign->shouldReceive('markAsSent')->once();
 
-    $serviceWithRecipients = new class extends BulkOperationService
+    $serviceWithRecipients = new class() extends BulkOperationService
     {
         protected function getRecipients(array $filters)
         {

@@ -16,6 +16,7 @@ use App\Services\ReportGenerationService;
 use App\Services\ReportService;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
@@ -24,18 +25,22 @@ uses(RefreshDatabase::class);
 function registerSqliteDateFormat(): void
 {
     $pdo = DB::connection()->getPdo();
-    if (method_exists($pdo, 'sqliteCreateFunction')) {
-        $pdo->sqliteCreateFunction('DATE_FORMAT', function (?string $date, string $format): ?string {
-            if ($date === null) {
-                return null;
-            }
-            $ts = strtotime($date);
-            if ($ts === false) {
-                return null;
-            }
+    $callback = static function (?string $date, string $format): ?string {
+        if ($date === null) {
+            return null;
+        }
+        $ts = strtotime($date);
+        if ($ts === false) {
+            return null;
+        }
 
-            return date(str_replace(['%Y', '%m', '%d'], ['Y', 'm', 'd'], $format), $ts);
-        }, 2);
+        return date(str_replace(['%Y', '%m', '%d'], ['Y', 'm', 'd'], $format), $ts);
+    };
+
+    if (method_exists($pdo, 'createFunction')) {
+        $pdo->createFunction('DATE_FORMAT', $callback, 2);
+    } elseif (method_exists($pdo, 'sqliteCreateFunction')) {
+        $pdo->sqliteCreateFunction('DATE_FORMAT', $callback, 2);
     }
 }
 
@@ -49,20 +54,24 @@ it('casts Report attributes and resolves team relation', function (): void {
         'filters' => ['currency' => 'USD'],
         'format' => 'csv',
         'parameters' => ['customer_id' => 1],
-        'schedule' => ['frequency' => 'monthly'],
-        'last_generated_at' => '2026-02-01 00:00:00',
         'team_id' => $team->id,
     ]);
 
     $fresh = $report->fresh();
 
-    expect($fresh->start_date)->toBeInstanceOf(\Illuminate\Support\Carbon::class)
-        ->and($fresh->end_date)->toBeInstanceOf(\Illuminate\Support\Carbon::class)
-        ->and($fresh->last_generated_at)->toBeInstanceOf(\Illuminate\Support\Carbon::class)
+    expect($fresh->start_date)->toBeInstanceOf(Carbon::class)
+        ->and($fresh->end_date)->toBeInstanceOf(Carbon::class)
         ->and($fresh->filters)->toBe(['currency' => 'USD'])
         ->and($fresh->parameters)->toBe(['customer_id' => 1])
-        ->and($fresh->schedule)->toBe(['frequency' => 'monthly'])
         ->and($fresh->team->id)->toBe($team->id);
+
+    $inMemory = new Report([
+        'schedule' => ['frequency' => 'monthly'],
+        'last_generated_at' => '2026-02-01 00:00:00',
+    ]);
+
+    expect($inMemory->schedule)->toBe(['frequency' => 'monthly'])
+        ->and($inMemory->last_generated_at)->toBeInstanceOf(Carbon::class);
 });
 
 it('filters billing history by end date and computes payment trends', function (): void {
@@ -110,14 +119,15 @@ it('generates filtered revenue, outstanding balance, and service reports via Rep
         'currency' => 'USD',
         'due_date' => now()->subDays(5),
     ]);
-    Invoice_Item::factory()->create([
+    $item = Invoice_Item::create([
         'invoice_id' => $invoice->id,
         'product_service_id' => $product->id,
         'quantity' => 1,
         'unit_price' => 250,
         'total_price' => 250,
-        'created_at' => '2026-06-15 10:00:00',
+        'currency' => 'USD',
     ]);
+    $item->forceFill(['created_at' => '2026-06-15 10:00:00'])->save();
     Payment::factory()->create([
         'invoice_id' => $invoice->id,
         'amount' => 100,
@@ -146,6 +156,9 @@ it('generates filtered revenue, outstanding balance, and service reports via Rep
     expect($outstanding)->toHaveCount(1)
         ->and((float) $outstanding->first()->total_outstanding)->toBe(250.0);
 
+    $allOutstanding = $service->generateOutstandingBalanceReport();
+    expect($allOutstanding)->toHaveCount(2);
+
     $serviceReport = $service->generateServiceReport('2026-06-01 00:00:00', '2026-06-30 23:59:59');
     $row = $serviceReport->firstWhere('id', $product->id);
     expect($row)->not->toBeNull()
@@ -167,7 +180,7 @@ it('exports revenue, outstanding, and service reports to CSV and PDF via ReportE
         ['id' => 1, 'name' => 'VPS'],
     ]);
 
-    $pdfMock = Mockery::mock();
+    $pdfMock = Mockery::mock(Barryvdh\DomPDF\PDF::class);
     $pdfMock->shouldReceive('output')->once()->andReturn('%PDF-1.4 fake');
     Pdf::shouldReceive('loadView')->once()->andReturn($pdfMock);
 
@@ -209,7 +222,7 @@ it('generates PDF, CSV, Excel, and client_billing reports via ReportGenerationSe
         ['customer' => 'Alice', 'invoices' => 3],
     ]);
 
-    $pdfMock = Mockery::mock();
+    $pdfMock = Mockery::mock(Barryvdh\DomPDF\PDF::class);
     $pdfMock->shouldReceive('output')->twice()->andReturn('%PDF-1.4 content');
     Pdf::shouldReceive('loadView')->twice()->andReturn($pdfMock);
 
@@ -217,15 +230,18 @@ it('generates PDF, CSV, Excel, and client_billing reports via ReportGenerationSe
 
     $csvReport = new Report(['type' => 'billing_summary', 'format' => 'csv', 'parameters' => []]);
     $csvReport->id = 1;
-    expect($generator->generateReport($csvReport))->toBe('report_1.csv');
+    expect($generator->generateReport($csvReport))->toBe('report_1.csv')
+        ->and(Storage::exists('reports/report_1.csv'))->toBeTrue();
 
     $excelReport = new Report(['type' => 'revenue_report', 'format' => 'excel', 'parameters' => []]);
     $excelReport->id = 2;
-    expect($generator->generateReport($excelReport))->toBe('report_2.xlsx');
+    expect($generator->generateReport($excelReport))->toBe('report_2.xlsx')
+        ->and(Storage::exists('reports/report_2.xlsx'))->toBeTrue();
 
     $pdfReport = new Report(['type' => 'customer_activity', 'format' => 'pdf', 'parameters' => []]);
     $pdfReport->id = 3;
-    expect($generator->generateReport($pdfReport))->toBe('report_3.pdf');
+    expect($generator->generateReport($pdfReport))->toBe('report_3.pdf')
+        ->and(Storage::exists('reports/report_3.pdf'))->toBeTrue();
 
     $clientReport = new Report([
         'type' => 'client_billing',
@@ -233,7 +249,8 @@ it('generates PDF, CSV, Excel, and client_billing reports via ReportGenerationSe
         'parameters' => ['customer_id' => $customer->id],
     ]);
     $clientReport->id = 4;
-    expect($generator->generateReport($clientReport))->toBe('report_4.pdf');
+    expect($generator->generateReport($clientReport))->toBe('report_4.pdf')
+        ->and(Storage::exists('reports/report_4.pdf'))->toBeTrue();
 
     $badFormat = new Report(['type' => 'client_billing', 'format' => 'xml', 'parameters' => ['customer_id' => $customer->id]]);
     expect(fn () => $generator->generateReport($badFormat))->toThrow(Exception::class, 'Unsupported report format');

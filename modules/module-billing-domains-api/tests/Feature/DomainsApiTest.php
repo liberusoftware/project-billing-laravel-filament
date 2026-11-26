@@ -23,7 +23,7 @@ it('manages domains, TLDs, contacts, DNS records, EPP operations, and registrar 
         'updated_at' => now(),
     ]);
 
-    app(RegistrarManager::class)->register('api-reg', new class implements RegistrarClient
+    app(RegistrarManager::class)->register('api-reg', new class() implements RegistrarClient
     {
         public function registerDomain(string $domainName, mixed $customerId): ?array
         {

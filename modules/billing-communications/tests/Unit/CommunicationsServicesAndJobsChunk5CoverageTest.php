@@ -26,7 +26,7 @@ test('send email notification job sends email and logs success', function (): vo
     Mail::fake();
     Log::spy();
 
-    $mailable = new class extends Mailable
+    $mailable = new class() extends Mailable
     {
         public function build(): self
         {
@@ -44,7 +44,7 @@ test('send email notification job sends email and logs success', function (): vo
 test('send email notification job logs error and rethrows on mail failure and logs permanent failure', function (): void {
     Log::spy();
 
-    $mailable = new class extends Mailable
+    $mailable = new class() extends Mailable
     {
         public function build(): self
         {
@@ -69,7 +69,7 @@ test('send email notification job logs error and rethrows on mail failure and lo
 test('email notification service handles queue push exceptions, sendNow retries, and zero-retry fallback', function (): void {
     Log::spy();
 
-    $mailable = new class extends Mailable
+    $mailable = new class() extends Mailable
     {
         public function build(): self
         {
@@ -92,7 +92,7 @@ test('email notification service handles queue push exceptions, sendNow retries,
 
     expect($service->sendNow($mailable, 'retry-fail@example.test'))->toBeFalse();
 
-    $zeroRetryService = new class extends EmailNotificationService
+    $zeroRetryService = new class() extends EmailNotificationService
     {
         protected $maxRetries = 0;
     };
@@ -180,7 +180,7 @@ test('voip billing service rejects terminated accounts and handles unrated or ze
         'status' => VoipAccountStatus::Terminated,
     ]);
 
-    $noopClient = new class implements VoipPlatformClient
+    $noopClient = new class() implements VoipPlatformClient
     {
         public function provisionAccount(VoipAccount $account): void {}
 

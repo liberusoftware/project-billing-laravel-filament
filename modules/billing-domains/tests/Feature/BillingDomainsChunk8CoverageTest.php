@@ -131,7 +131,7 @@ class BillingDomainsChunk8CoverageTest extends TestCase
             'status' => 'pending',
         ]);
 
-        (new RenewDomainOnPayment)->handle(new InvoiceStatusChanged($invoice, 'pending'));
+        (new RenewDomainOnPayment())->handle(new InvoiceStatusChanged($invoice, 'pending'));
 
         $this->assertDatabaseCount('domain_renewals', 0);
     }
@@ -177,7 +177,7 @@ class BillingDomainsChunk8CoverageTest extends TestCase
             ),
         ]);
 
-        $client = new EnomClient;
+        $client = new EnomClient();
         $this->assertSame(['.com', '.org'], $client->getAvailableTlds());
     }
 
@@ -196,7 +196,7 @@ class BillingDomainsChunk8CoverageTest extends TestCase
             ),
         ]);
 
-        $client = new EnomClient;
+        $client = new EnomClient();
         $this->assertSame(11.25, $client->getDomainPrice('.com'));
 
         Http::assertSent(fn ($request): bool => str_contains($request->url(), 'command=PE_GetDomainPrice')
@@ -215,7 +215,7 @@ class BillingDomainsChunk8CoverageTest extends TestCase
             '*' => Http::response('<interface-response><ErrCount>0</ErrCount></interface-response>', 200),
         ]);
 
-        $client = new EnomClient;
+        $client = new EnomClient();
         $this->assertTrue($client->deleteDnsRecord('example.com', '42'));
 
         Http::assertSent(fn ($request): bool => str_contains($request->url(), 'command=SetHosts')
@@ -237,7 +237,7 @@ class BillingDomainsChunk8CoverageTest extends TestCase
             ),
         ]);
 
-        $client = new EnomClient;
+        $client = new EnomClient();
         $contacts = $client->getWhoisContacts('example.com');
 
         $this->assertSame([
@@ -264,7 +264,7 @@ class BillingDomainsChunk8CoverageTest extends TestCase
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('eNom API request failed.');
 
-        (new EnomClient)->getAvailableTlds();
+        (new EnomClient())->getAvailableTlds();
     }
 
     public function test_enom_client_throws_on_doctype_response(): void
@@ -282,7 +282,7 @@ class BillingDomainsChunk8CoverageTest extends TestCase
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Invalid eNom API response.');
 
-        (new EnomClient)->getAvailableTlds();
+        (new EnomClient())->getAvailableTlds();
     }
 
     public function test_enom_client_throws_on_unexpected_xml_root(): void
@@ -300,7 +300,7 @@ class BillingDomainsChunk8CoverageTest extends TestCase
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Invalid eNom API response.');
 
-        (new EnomClient)->getAvailableTlds();
+        (new EnomClient())->getAvailableTlds();
     }
 
     public function test_reseller_club_client_stub_methods(): void
@@ -311,7 +311,7 @@ class BillingDomainsChunk8CoverageTest extends TestCase
             'services.resellerclub.api_key' => 'secret',
         ]);
 
-        $client = new ResellerClubClient;
+        $client = new ResellerClubClient();
 
         $this->assertSame(['new_expiration_date' => null], $client->renewDomain('example.com', 1));
         $this->assertSame(['expiration_date' => null], $client->transferDomain('example.com', 'AUTH', 1));

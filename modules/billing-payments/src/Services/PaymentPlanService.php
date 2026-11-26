@@ -59,7 +59,7 @@ class PaymentPlanService
         foreach ($activePlans as $plan) {
             $this->createInstallmentInvoice($plan);
 
-            if ($plan->installments->count() >= $plan->total_installments) {
+            if ($plan->installments()->count() >= $plan->total_installments) {
                 $plan->update(['status' => 'completed']);
             }
         }

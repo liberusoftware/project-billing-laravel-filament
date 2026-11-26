@@ -121,9 +121,16 @@ it('covers InstallationScriptService validation, control panels, and execution p
     file_put_contents($fakeBash, "#!/bin/sh\necho 'ok'\nexit 0\n");
     chmod($fakeBash, 0700);
     $originalPath = getenv('PATH') ?: '';
+    $hadEnvPath = array_key_exists('PATH', $_ENV);
+    $originalEnvPath = $_ENV['PATH'] ?? null;
+    $hadServerPath = array_key_exists('PATH', $_SERVER);
+    $originalServerPath = $_SERVER['PATH'] ?? null;
+    $shimmedPath = "{$tmpBin}:{$originalPath}";
 
     try {
-        putenv("PATH={$tmpBin}:{$originalPath}");
+        putenv("PATH={$shimmedPath}");
+        $_ENV['PATH'] = $shimmedPath;
+        $_SERVER['PATH'] = $shimmedPath;
 
         $service = new InstallationScriptService(
             'cpanel',
@@ -136,7 +143,7 @@ it('covers InstallationScriptService validation, control panels, and execution p
 
         expect($service->execute())->toBeTrue();
 
-        $controller = new InstallationController;
+        $controller = new InstallationController();
         $request = Request::create('/api/install', 'POST', [
             'control_panel' => 'cpanel',
             'git_repo' => 'https://github.com/acme/app.git',
@@ -158,6 +165,16 @@ it('covers InstallationScriptService validation, control panels, and execution p
             ->and($failResponse->getData(true))->toHaveKey('error');
     } finally {
         putenv("PATH={$originalPath}");
+        if ($hadEnvPath) {
+            $_ENV['PATH'] = $originalEnvPath;
+        } else {
+            unset($_ENV['PATH']);
+        }
+        if ($hadServerPath) {
+            $_SERVER['PATH'] = $originalServerPath;
+        } else {
+            unset($_SERVER['PATH']);
+        }
         @unlink($fakeBash);
         @rmdir($tmpBin);
     }
@@ -182,8 +199,10 @@ it('covers Client LicenseResource canCreate and ViewLicense infolist', function 
 
     Gate::before(fn () => true);
     $this->actingAs($user);
-    Filament::setCurrentPanel(Filament::getPanel('client'));
-    Filament::setTenant($team);
+    $clientPanel = Filament::getPanel('client');
+    Filament::setCurrentPanel($clientPanel);
+    $clientPanel->boot();
+    Filament::setTenant(null);
 
     Livewire::test(ClientViewLicense::class, ['record' => $license->getRouteKey()])
         ->assertOk();
@@ -203,7 +222,9 @@ it('covers Admin LicenseResource pages, table actions, reissue error handling, a
 
     Gate::before(fn () => true);
     $this->actingAs($admin);
-    Filament::setCurrentPanel(Filament::getPanel('admin'));
+    $adminPanel = Filament::getPanel('admin');
+    Filament::setCurrentPanel($adminPanel);
+    $adminPanel->boot();
     Filament::setTenant($team);
 
     // ListLicenses + toggleSuspend (Active -> Suspended -> Active) + reissue success
@@ -231,7 +252,8 @@ it('covers Admin LicenseResource pages, table actions, reissue error handling, a
     app()->instance(LicenseService::class, $mock);
 
     Livewire::test(AdminListLicenses::class)
-        ->callTableAction('reissue', $license);
+        ->callTableAction('reissue', $license)
+        ->assertNotified('Reissue failed');
 
     // EditLicense page
     Livewire::test(EditLicense::class, ['record' => $license->getRouteKey()])

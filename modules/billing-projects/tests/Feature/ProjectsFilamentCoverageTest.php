@@ -13,7 +13,7 @@ use App\Filament\Admin\Resources\Projects\RelationManagers\NotesRelationManager;
 use App\Filament\Admin\Resources\Projects\RelationManagers\TasksRelationManager;
 use App\Filament\Admin\Widgets\ProjectStatsWidget;
 use App\Filament\Client\Resources\ProjectResource as ClientProjectResource;
-use App\Filament\Client\Resources\ProjectResource\Pages\ViewProject as ClientViewProject;
+use App\Filament\Client\Resources\ProjectResource\Pages\ListProjects as ClientListProjects;
 use App\Filament\Client\Resources\ProjectResource\RelationManagers\MessagesRelationManager as ClientMessagesRelationManager;
 use App\Models\Customer;
 use App\Models\Invoice;
@@ -32,10 +32,15 @@ use Illuminate\Support\Facades\Storage;
 use Livewire\Livewire;
 use Spatie\Permission\Models\Role;
 
+afterEach(function (): void {
+    setPermissionsTeamId(null);
+});
+
 function actAsAdminProjectUser(): User
 {
-    $role = Role::firstOrCreate(['name' => 'super_admin', 'guard_name' => 'web']);
     $user = User::factory()->withPersonalTeam()->create();
+    setPermissionsTeamId($user->currentTeam->id);
+    $role = Role::firstOrCreate(['name' => 'super_admin', 'guard_name' => 'web']);
     $user->assignRole($role);
 
     test()->actingAs($user);
@@ -319,7 +324,7 @@ it('denies creation on Client ProjectResource and allows posting messages in Cli
 
     Livewire::test(ClientMessagesRelationManager::class, [
         'ownerRecord' => $project,
-        'pageClass' => ClientViewProject::class,
+        'pageClass' => ClientListProjects::class,
     ])
         ->assertSuccessful()
         ->assertCanSeeTableRecords([$existing])

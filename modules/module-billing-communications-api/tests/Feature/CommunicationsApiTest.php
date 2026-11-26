@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Models\User;
 use Laravel\Sanctum\Sanctum;
+use Liberu\Billing\Communications\Api\Http\Controllers\CommunicationsController;
 
 it('manages communication services, numbers, providers, and usage imports through the API', function (): void {
     $user = User::factory()->withPersonalTeam()->create();
@@ -72,7 +73,7 @@ it('manages communication services, numbers, providers, and usage imports throug
         ->assertOk()
         ->assertJsonPath('data', []);
 
-    $controller = app(\Liberu\Billing\Communications\Api\Http\Controllers\CommunicationsController::class);
+    $controller = app(CommunicationsController::class);
     $method = new ReflectionMethod($controller, 'resource');
     $unknown = $method->invoke($controller, $user);
     expect($unknown['attributes'])->toBe([]);

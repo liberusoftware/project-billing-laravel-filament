@@ -51,7 +51,7 @@ it('creates portal items and requests, validates errors, and lists records', fun
 
     expect($item->subject)->toBe('Need support')
         ->and($item->customer_id)->toBe($customerId);
-    Event::assertDispatched(PortalItemCreated::class);
+    Event::assertDispatched(PortalItemCreated::class, fn (PortalItemCreated $event): bool => $event->item->is($item));
 
     $itemNoCustomer = app(CreatePortalItem::class)->handle($team->id, [
         'type' => 'profile',
@@ -61,6 +61,7 @@ it('creates portal items and requests, validates errors, and lists records', fun
 
     $itemsPage = app(ListPortalItems::class)->handle($team->id, 'tickets', 10);
     expect($itemsPage->total())->toBe(1);
+    expect(app(ListPortalItems::class)->handle($team->id, null, 10)->total())->toBe(2);
 
     $request = app(CreatePortalRequest::class)->handle($team->id, [
         'name' => 'Upgrade plan',
@@ -68,9 +69,14 @@ it('creates portal items and requests, validates errors, and lists records', fun
         'metadata' => ['plan' => 'pro'],
     ]);
     expect($request->name)->toBe('Upgrade plan');
-    Event::assertDispatched(PortalRequestCreated::class);
+    Event::assertDispatched(PortalRequestCreated::class, fn (PortalRequestCreated $event): bool => $event->request->is($request));
 
     expect(fn () => app(TransitionPortalRequest::class)->handle($request, 'unknown'))
+        ->toThrow(InvalidArgumentException::class);
+
+    $closed = app(TransitionPortalRequest::class)->handle($request, 'closed');
+    expect($closed->status)->toBe('closed');
+    expect(fn () => app(TransitionPortalRequest::class)->handle($closed, 'active'))
         ->toThrow(InvalidArgumentException::class);
 
     $requestsPage = app(ListCustomerPortalRecords::class)->handle($team->id, 10);
@@ -96,17 +102,29 @@ it('evaluates portal item and request policies', function (): void {
         'status' => 'active',
     ]);
 
+    $otherUser = User::factory()->withPersonalTeam()->create();
+    $otherUser->switchTeam($otherUser->ownedTeams()->sole());
+    Sanctum::actingAs($otherUser, ['billing.customer-portal.read', 'billing.customer-portal.write']);
+
     $itemPolicy = new PortalItemPolicy();
     expect($itemPolicy->viewAny($user))->toBeTrue()
         ->and($itemPolicy->create($user))->toBeTrue()
         ->and($itemPolicy->view($user, $item))->toBeTrue()
-        ->and($itemPolicy->update($user, $item))->toBeTrue();
+        ->and($itemPolicy->update($user, $item))->toBeTrue()
+        ->and($itemPolicy->viewAny(null))->toBeFalse()
+        ->and($itemPolicy->create(null))->toBeFalse()
+        ->and($itemPolicy->view($otherUser, $item))->toBeFalse()
+        ->and($itemPolicy->update($otherUser, $item))->toBeFalse();
 
     $requestPolicy = new PortalRequestPolicy();
     expect($requestPolicy->viewAny($user))->toBeTrue()
         ->and($requestPolicy->create($user))->toBeTrue()
         ->and($requestPolicy->view($user, $request))->toBeTrue()
-        ->and($requestPolicy->update($user, $request))->toBeTrue();
+        ->and($requestPolicy->update($user, $request))->toBeTrue()
+        ->and($requestPolicy->viewAny(null))->toBeFalse()
+        ->and($requestPolicy->create(null))->toBeFalse()
+        ->and($requestPolicy->view($otherUser, $request))->toBeFalse()
+        ->and($requestPolicy->update($otherUser, $request))->toBeFalse();
 });
 
 it('handles edge cases in GetCustomerBillingSummary and CustomerReference', function (): void {
@@ -129,31 +147,33 @@ it('handles edge cases in GetCustomerBillingSummary and CustomerReference', func
         'updated_at' => now(),
     ]);
 
-    // Missing billing_invoices table
-    Schema::shouldReceive('hasTable')->with('customers')->andReturn(true);
-    Schema::shouldReceive('hasTable')->with('billing_invoices')->andReturn(false);
-
-    $empty = $summary->handle($team->id, $customerId);
-    expect($empty['history'])->toBe([])
-        ->and($empty['status']['total_invoiced'])->toBe(0);
-
-    Schema::clearResolvedInstances();
-
-    // Missing billing_payment_allocations and billing_payments tables
-    Schema::shouldReceive('hasTable')->with('customers')->andReturn(true);
-    Schema::shouldReceive('hasTable')->with('billing_invoices')->andReturn(true);
-    Schema::shouldReceive('hasTable')->with('billing_payment_allocations')->andReturn(false);
-    Schema::shouldReceive('hasTable')->with('billing_payments')->andReturn(false);
-
-    $noPayments = $summary->handle($team->id, $customerId);
-    expect($noPayments['trends'])->toBe([]);
-
-    Schema::clearResolvedInstances();
-
-    // Missing customers table in CustomerReference
-    Schema::shouldReceive('hasTable')->with('customers')->andReturn(false);
-    expect(fn () => CustomerReference::assertBelongsToTeam(app('db'), 1, $team->id))
+    expect(fn () => CustomerReference::assertBelongsToTeam(app('db'), 999999, $team->id))
         ->toThrow(InvalidArgumentException::class);
 
-    Schema::clearResolvedInstances();
+    $missingTables = ['billing_invoices'];
+
+    Schema::shouldReceive('hasTable')->andReturnUsing(
+        function (string $table) use (&$missingTables): bool {
+            return ! in_array($table, $missingTables, true);
+        }
+    );
+
+    try {
+        // Missing billing_invoices table
+        $empty = $summary->handle($team->id, $customerId);
+        expect($empty['history'])->toBe([])
+            ->and($empty['status']['total_invoiced'])->toBe(0);
+
+        // Missing billing_payment_allocations and billing_payments tables
+        $missingTables = ['billing_payment_allocations', 'billing_payments'];
+        $noPayments = $summary->handle($team->id, $customerId);
+        expect($noPayments['trends'])->toBe([]);
+
+        // Missing customers table in CustomerReference
+        $missingTables = ['customers'];
+        expect(fn () => CustomerReference::assertBelongsToTeam(app('db'), 1, $team->id))
+            ->toThrow(InvalidArgumentException::class);
+    } finally {
+        Schema::clearResolvedInstances();
+    }
 });

@@ -16,9 +16,16 @@ final class DomainsLivewireServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'module-billing-domains-livewire');
-        Livewire::component('module-billing-domains::domain-list', DomainList::class);
-        Livewire::component('module-billing-domains::search', DomainSearch::class);
-        Livewire::component('module-billing-domains::support', DomainSupport::class);
-        Livewire::component('module-billing-domains::tld-list', DomainTldList::class);
+        $components = [
+            'module-billing-domains::domain-list' => DomainList::class,
+            'module-billing-domains::search' => DomainSearch::class,
+            'module-billing-domains::support' => DomainSupport::class,
+            'module-billing-domains::tld-list' => DomainTldList::class,
+        ];
+        foreach ($components as $name => $component) {
+            Livewire::component($name, $component);
+        }
+
+        Livewire::resolveMissingComponent(static fn (string $name): ?string => $components[$name] ?? null);
     }
 }

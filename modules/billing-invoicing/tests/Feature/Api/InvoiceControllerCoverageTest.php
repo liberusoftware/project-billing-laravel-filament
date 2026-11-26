@@ -85,7 +85,7 @@ it('covers API invoice download for own team and cross-team 404', function (): v
         'invoice_number' => 'INV-DL-001',
     ]);
 
-    $pdfMock = Mockery::mock(\Barryvdh\DomPDF\PDF::class);
+    $pdfMock = Mockery::mock(Barryvdh\DomPDF\PDF::class);
     $pdfMock->shouldReceive('download')
         ->once()
         ->with('invoice-INV-DL-001.pdf')

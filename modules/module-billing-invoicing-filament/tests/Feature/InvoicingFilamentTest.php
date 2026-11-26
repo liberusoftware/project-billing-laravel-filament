@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Models\Team;
 use App\Models\User;
 use Filament\Facades\Filament;
 use Filament\Tables\Table;
@@ -33,85 +34,98 @@ it('manages invoices, schedules, support records, lines, and payment plans throu
     $this->actingAs($actor, 'web');
     Sanctum::actingAs($actor, ['billing.invoicing.read', 'billing.invoicing.write']);
 
+    foreach ([
+        Invoice::class,
+        InvoiceSchedule::class,
+        InvoiceSupport::class,
+        PaymentPlan::class,
+    ] as $modelClass) {
+        $modelClass::resolveRelationUsing('team', fn ($model) => $model->belongsTo(Team::class, 'team_id', null, 'team'));
+    }
+
     $panel = Filament::getPanel('admin');
     Filament::setCurrentPanel($panel);
     $panel->boot();
     Filament::setTenant($team);
     InvoicingFilamentPlugin::make()->boot($panel);
 
-    // Create invoice via Filament page
-    Livewire::test(CreateInvoicePage::class)
-        ->fillForm([
-            'currency' => 'USD',
-        ])
-        ->call('create')
-        ->assertHasNoFormErrors();
+    try {
+        // Create invoice via Filament page
+        Livewire::test(CreateInvoicePage::class)
+            ->fillForm([
+                'currency' => 'USD',
+            ])
+            ->call('create')
+            ->assertHasNoFormErrors();
 
-    $invoice = Invoice::query()->where('team_id', $team->id)->latest('id')->firstOrFail();
-    app(AddInvoiceLine::class)->execute($invoice, 'Filament Service', 1, 5000);
+        $invoice = Invoice::query()->where('team_id', $team->id)->latest('id')->firstOrFail();
+        app(AddInvoiceLine::class)->execute($invoice, 'Filament Service', 1, 5000);
 
-    // InvoiceResource table actions: finalize, document, deliver, paymentPlan, lateFee
-    Livewire::test(ListInvoices::class)
-        ->assertCanSeeTableRecords([$invoice])
-        ->callTableAction('finalize', $invoice)
-        ->callTableAction('document', $invoice->refresh())
-        ->callTableAction('deliver', $invoice->refresh(), data: ['destination' => 'filament@example.com'])
-        ->callTableAction('paymentPlan', $invoice->refresh(), data: ['total_installments' => 2, 'frequency' => 'monthly']);
+        // InvoiceResource table actions: finalize, document, deliver, paymentPlan, lateFee
+        Livewire::test(ListInvoices::class)
+            ->assertCanSeeTableRecords([$invoice])
+            ->callTableAction('finalize', $invoice)
+            ->callTableAction('document', $invoice->refresh())
+            ->callTableAction('deliver', $invoice->refresh(), data: ['destination' => 'filament@example.com'])
+            ->callTableAction('paymentPlan', $invoice->refresh(), data: ['total_installments' => 2, 'frequency' => 'monthly']);
 
-    $invoice->update(['due_at' => now()->subDays(5)]);
+        $invoice->update(['due_at' => now()->subDays(5)]);
 
-    Livewire::test(ListInvoices::class)
-        ->callTableAction('lateFee', $invoice->refresh(), data: ['amount_minor' => 250]);
+        Livewire::test(ListInvoices::class)
+            ->callTableAction('lateFee', $invoice->refresh(), data: ['amount_minor' => 250]);
 
-    expect($invoice->fresh()->status)->toBe(InvoiceStatus::Finalized)
-        ->and($invoice->fresh()->total_minor)->toBe(5250);
+        expect($invoice->fresh()->status)->toBe(InvoiceStatus::Finalized)
+            ->and($invoice->fresh()->total_minor)->toBe(5250);
 
-    // InvoiceScheduleResource create + list
-    Livewire::test(CreateInvoiceSchedule::class)
-        ->fillForm([
-            'frequency' => 'monthly',
-            'active' => true,
-        ])
-        ->call('create')
-        ->assertHasNoFormErrors();
+        // InvoiceScheduleResource create + list
+        Livewire::test(CreateInvoiceSchedule::class)
+            ->fillForm([
+                'frequency' => 'monthly',
+                'active' => true,
+            ])
+            ->call('create')
+            ->assertHasNoFormErrors();
 
-    $schedule = InvoiceSchedule::query()->where('team_id', $team->id)->latest('id')->firstOrFail();
-    Livewire::test(ListInvoiceSchedules::class)
-        ->assertCanSeeTableRecords([$schedule]);
+        $schedule = InvoiceSchedule::query()->where('team_id', $team->id)->latest('id')->firstOrFail();
+        Livewire::test(ListInvoiceSchedules::class)
+            ->assertCanSeeTableRecords([$schedule]);
 
-    // InvoiceSupportResource create + list
-    Livewire::test(CreateInvoiceSupport::class)
-        ->fillForm([
-            'invoice_id' => $invoice->id,
-            'type' => 'tax',
-            'amount_minor' => 100,
-        ])
-        ->call('create')
-        ->assertHasNoFormErrors();
+        // InvoiceSupportResource create + list
+        Livewire::test(CreateInvoiceSupport::class)
+            ->fillForm([
+                'invoice_id' => $invoice->id,
+                'type' => 'tax',
+                'amount_minor' => 100,
+            ])
+            ->call('create')
+            ->assertHasNoFormErrors();
 
-    $support = InvoiceSupport::query()->where('invoice_id', $invoice->id)->where('type', 'tax')->latest('id')->firstOrFail();
-    Livewire::test(ListInvoiceSupports::class)
-        ->assertCanSeeTableRecords([$support]);
+        $support = InvoiceSupport::query()->where('invoice_id', $invoice->id)->where('type', 'tax')->latest('id')->firstOrFail();
+        Livewire::test(ListInvoiceSupports::class)
+            ->assertCanSeeTableRecords([$support]);
 
-    // InvoiceLineResource table definition
-    $listComponent = new ListInvoices();
-    $lineTable = InvoiceLineResource::table(Table::make($listComponent));
-    expect($lineTable->getColumns())->toHaveKey('description');
+        // InvoiceLineResource table definition
+        $listComponent = new ListInvoices();
+        $lineTable = InvoiceLineResource::table(Table::make($listComponent));
+        expect($lineTable->getColumns())->toHaveKey('description');
 
-    // PaymentPlanResource table definition and run action
-    $plan = PaymentPlan::query()->where('invoice_id', $invoice->id)->latest('id')->firstOrFail();
-    $plan->update(['next_due_at' => now()->subDay()]);
+        // PaymentPlanResource table definition and run action
+        $plan = PaymentPlan::query()->where('invoice_id', $invoice->id)->latest('id')->firstOrFail();
+        $plan->update(['next_due_at' => now()->subDay()]);
 
-    $planTable = PaymentPlanResource::table(Table::make($listComponent));
-    expect($planTable->getColumns())->toHaveKey('frequency');
+        $planTable = PaymentPlanResource::table(Table::make($listComponent));
+        expect($planTable->getColumns())->toHaveKey('frequency');
 
-    $runAction = collect($planTable->getRecordActions())->first();
-    expect($runAction)->not->toBeNull();
-    $runAction->record($plan);
-    expect($runAction->isVisible())->toBeTrue();
-    $runAction->call();
+        $runAction = collect($planTable->getRecordActions())->first();
+        expect($runAction)->not->toBeNull();
+        $runAction->record($plan);
+        expect($runAction->isVisible())->toBeTrue();
+        $runAction->call();
 
-    expect($plan->fresh()->generated_installments)->toBe(1);
+        expect($plan->fresh()->generated_installments)->toBe(1);
+    } finally {
+        Filament::setTenant(null);
+    }
 });
 
 it('scopes Filament invoicing queries when no current team is active', function (): void {

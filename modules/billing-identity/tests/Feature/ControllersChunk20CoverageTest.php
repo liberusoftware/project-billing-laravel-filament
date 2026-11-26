@@ -134,6 +134,14 @@ it('accepts a team invitation via TeamInvitationController', function () {
         $createdInvitationsTable = true;
     }
 
+    $addedAcceptedColumn = false;
+    if (! Schema::hasColumn('team_invitations', 'accepted')) {
+        Schema::table('team_invitations', function (Blueprint $table): void {
+            $table->boolean('accepted')->default(false);
+        });
+        $addedAcceptedColumn = true;
+    }
+
     try {
         DB::table('invitations')->insert(['token' => $invitation->token]);
 
@@ -143,6 +151,11 @@ it('accepts a team invitation via TeamInvitationController', function () {
 
         $response = app(TeamInvitationController::class)->acceptInvitation($request);
     } finally {
+        if ($addedAcceptedColumn) {
+            Schema::table('team_invitations', function (Blueprint $table): void {
+                $table->dropColumn('accepted');
+            });
+        }
         if ($createdInvitationsTable) {
             Schema::dropIfExists('invitations');
         }

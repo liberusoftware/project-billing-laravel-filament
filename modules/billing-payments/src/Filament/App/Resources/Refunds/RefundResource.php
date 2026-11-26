@@ -91,12 +91,12 @@ class RefundResource extends Resource
                         ->label('Refund Amount')
                         ->hint(fn ($state, $record): string => $record ? "Maximum refundable amount: {$record->getRemainingRefundableAmount()} {$record->currency}" : '')
                         ->rules(
-                            [
+                            fn ($get): array => [
                                 'required',
                                 'numeric',
                                 'min:0.01',
-                                function (string $attribute, $value, Closure $fail): void {
-                                    $payment = Payment::find(request()->input('data.payment_id'));
+                                function (string $attribute, $value, Closure $fail) use ($get): void {
+                                    $payment = Payment::find($get('payment_id') ?? request()->input('data.payment_id'));
                                     if ($payment && $value > $payment->getRemainingRefundableAmount()) {
                                         $fail("The refund amount cannot exceed the remaining refundable amount of {$payment->getRemainingRefundableAmount()} {$payment->currency}");
                                     }

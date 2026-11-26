@@ -12,6 +12,8 @@ use App\Models\PaymentHistory;
 use App\Models\PaymentMethod;
 use App\Models\User;
 use App\Policies\PaymentPolicy;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 use Liberu\Foundation\RolesPermissions\Models\Permission;
 
 afterEach(function (): void {
@@ -87,6 +89,12 @@ it('covers payment badges, relationships, formatting, and refund processing', fu
         'commission_rate' => 10.0,
         'status' => 'active',
     ]);
+
+    if (! Schema::hasColumn('payments', 'affiliate_id')) {
+        Schema::table('payments', function (Blueprint $table): void {
+            $table->unsignedBigInteger('affiliate_id')->nullable();
+        });
+    }
 
     $payment = Payment::factory()->create([
         'amount' => 100.00,

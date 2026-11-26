@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Models\Team;
 use App\Models\User;
 use Filament\Facades\Filament;
 use Laravel\Sanctum\Sanctum;
@@ -23,43 +24,50 @@ it('manages portal items and requests through Filament resources', function (): 
     $this->actingAs($actor, 'web');
     Sanctum::actingAs($actor, ['billing.customer-portal.read', 'billing.customer-portal.write']);
 
+    PortalItem::resolveRelationUsing('team', fn ($model) => $model->belongsTo(Team::class, 'team_id'));
+    PortalRequest::resolveRelationUsing('team', fn ($model) => $model->belongsTo(Team::class, 'team_id'));
+
     $panel = Filament::getPanel('admin');
     Filament::setCurrentPanel($panel);
     $panel->boot();
     Filament::setTenant($team);
     CustomerPortalFilamentPlugin::make()->boot($panel);
 
-    Livewire::test(CreatePortalItem::class)
-        ->fillForm([
-            'type' => 'tickets',
-            'subject' => 'Filament Portal Item',
-        ])
-        ->call('create')
-        ->assertHasNoFormErrors();
+    try {
+        Livewire::test(CreatePortalItem::class)
+            ->fillForm([
+                'type' => 'tickets',
+                'subject' => 'Filament Portal Item',
+            ])
+            ->call('create')
+            ->assertHasNoFormErrors();
 
-    $item = PortalItem::query()->where('subject', 'Filament Portal Item')->sole();
+        $item = PortalItem::query()->where('subject', 'Filament Portal Item')->sole();
 
-    Livewire::test(ListPortalItems::class)
-        ->assertCanSeeTableRecords([$item])
-        ->callTableAction('status', $item, data: ['status' => 'completed']);
+        Livewire::test(ListPortalItems::class)
+            ->assertCanSeeTableRecords([$item])
+            ->callTableAction('status', $item, data: ['status' => 'completed']);
 
-    expect($item->fresh()->status)->toBe('completed');
+        expect($item->fresh()->status)->toBe('completed');
 
-    Livewire::test(CreatePortalRequest::class)
-        ->fillForm([
-            'name' => 'Filament Portal Request',
-            'status' => 'active',
-        ])
-        ->call('create')
-        ->assertHasNoFormErrors();
+        Livewire::test(CreatePortalRequest::class)
+            ->fillForm([
+                'name' => 'Filament Portal Request',
+                'status' => 'active',
+            ])
+            ->call('create')
+            ->assertHasNoFormErrors();
 
-    $request = PortalRequest::query()->where('name', 'Filament Portal Request')->sole();
+        $request = PortalRequest::query()->where('name', 'Filament Portal Request')->sole();
 
-    Livewire::test(ListPortalRequests::class)
-        ->assertCanSeeTableRecords([$request])
-        ->callTableAction('status', $request, data: ['status' => 'closed']);
+        Livewire::test(ListPortalRequests::class)
+            ->assertCanSeeTableRecords([$request])
+            ->callTableAction('status', $request, data: ['status' => 'closed']);
 
-    expect($request->fresh()->status)->toBe('closed');
+        expect($request->fresh()->status)->toBe('closed');
+    } finally {
+        Filament::setTenant(null);
+    }
 });
 
 it('scopes Filament customer portal queries when no current team is active', function (): void {

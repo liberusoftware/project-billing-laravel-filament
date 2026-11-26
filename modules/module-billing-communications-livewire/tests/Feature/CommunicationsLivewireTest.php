@@ -3,6 +3,8 @@
 declare(strict_types=1);
 
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 use Laravel\Sanctum\Sanctum;
 use Liberu\Billing\Communications\Contracts\VoiceProvider;
 use Liberu\Billing\Communications\Livewire\Components\CommunicationInventory;
@@ -70,8 +72,8 @@ it('manages communications services, inventory, providers, and voice accounts vi
         ->assertHasNoErrors();
 
     $customerId = 1;
-    if (Illuminate\Support\Facades\Schema::hasTable('customers')) {
-        $customerId = (int) Illuminate\Support\Facades\DB::table('customers')->insertGetId([
+    if (Schema::hasTable('customers')) {
+        $customerId = (int) DB::table('customers')->insertGetId([
             'name' => 'Livewire Comm Customer',
             'email' => 'comm-livewire-customer@example.test',
             'created_at' => now(),

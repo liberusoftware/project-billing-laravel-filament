@@ -19,6 +19,7 @@ use App\Policies\InvoicePolicy;
 use App\Policies\InvoiceTemplatePolicy;
 use App\Services\InvoiceCheckoutService;
 use App\Services\PaymentGatewayService;
+use Illuminate\Mail\Markdown;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Storage;
 use Spatie\Permission\Models\Permission;
@@ -212,6 +213,7 @@ it('covers InvoiceGenerated mailable with fallback view and custom EmailTemplate
     ]);
 
     // Without EmailTemplate (fallback)
+    view()->replaceNamespace('mail', app(Markdown::class)->htmlComponentPaths());
     $fallbackMail = new InvoiceGenerated($invoice);
     $fallbackEnvelope = $fallbackMail->envelope();
     $fallbackContent = $fallbackMail->content();

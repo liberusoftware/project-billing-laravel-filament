@@ -6,11 +6,12 @@ use App\Models\Invoice;
 use App\Models\Payment;
 use App\Models\PaymentGateway;
 use App\Services\PaymentGatewayService;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 
-uses(DatabaseMigrations::class);
+beforeEach(function (): void {
+    $this->artisan('migrate:fresh');
+});
 
 it('covers all Paddle checkout guard rails, claim race, success, and review fallback', function (): void {
     $paddleGateway = PaymentGateway::query()->create([

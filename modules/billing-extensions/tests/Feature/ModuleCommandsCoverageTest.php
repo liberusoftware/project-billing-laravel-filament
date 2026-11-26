@@ -52,14 +52,14 @@ it('validates names and scaffolds standard and modular modules with make:module'
             ->and(File::exists("{$modPath}/src/{$modName}Module.php"))->toBeTrue();
     } finally {
         File::deleteDirectory($modPath);
-        if (! $appModulesExisted) {
+        if (! $appModulesExisted && File::isDirectory(base_path('app-modules')) && File::directories(base_path('app-modules')) === []) {
             File::deleteDirectory(base_path('app-modules'));
         }
     }
 });
 
 it('handles all ModuleCommand actions, formats, confirmations, and error paths', function (): void {
-    $enabledMod = new class extends BaseModule
+    $enabledMod = new class() extends BaseModule
     {
         public function getName(): string
         {
@@ -87,7 +87,7 @@ it('handles all ModuleCommand actions, formats, confirmations, and error paths',
         }
     };
 
-    $disabledMod = new class extends BaseModule
+    $disabledMod = new class() extends BaseModule
     {
         public function getName(): string
         {
@@ -197,11 +197,21 @@ it('handles all ModuleCommand actions, formats, confirmations, and error paths',
 });
 
 it('runs ModuleAutoloadCommand across success, failure, and composer.phar branches', function (): void {
-    $pharPath = base_path('composer.phar');
-    $hadPhar = file_exists($pharPath);
-    $originalPhar = $hadPhar ? file_get_contents($pharPath) : null;
+    $originalBasePath = $this->app->basePath();
+    $originalGetenvPath = getenv('PATH');
+    $hadEnvPath = array_key_exists('PATH', $_ENV);
+    $originalEnvPath = $_ENV['PATH'] ?? null;
+    $hadServerPath = array_key_exists('PATH', $_SERVER);
+    $originalServerPath = $_SERVER['PATH'] ?? null;
+
+    $tempDir = sys_get_temp_dir().'/cov-autoload-'.uniqid('', true);
+    $tempBin = "{$tempDir}/bin";
+    $pharPath = "{$tempDir}/composer.phar";
+    File::makeDirectory($tempBin, 0755, true);
 
     try {
+        $this->app->setBasePath($tempDir);
+
         // 1. composer.phar exists and exits 0 (covers phar branch + output callback + SUCCESS)
         file_put_contents($pharPath, "<?php echo \"Autoload ok\\n\"; exit(0);\n");
         $this->artisan('module:dump-autoload')->assertExitCode(0);
@@ -212,12 +222,37 @@ it('runs ModuleAutoloadCommand across success, failure, and composer.phar branch
 
         // 3. composer.phar absent (covers ['composer'] fallback branch)
         @unlink($pharPath);
-        $this->artisan('module:dump-autoload');
+        $fakeComposer = "{$tempBin}/composer";
+        file_put_contents($fakeComposer, "#!/bin/sh\necho \"Fake composer ok\"\nexit 0\n");
+        chmod($fakeComposer, 0755);
+
+        $newPath = $tempBin.PATH_SEPARATOR.($originalGetenvPath !== false ? $originalGetenvPath : '');
+        putenv("PATH={$newPath}");
+        $_ENV['PATH'] = $newPath;
+        $_SERVER['PATH'] = $newPath;
+
+        $this->artisan('module:dump-autoload')->assertExitCode(0);
     } finally {
-        if ($hadPhar && $originalPhar !== null) {
-            file_put_contents($pharPath, $originalPhar);
+        $this->app->setBasePath($originalBasePath);
+
+        if ($originalGetenvPath === false) {
+            putenv('PATH');
         } else {
-            @unlink($pharPath);
+            putenv("PATH={$originalGetenvPath}");
         }
+
+        if ($hadEnvPath) {
+            $_ENV['PATH'] = $originalEnvPath;
+        } else {
+            unset($_ENV['PATH']);
+        }
+
+        if ($hadServerPath) {
+            $_SERVER['PATH'] = $originalServerPath;
+        } else {
+            unset($_SERVER['PATH']);
+        }
+
+        File::deleteDirectory($tempDir);
     }
 });

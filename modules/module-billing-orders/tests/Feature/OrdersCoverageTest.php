@@ -53,7 +53,7 @@ it('covers orders, quotes, and carts actions validation, edge cases, and happy p
         'team_id' => $team->id,
         'currency' => 'USD',
         'items' => [],
-    ]))->toThrow(\InvalidArgumentException::class);
+    ]))->toThrow(InvalidArgumentException::class);
 
     $cart = $createCart->execute([
         'team_id' => $team->id,
@@ -69,7 +69,7 @@ it('covers orders, quotes, and carts actions validation, edge cases, and happy p
         ->and($cart->fresh()->status)->toBe('checked_out');
 
     expect(fn () => $checkoutCart->execute($cart->refresh(), ['subtotal_minor' => 2500]))
-        ->toThrow(\LogicException::class);
+        ->toThrow(LogicException::class);
 
     // CreateQuote validation + happy path
     expect(fn () => $createQuote->execute([
@@ -77,7 +77,7 @@ it('covers orders, quotes, and carts actions validation, edge cases, and happy p
         'currency' => 'USD',
         'total_minor' => -10,
         'items' => [['sku' => 'X']],
-    ]))->toThrow(\InvalidArgumentException::class);
+    ]))->toThrow(InvalidArgumentException::class);
 
     $quote = $createQuote->execute([
         'team_id' => $team->id,
@@ -89,11 +89,11 @@ it('covers orders, quotes, and carts actions validation, edge cases, and happy p
 
     // ConvertQuoteToOrder on non-accepted quote throws
     expect(fn () => $convertQuote->execute($quote))
-        ->toThrow(\LogicException::class);
+        ->toThrow(LogicException::class);
 
     // TransitionQuote invalid status throws
     expect(fn () => $transitionQuote->execute($quote, 'invalid-status'))
-        ->toThrow(\InvalidArgumentException::class);
+        ->toThrow(InvalidArgumentException::class);
 
     $acceptedQuote = $transitionQuote->execute($quote, 'accepted');
     $convertedOrder = $convertQuote->execute($acceptedQuote);
@@ -101,7 +101,7 @@ it('covers orders, quotes, and carts actions validation, edge cases, and happy p
 
     // AddChangeOrder empty reason throws
     expect(fn () => $addChange->execute($convertedOrder, ['reason' => '   ']))
-        ->toThrow(\InvalidArgumentException::class);
+        ->toThrow(InvalidArgumentException::class);
 
     // ReviewFraud happy path
     $reviewed = $reviewFraud->execute($convertedOrder, FraudReviewStatus::Cleared);
@@ -116,7 +116,7 @@ it('covers orders, quotes, and carts actions validation, edge cases, and happy p
     ]);
     $blockedOrder = $reviewFraud->execute($blockedOrder, FraudReviewStatus::Blocked);
     expect(fn () => $transitionOrder->execute($blockedOrder, OrderStatus::Approved))
-        ->toThrow(\LogicException::class);
+        ->toThrow(LogicException::class);
 
     // TransitionOrder: stale in-memory order whose DB status became Completed
     $staleCompleted = $createOrder->execute([
@@ -126,7 +126,7 @@ it('covers orders, quotes, and carts actions validation, edge cases, and happy p
     ]);
     Order::query()->whereKey($staleCompleted->id)->update(['status' => OrderStatus::Completed->value]);
     expect(fn () => $transitionOrder->execute($staleCompleted, OrderStatus::Cancelled))
-        ->toThrow(\LogicException::class);
+        ->toThrow(LogicException::class);
 
     // TransitionOrder: stale in-memory order whose DB fraud_status became Blocked
     $staleBlocked = $createOrder->execute([
@@ -137,7 +137,7 @@ it('covers orders, quotes, and carts actions validation, edge cases, and happy p
     ]);
     Order::query()->whereKey($staleBlocked->id)->update(['fraud_status' => FraudReviewStatus::Blocked->value]);
     expect(fn () => $transitionOrder->execute($staleBlocked, OrderStatus::Approved))
-        ->toThrow(\LogicException::class);
+        ->toThrow(LogicException::class);
 
     // ListOrders query (with teamId and with null)
     expect(app(ListOrders::class)->execute($team->id, 10)->total())->toBeGreaterThanOrEqual(1);
@@ -185,5 +185,5 @@ it('covers order and quote policies and customer reference missing table guard',
     // CustomerReference when customers table does not exist
     Schema::shouldReceive('hasTable')->with('customers')->once()->andReturn(false);
     expect(fn () => CustomerReference::assertBelongsToTeam(app('db'), 1, $team->id))
-        ->toThrow(\InvalidArgumentException::class);
+        ->toThrow(InvalidArgumentException::class);
 });

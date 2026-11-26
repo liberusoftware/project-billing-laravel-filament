@@ -10,6 +10,8 @@ use App\Models\Discount;
 use App\Models\Invoice;
 use App\Models\InvoiceTemplate;
 use App\Models\LateFeeConfiguration;
+use App\Models\Payment;
+use App\Models\PaymentGateway;
 use App\Models\RecurringBillingConfiguration;
 use App\Models\User;
 use App\Services\CurrencyService;
@@ -111,10 +113,19 @@ it('covers Invoice processPayment, updateStatus reversal, tax, currency conversi
         ->toThrow(Exception::class, 'Card declined');
 
     // Successful gateway payment
-    $this->mock(PaymentGatewayService::class, function ($mock): void {
+    $gateway = PaymentGateway::query()->create([
+        'name' => 'Gateway',
+        'api_key' => 'k',
+        'secret_key' => 's',
+    ]);
+    $this->mock(PaymentGatewayService::class, function ($mock) use ($gateway): void {
         $mock->shouldReceive('processPayment')
             ->once()
-            ->andReturn(['success' => true, 'transaction_id' => 'txn_inv_1']);
+            ->andReturnUsing(function (Payment $payment) use ($gateway): array {
+                $payment->payment_gateway_id = $gateway->id;
+
+                return ['success' => true, 'transaction_id' => 'txn_inv_1'];
+            });
     });
 
     expect($invoice->processPayment('card', 100.00))->toBeTrue()
@@ -149,7 +160,7 @@ it('covers Invoice processPayment, updateStatus reversal, tax, currency conversi
     Mail::assertSent(InvoiceGenerated::class);
 
     // generatePdf
-    $pdfMock = Mockery::mock(\Barryvdh\DomPDF\PDF::class);
+    $pdfMock = Mockery::mock(Barryvdh\DomPDF\PDF::class);
     Pdf::shouldReceive('loadView')
         ->once()
         ->with('invoices.pdf', ['invoice' => $invoice])
@@ -233,9 +244,19 @@ it('covers Invoice calculateLateFee and remainingLateFee across all branches', f
     $overdue->forceFill(['last_late_fee_date' => now()->subDays(31)])->save();
     expect($overdue->calculateLateFee())->toBe(15.0);
 
-    // unknown frequency (default) -> 0.0
-    $config->update(['frequency' => 'biweekly']);
-    expect($overdue->calculateLateFee())->toBe(0.0);
+    // unknown frequency (default) -> 0.0 (avoid DB enum CHECK constraint by overriding on retrieve)
+    $forceUnknownFrequency = true;
+    LateFeeConfiguration::retrieved(function (LateFeeConfiguration $retrieved) use (&$forceUnknownFrequency, $config): void {
+        if ($forceUnknownFrequency && $retrieved->id === $config->id) {
+            $retrieved->frequency = 'biweekly';
+        }
+    });
+
+    try {
+        expect($overdue->calculateLateFee())->toBe(0.0);
+    } finally {
+        $forceUnknownFrequency = false;
+    }
 
     Carbon::setTestNow();
 });

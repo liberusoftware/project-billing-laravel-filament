@@ -74,8 +74,13 @@ it('resolves redirect path in Authenticate middleware for web and json requests'
         $middleware->handle($jsonRequest, fn () => response('ok'));
         $this->fail('Expected AuthenticationException for JSON request.');
     } catch (AuthenticationException $exception) {
-        expect($exception->redirectTo($jsonRequest))->toBeNull();
+        $redirectToProperty = new ReflectionProperty($exception, 'redirectTo');
+        expect($redirectToProperty->getValue($exception))->toBeNull();
     }
+
+    $redirectToMethod = new ReflectionMethod($middleware, 'redirectTo');
+    expect($redirectToMethod->invoke($middleware, $webRequest))->toBe(route('login'))
+        ->and($redirectToMethod->invoke($middleware, $jsonRequest))->toBeNull();
 });
 
 it('enforces roles in CheckRole middleware', function () {
@@ -148,7 +153,7 @@ it('handles all branches of RoleBasedRedirect middleware', function () {
             ->and($adminRedirect->getTargetUrl())->toEndWith('/admin');
 
         // 5. User with mapped role ('admin') already on matching path passes through
-        $matchingAdminRequest = new class extends Request
+        $matchingAdminRequest = new class() extends Request
         {
             public function decodedPath(): string
             {
@@ -172,7 +177,7 @@ it('handles all branches of RoleBasedRedirect middleware', function () {
             ->and($customRedirect->getTargetUrl())->toEndWith('/custom-portal');
 
         // 7. User with custom role already on matching path passes through
-        $matchingCustomRequest = new class extends Request
+        $matchingCustomRequest = new class() extends Request
         {
             public function decodedPath(): string
             {

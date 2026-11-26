@@ -19,6 +19,7 @@ use App\Models\Subscription;
 use App\Models\User;
 use App\Settings\GeneralSettings;
 use Filament\Facades\Filament;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\View;
 use Liberu\Foundation\RolesPermissions\Models\Role;
@@ -107,6 +108,27 @@ it('renders SocialLinksWidget with configured links and fallback links', functio
     $finder->flush();
 
     try {
+        foreach ([
+            'site_name' => 'Liberu Billing',
+            'site_email' => 'info@example.com',
+            'site_phone' => '',
+            'site_address' => '',
+            'site_country' => '',
+            'site_currency' => '$',
+            'site_default_language' => 'en',
+            'facebook_url' => null,
+            'twitter_url' => null,
+            'github_url' => null,
+            'youtube_url' => null,
+            'footer_copyright' => '© Liberu Billing',
+        ] as $name => $value) {
+            DB::table('settings')->updateOrInsert(
+                ['group' => 'general', 'name' => $name],
+                ['locked' => false, 'payload' => json_encode($value)]
+            );
+        }
+        app()->forgetInstance(GeneralSettings::class);
+
         $settings = app(GeneralSettings::class);
         $settings->github_url = 'https://github.com/liberu';
         $settings->facebook_url = 'https://facebook.com/liberu';

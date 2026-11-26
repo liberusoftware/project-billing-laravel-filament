@@ -7,6 +7,7 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Exception\TransferException;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Facades\Event;
@@ -174,13 +175,13 @@ it('exercises all AbstractControlPanelDriver helpers and HTTP error paths', func
         new Response(200, [], json_encode(['ok' => true])),
         new Response(500, [], json_encode(['error' => 'boom'])),
         new Response(200, [], 'not-json'),
-        new TransferException('network down', new \GuzzleHttp\Psr7\Request('GET', 'https://example.test')),
+        new TransferException('network down', new Request('GET', 'https://example.test')),
         new Response(200, [], 'status=ok&code=1'),
         new Response(502, [], 'bad gateway'),
-        new TransferException('form network down', new \GuzzleHttp\Psr7\Request('POST', 'https://example.test')),
+        new TransferException('form network down', new Request('POST', 'https://example.test')),
         new Response(200, [], '<ok/>'),
         new Response(503, [], '<err/>'),
-        new TransferException('xml network down', new \GuzzleHttp\Psr7\Request('POST', 'https://example.test')),
+        new TransferException('xml network down', new Request('POST', 'https://example.test')),
     ]);
     $client = new Client(['handler' => HandlerStack::create($mock)]);
 

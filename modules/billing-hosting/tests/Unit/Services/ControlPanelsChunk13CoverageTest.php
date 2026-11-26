@@ -169,7 +169,7 @@ it('logs and returns false when Softaculous encounters a transport or JSON error
     ],
     'invalid json' => [
         new Response(200, [], 'not-valid-json'),
-        \JsonException::class,
+        JsonException::class,
     ],
 ]);
 
@@ -231,6 +231,6 @@ it('logs and returns false when Virtualmin encounters a transport or JSON error'
     ],
     'invalid json' => [
         new Response(200, [], '<html>error</html>'),
-        \JsonException::class,
+        JsonException::class,
     ],
 ]);

@@ -14,6 +14,7 @@ use App\Models\User;
 use App\Services\Git\GitPlatformClientFactory;
 use App\Services\Git\HttpGitPlatformClient;
 use App\Services\GitSyncService;
+use Illuminate\Http\Client\Factory as HttpFactory;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Queue;
 use Laravel\Sanctum\Sanctum;
@@ -230,6 +231,7 @@ it('covers HttpGitPlatformClient record types, release creation, pagination, and
             'is_private' => true,
         ]);
 
+        Http::swap(new HttpFactory());
         Http::fake(function ($request) use ($provider) {
             if ($request->method() === 'POST') {
                 return Http::response([
@@ -265,6 +267,9 @@ it('covers HttpGitPlatformClient record types, release creation, pagination, and
 
         $release = $client->createRelease($repository, 'v1.0.0', 'First release', 'Notes');
         expect($release['external_id'])->toBe('rel-1');
+
+        expect(fn () => $client->records($repository, 'unsupported'))
+            ->toThrow(InvalidArgumentException::class, 'Unsupported Git record type: unsupported');
     }
 
     // GitHub Link header pagination
@@ -272,6 +277,7 @@ it('covers HttpGitPlatformClient record types, release creation, pagination, and
         'provider' => GitProvider::GitHub,
         'base_url' => 'https://github.example.test/api',
     ]);
+    Http::swap(new HttpFactory());
     Http::fake(function ($request) {
         if (str_contains($request->url(), 'page=2')) {
             return Http::response([[
@@ -298,6 +304,7 @@ it('covers HttpGitPlatformClient record types, release creation, pagination, and
         'provider' => GitProvider::GitLab,
         'base_url' => 'https://gitlab.example.test/api',
     ]);
+    Http::swap(new HttpFactory());
     Http::fake(function ($request) {
         if (str_contains($request->url(), 'page=2')) {
             return Http::response([[
@@ -320,6 +327,7 @@ it('covers HttpGitPlatformClient record types, release creation, pagination, and
     expect($glRepos)->toHaveCount(2);
 
     // Non-array collection throws RuntimeException
+    Http::swap(new HttpFactory());
     Http::fake([
         '*' => Http::response('"scalar-not-array"', 200, ['Content-Type' => 'application/json']),
     ]);
@@ -327,6 +335,7 @@ it('covers HttpGitPlatformClient record types, release creation, pagination, and
         ->toThrow(RuntimeException::class, 'Git provider returned an invalid collection.');
 
     // HTTP failure throws provider operation failed RuntimeException
+    Http::swap(new HttpFactory());
     Http::fake(['*' => Http::response('Server error', 500)]);
     expect(fn () => (new HttpGitPlatformClient($githubConn))->repositories())
         ->toThrow(RuntimeException::class, 'github operation failed.');

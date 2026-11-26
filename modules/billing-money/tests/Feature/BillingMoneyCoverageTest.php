@@ -22,19 +22,26 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
+use Liberu\Foundation\RolesPermissions\Models\Role;
 use Livewire\Livewire;
 use ReflectionMethod;
 use ReflectionProperty;
 use RuntimeException;
-use Spatie\Permission\Models\Role;
 use Tests\TestCase;
 
 class BillingMoneyCoverageTest extends TestCase
 {
     use RefreshDatabase;
 
+    protected function tearDown(): void
+    {
+        setPermissionsTeamId(null);
+        parent::tearDown();
+    }
+
     private function bootAdminPanel(User $user): void
     {
+        setPermissionsTeamId($user->currentTeam->id);
         Role::findOrCreate('super_admin', 'web');
         $user->assignRole('super_admin');
         $this->actingAs($user);
@@ -127,6 +134,24 @@ class BillingMoneyCoverageTest extends TestCase
         ]);
         $this->assertFalse($expired->isValid());
 
+        $noExpiry = TaxExemption::create([
+            'customer_id' => $customer->id,
+            'exemption_number' => 'EX-125',
+            'reason' => 'Permanent',
+            'expiry_date' => null,
+            'is_active' => true,
+        ]);
+        $this->assertTrue($noExpiry->isValid());
+
+        $inactiveExemption = TaxExemption::create([
+            'customer_id' => $customer->id,
+            'exemption_number' => 'EX-126',
+            'reason' => 'Revoked',
+            'expiry_date' => now()->addMonth(),
+            'is_active' => false,
+        ]);
+        $this->assertFalse($inactiveExemption->isValid());
+
         $rate = TaxRate::create([
             'team_id' => $team->id,
             'name' => 'Standard VAT',
@@ -144,11 +169,34 @@ class BillingMoneyCoverageTest extends TestCase
         $this->assertCount(1, TaxRate::active()->where('id', $rate->id)->get());
         $this->assertEquals(20.00, (float) $rate->getEffectiveRate(50.00));
         $this->assertEquals(25.00, (float) $rate->getEffectiveRate(150.00));
+
+        $rateWithoutThresholdRate = TaxRate::create([
+            'team_id' => $team->id,
+            'name' => 'Flat Threshold VAT',
+            'country' => 'GB',
+            'rate' => 15.00,
+            'is_active' => true,
+            'effective_date' => null,
+            'expiry_date' => null,
+            'threshold_amount' => 100.00,
+            'threshold_rate' => null,
+        ]);
+        $this->assertTrue($rateWithoutThresholdRate->isValid());
+        $this->assertEquals(15.00, (float) $rateWithoutThresholdRate->getEffectiveRate(150.00));
+
+        $inactiveRate = TaxRate::create([
+            'team_id' => $team->id,
+            'name' => 'Inactive VAT',
+            'country' => 'GB',
+            'rate' => 10.00,
+            'is_active' => false,
+        ]);
+        $this->assertFalse($inactiveRate->isValid());
     }
 
     public function test_currency_service_edge_case_guards(): void
     {
-        $service = new CurrencyService;
+        $service = new CurrencyService();
 
         // Zero/negative exchange rate guard
         Currency::create([
@@ -233,9 +281,11 @@ class BillingMoneyCoverageTest extends TestCase
             'quantity' => 1,
             'unit_price' => 200.00,
             'total_price' => 200.00,
+            'currency' => 'USD',
         ]);
 
         // 1. External Tax API success path (including threshold_amount set without threshold_rate)
+        // 2. External Tax API failure (500) falls back to database
         config(['services.tax_api' => [
             'enabled' => true,
             'api_key' => 'secret-key',
@@ -243,8 +293,8 @@ class BillingMoneyCoverageTest extends TestCase
         ]]);
         Cache::flush();
 
-        Http::fake([
-            'https://tax.example.test/rates*' => Http::response([
+        Http::fakeSequence('https://tax.example.test/rates*')
+            ->push([
                 [
                     'rate' => 10.0,
                     'type' => 'hosting',
@@ -253,13 +303,13 @@ class BillingMoneyCoverageTest extends TestCase
                     'threshold_amount' => 100.0,
                     'threshold_rate' => null,
                 ],
-            ], 200),
-        ]);
+            ], 200)
+            ->push(['error' => 'down'], 500);
 
-        $tax = (new TaxService)->calculateTax($invoice->fresh(['customer', 'items.productService']));
+        $tax = (new TaxService())->calculateTax($invoice->fresh(['customer', 'items.productService']));
         $this->assertEquals(20.00, $tax);
 
-        // 2. External Tax API failure falls back to database
+        // Second call hits the 500 response and falls back to database rates
         Cache::flush();
         TaxRate::create([
             'team_id' => $team->id,
@@ -271,11 +321,7 @@ class BillingMoneyCoverageTest extends TestCase
             'is_active' => true,
         ]);
 
-        Http::fake([
-            'https://tax.example.test/rates*' => Http::response(['error' => 'down'], 500),
-        ]);
-
-        $fallbackTax = (new TaxService)->calculateTax($invoice->fresh(['customer', 'items.productService']));
+        $fallbackTax = (new TaxService())->calculateTax($invoice->fresh(['customer', 'items.productService']));
         $this->assertEquals(16.00, $fallbackTax);
     }
 }

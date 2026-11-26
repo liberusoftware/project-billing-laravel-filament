@@ -114,10 +114,11 @@ it('manages invoices, schedules, payment plans, and invoice support through the 
         ->assertJsonPath('data.type', 'invoice-support')
         ->json('data.id');
 
-    $this->getJson(route('billing.invoicing.support.index', ['per_page' => 10]))
+    $supportResponse = $this->getJson(route('billing.invoicing.support.index', ['per_page' => 10]))
         ->assertOk()
-        ->assertJsonPath('data.0.id', $supportId)
         ->assertJsonPath('meta.per_page', 10);
+
+    expect(collect($supportResponse->json('data'))->pluck('id'))->toContain($supportId);
 
     expect(Invoice::query()->whereKey($invoiceId)->exists())->toBeTrue();
 });

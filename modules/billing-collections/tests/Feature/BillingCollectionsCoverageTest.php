@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tests\Feature;
 
 use App\Console\Commands\ProcessInvoiceReminders;
+use App\Console\Commands\SuspendOverdueServices;
 use App\Http\Controllers\InvoiceDisputeController;
 use App\Mail\UpcomingInvoiceReminder;
 use App\Models\Customer;
@@ -24,6 +25,7 @@ use App\Services\ServiceProvisioningService;
 use Exception;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Route;
 use InvalidArgumentException;
@@ -45,7 +47,7 @@ class BillingCollectionsCoverageTest extends TestCase
 
         // Already running lock path
         Cache::put('processing_invoice_reminders', true, 60);
-        $statusLocked = $command->run(new ArrayInput([]), new BufferedOutput);
+        $statusLocked = $command->run(new ArrayInput([]), new BufferedOutput());
         $this->assertSame(1, $statusLocked);
         Cache::forget('processing_invoice_reminders');
 
@@ -57,7 +59,7 @@ class BillingCollectionsCoverageTest extends TestCase
         $ref = new \ReflectionProperty(ProcessInvoiceReminders::class, 'billingService');
         $ref->setValue($command, $billingMock);
 
-        $statusOk = $command->run(new ArrayInput([]), new BufferedOutput);
+        $statusOk = $command->run(new ArrayInput([]), new BufferedOutput());
         $this->assertSame(0, $statusOk);
         $this->assertNull(Cache::get('processing_invoice_reminders'));
 
@@ -66,7 +68,7 @@ class BillingCollectionsCoverageTest extends TestCase
         $failingMock->shouldReceive('sendUpcomingInvoiceReminders')->once()->andThrow(new Exception('Mail down'));
         $ref->setValue($command, $failingMock);
 
-        $statusFail = $command->run(new ArrayInput([]), new BufferedOutput);
+        $statusFail = $command->run(new ArrayInput([]), new BufferedOutput());
         $this->assertSame(1, $statusFail);
         $this->assertNull(Cache::get('processing_invoice_reminders'));
     }
@@ -75,7 +77,7 @@ class BillingCollectionsCoverageTest extends TestCase
     {
         $billingMock = Mockery::mock(BillingService::class);
         $billingMock->shouldReceive('sendUpcomingDueReminders')->once();
-        $billingMock->shouldReceive('sendOverdueReminders')->once();
+        $billingMock->shouldReceive('sendOverdueReminders')->once()->andReturn(1);
         $this->app->instance(BillingService::class, $billingMock);
 
         $this->artisan('invoices:send-reminders')->assertExitCode(0);
@@ -91,19 +93,25 @@ class BillingCollectionsCoverageTest extends TestCase
     {
         $automationMock = Mockery::mock(ServiceAutomationService::class);
         $automationMock->shouldReceive('suspendOverdueServices')->with(10)->once()->andReturn(4);
-        $this->app->instance(ServiceAutomationService::class, $automationMock);
+
+        $command = new SuspendOverdueServices($automationMock);
+        $command->setLaravel($this->app);
 
         Cache::put('suspending_overdue_services', true, 60);
-        $this->artisan('services:suspend-overdue', ['--days' => 10])->assertExitCode(1);
+        $this->assertSame(1, $command->run(new ArrayInput(['--days' => '10']), new BufferedOutput()));
         Cache::forget('suspending_overdue_services');
 
-        $this->artisan('services:suspend-overdue', ['--days' => 10])->assertExitCode(0);
+        $this->assertSame(0, $command->run(new ArrayInput(['--days' => '10']), new BufferedOutput()));
+        $this->assertNull(Cache::get('suspending_overdue_services'));
 
         $failingMock = Mockery::mock(ServiceAutomationService::class);
         $failingMock->shouldReceive('suspendOverdueServices')->once()->andThrow(new Exception('Suspend error'));
-        $this->app->instance(ServiceAutomationService::class, $failingMock);
 
-        $this->artisan('services:suspend-overdue')->assertExitCode(1);
+        $failingCommand = new SuspendOverdueServices($failingMock);
+        $failingCommand->setLaravel($this->app);
+
+        $this->assertSame(1, $failingCommand->run(new ArrayInput([]), new BufferedOutput()));
+        $this->assertNull(Cache::get('suspending_overdue_services'));
     }
 
     public function test_invoice_dispute_controller_endpoints(): void
@@ -117,9 +125,11 @@ class BillingCollectionsCoverageTest extends TestCase
             'customer_id' => $customer->id,
         ]);
 
-        Route::post('/test/invoices/{invoice}/disputes', [InvoiceDisputeController::class, 'store']);
-        Route::patch('/test/disputes/{dispute}', [InvoiceDisputeController::class, 'update']);
-        Route::post('/test/disputes/{dispute}/messages', [InvoiceDisputeController::class, 'addMessage']);
+        Route::middleware(SubstituteBindings::class)->group(function (): void {
+            Route::post('/test/invoices/{invoice}/disputes', [InvoiceDisputeController::class, 'store']);
+            Route::patch('/test/disputes/{dispute}', [InvoiceDisputeController::class, 'update']);
+            Route::post('/test/disputes/{dispute}/messages', [InvoiceDisputeController::class, 'addMessage']);
+        });
 
         $disputeService = Mockery::mock(DisputeService::class);
         $dispute = InvoiceDispute::create([
@@ -261,7 +271,7 @@ class BillingCollectionsCoverageTest extends TestCase
         $suspension = ServiceSuspension::create([
             'subscription_id' => $subscription->id,
             'invoice_id' => $invoice->id,
-            'reason' => 'Overdue invoice',
+            'reason' => 'overdue_payment',
             'suspended_at' => now(),
             'suspended_by' => $user->id,
             'is_active' => true,

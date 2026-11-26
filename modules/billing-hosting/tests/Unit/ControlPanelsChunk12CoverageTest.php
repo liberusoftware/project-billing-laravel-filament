@@ -119,7 +119,7 @@ it('validates CpanelClient hostnames against private IPs, malformed hosts, and u
     'private ipv4' => ['127.0.0.1', 'Private or reserved IP addresses are not allowed as cPanel hostnames'],
     'rfc1918 ipv4' => ['10.0.0.1', 'Private or reserved IP addresses are not allowed as cPanel hostnames'],
     'invalid hostname' => ['invalid host!', 'Invalid cPanel hostname'],
-    'unresolvable domain' => ['nonexistent-chunk12.invalid', 'cPanel hostname could not be resolved'],
+    'unresolvable domain' => ['nonexistent-chunk12.invalid.', 'cPanel hostname could not be resolved'],
 ]);
 
 it('executes DirectAdminClient lifecycle and addon methods with expected endpoints and form payloads', function () use ($injectGuzzle): void {

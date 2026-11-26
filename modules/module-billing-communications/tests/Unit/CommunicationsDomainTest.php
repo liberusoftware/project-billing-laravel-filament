@@ -3,8 +3,10 @@
 declare(strict_types=1);
 
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Schema;
 use Laravel\Sanctum\Sanctum;
 use Liberu\Billing\Communications\Actions\CreateCallRateRule;
 use Liberu\Billing\Communications\Actions\CreateCommunicationProvider;
@@ -86,15 +88,15 @@ it('manages communication providers, services, numbers, usage imports, and queri
 it('validates voice actions, raises fraud alerts on CDR ingestion, and enforces provider registry uniqueness', function (): void {
     $teamId = 10;
     $customerId = 1;
-    if (Illuminate\Support\Facades\Schema::hasTable('teams')) {
-        $ownerId = Illuminate\Support\Facades\DB::table('users')->insertGetId([
+    if (Schema::hasTable('teams')) {
+        $ownerId = DB::table('users')->insertGetId([
             'name' => 'Comm Owner',
             'email' => 'comm-domain-owner@example.test',
             'password' => bcrypt('password'),
             'created_at' => now(),
             'updated_at' => now(),
         ]);
-        Illuminate\Support\Facades\DB::table('teams')->insert([
+        DB::table('teams')->insert([
             'id' => $teamId,
             'user_id' => $ownerId,
             'name' => 'Comm Team',
@@ -103,8 +105,8 @@ it('validates voice actions, raises fraud alerts on CDR ingestion, and enforces 
             'updated_at' => now(),
         ]);
     }
-    if (Illuminate\Support\Facades\Schema::hasTable('customers')) {
-        $customerId = (int) Illuminate\Support\Facades\DB::table('customers')->insertGetId([
+    if (Schema::hasTable('customers')) {
+        $customerId = (int) DB::table('customers')->insertGetId([
             'name' => 'Comm Customer',
             'email' => 'comm-domain-customer@example.test',
             'created_at' => now(),

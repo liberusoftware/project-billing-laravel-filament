@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
+use App\Http\Middleware\VerifyInboundEmailSignature;
 use App\Models\Customer;
 use App\Models\Project;
 use App\Models\Subscription;
-use App\Models\Team;
 use App\Models\Ticket;
 use App\Models\TicketAttachment;
 use App\Models\TicketCustomField;
@@ -16,7 +16,9 @@ use App\Models\User;
 use App\Services\InboundEmailService;
 use App\Services\TicketEscalationService;
 use Illuminate\Database\QueryException;
+use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Schema;
 
 it('runs the tickets:escalate artisan command and reports escalated count', function (): void {
     Ticket::factory()->create([
@@ -37,6 +39,7 @@ it('runs the tickets:escalate artisan command and reports escalated count', func
 });
 
 it('handles inbound email API requests for both new tickets and ticket responses', function (): void {
+    app('router')->aliasMiddleware('inbound-email.verify', VerifyInboundEmailSignature::class);
     config()->set('services.inbound_email.secret', 'webhook-secret');
 
     $sender = User::factory()->create(['email' => 'client@example.test']);
@@ -187,8 +190,15 @@ it('handles notify escalation, high-priority ceiling, and no-op reassignments', 
 });
 
 it('exposes all relationships and owningTicket branches across support models', function (): void {
+    if (! Schema::hasColumn('tickets', 'subscription_id')) {
+        Schema::table('tickets', function (Blueprint $table): void {
+            $table->unsignedBigInteger('subscription_id')->nullable();
+        });
+    }
+
     $user = User::factory()->withPersonalTeam()->create();
-    $team = Team::findOrFail($user->current_team_id);
+    $team = $user->ownedTeams()->sole();
+    $user->switchTeam($team);
     $customer = Customer::factory()->create(['user_id' => $user->id, 'team_id' => $team->id]);
     $subscription = Subscription::factory()->create(['customer_id' => $customer->id]);
     $project = Project::create([

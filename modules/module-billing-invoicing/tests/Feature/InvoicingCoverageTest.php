@@ -48,34 +48,34 @@ it('covers invoicing actions validation, edge cases, and happy paths', function 
 
     // AddInvoiceLine invalid arguments
     expect(fn () => $addLine->execute($draft, '   ', 1, 1000))
-        ->toThrow(\InvalidArgumentException::class);
+        ->toThrow(InvalidArgumentException::class);
 
     // AddInvoiceLine stale status inside transaction
     $staleDraft = $createInvoice->execute(['team_id' => $team->id, 'currency' => 'USD']);
     Invoice::query()->whereKey($staleDraft->id)->update(['status' => InvoiceStatus::Finalized->value]);
     expect(fn () => $addLine->execute($staleDraft, 'Stale line', 1, 1000))
-        ->toThrow(\LogicException::class);
+        ->toThrow(LogicException::class);
 
     // FinalizeInvoice stale status inside transaction
     $staleFinalize = $createInvoice->execute(['team_id' => $team->id, 'currency' => 'USD']);
     $addLine->execute($staleFinalize, 'Item', 1, 1000);
     Invoice::query()->whereKey($staleFinalize->id)->update(['status' => InvoiceStatus::Finalized->value]);
     expect(fn () => $finalize->execute($staleFinalize))
-        ->toThrow(\LogicException::class);
+        ->toThrow(LogicException::class);
 
     // GenerateInvoiceDocument on draft throws
     expect(fn () => $document->execute($draft, 'pdf'))
-        ->toThrow(\LogicException::class);
+        ->toThrow(LogicException::class);
 
     // DeliverInvoice with invalid email throws
     expect(fn () => $deliver->execute($draft, 'not-an-email'))
-        ->toThrow(\InvalidArgumentException::class);
+        ->toThrow(InvalidArgumentException::class);
 
     // ApplyInvoiceLateFee validation & non-finalized throws
     expect(fn () => $lateFee->execute($draft, 0))
-        ->toThrow(\InvalidArgumentException::class);
+        ->toThrow(InvalidArgumentException::class);
     expect(fn () => $lateFee->execute($draft, 500))
-        ->toThrow(\LogicException::class);
+        ->toThrow(LogicException::class);
 
     // Add line and finalize draft
     $addLine->execute($draft, 'Platform Subscription', 2, 1000, 10.0);
@@ -83,21 +83,21 @@ it('covers invoicing actions validation, edge cases, and happy paths', function 
 
     // GenerateInvoiceDocument invalid format throws, valid html succeeds
     expect(fn () => $document->execute($finalized, 'docx'))
-        ->toThrow(\LogicException::class);
+        ->toThrow(LogicException::class);
     $htmlDoc = $document->execute($finalized, 'html');
     expect($htmlDoc->type)->toBe('html');
 
     // ApplyInvoiceAdjustment invalid args and excessive negative adjustment
     expect(fn () => $adjust->execute($finalized, 0, 'Zero'))
-        ->toThrow(\InvalidArgumentException::class);
+        ->toThrow(InvalidArgumentException::class);
     expect(fn () => $adjust->execute($finalized, -999999, 'Too large', 'credit'))
-        ->toThrow(\LogicException::class);
+        ->toThrow(LogicException::class);
 
     // ApplyInvoiceAdjustment on void invoice throws
     $voidInvoice = $createInvoice->execute(['team_id' => $team->id, 'currency' => 'USD']);
     $voidInvoice->update(['status' => InvoiceStatus::Void]);
     expect(fn () => $adjust->execute($voidInvoice, 100, 'Void check'))
-        ->toThrow(\LogicException::class);
+        ->toThrow(LogicException::class);
 
     // ApplyInvoiceLateFee succeeds and is idempotent on same date
     $withFee = $lateFee->execute($finalized, 250);
@@ -124,7 +124,7 @@ it('covers invoicing actions validation, edge cases, and happy paths', function 
     expect(fn () => $createSupport->execute($team->id, [
         'invoice_id' => $finalized->id,
         'type' => 'unknown',
-    ]))->toThrow(\InvalidArgumentException::class);
+    ]))->toThrow(InvalidArgumentException::class);
 
     // ListInvoices query
     $list = app(ListInvoices::class)->execute($team->id, 10);
@@ -149,7 +149,7 @@ it('covers invoice schedules and payment plans across all frequencies and error 
         'team_id' => $team->id,
         'frequency' => 'monthly',
         'metadata' => 'not-an-array',
-    ]))->toThrow(\InvalidArgumentException::class);
+    ]))->toThrow(InvalidArgumentException::class);
 
     // Inactive schedule throws
     $inactive = $createSchedule->execute([
@@ -159,7 +159,7 @@ it('covers invoice schedules and payment plans across all frequencies and error 
         'active' => false,
     ]);
     expect(fn () => $runSchedule->execute($inactive))
-        ->toThrow(\LogicException::class);
+        ->toThrow(LogicException::class);
 
     // Schedule with non-array line item throws
     $badLines = $createSchedule->execute([
@@ -169,7 +169,7 @@ it('covers invoice schedules and payment plans across all frequencies and error 
         'metadata' => ['lines' => ['invalid-line']],
     ]);
     expect(fn () => $runSchedule->execute($badLines))
-        ->toThrow(\InvalidArgumentException::class);
+        ->toThrow(InvalidArgumentException::class);
 
     // Daily, weekly, yearly schedules
     foreach (['daily', 'weekly', 'yearly'] as $frequency) {
@@ -194,19 +194,19 @@ it('covers invoice schedules and payment plans across all frequencies and error 
     ]);
     InvoiceSchedule::query()->whereKey($brokenFreq->id)->update(['frequency' => 'invalid']);
     expect(fn () => $runSchedule->execute($brokenFreq->refresh()))
-        ->toThrow(\LogicException::class);
+        ->toThrow(LogicException::class);
 
     // CreatePaymentPlan validation errors
     $draft = $createInvoice->execute(['team_id' => $team->id, 'currency' => 'USD']);
     expect(fn () => $createPlan->execute($draft, 2, 'monthly'))
-        ->toThrow(\InvalidArgumentException::class);
+        ->toThrow(InvalidArgumentException::class);
 
     // Installment amount < 1 throws
     $tiny = $createInvoice->execute(['team_id' => $team->id, 'currency' => 'USD']);
     $addLine->execute($tiny, 'Tiny', 1, 1);
     $tiny = $finalize->execute($tiny->refresh());
     expect(fn () => $createPlan->execute($tiny, 2, 'monthly'))
-        ->toThrow(\InvalidArgumentException::class);
+        ->toThrow(InvalidArgumentException::class);
 
     // Weekly and quarterly payment plans + RunPaymentPlan errors and execution
     $invoice = $createInvoice->execute(['team_id' => $team->id, 'currency' => 'USD', 'number' => 'INV-PLAN']);
@@ -216,7 +216,7 @@ it('covers invoice schedules and payment plans across all frequencies and error 
     $weeklyPlan = $createPlan->execute($invoice, 2, 'weekly', now()->subWeeks(2));
     // Future check: next_due_at is after an earlier $at
     expect(fn () => $runPlan->execute($weeklyPlan, now()->subMonths(2)))
-        ->toThrow(\LogicException::class);
+        ->toThrow(LogicException::class);
 
     $inst1 = $runPlan->execute($weeklyPlan, now()->addMonth());
     expect($inst1->status)->toBe(InvoiceStatus::Finalized);
@@ -226,9 +226,13 @@ it('covers invoice schedules and payment plans across all frequencies and error 
 
     // Completed plan throws
     expect(fn () => $runPlan->execute($weeklyPlan->refresh(), now()->addMonths(3)))
-        ->toThrow(\LogicException::class);
+        ->toThrow(LogicException::class);
 
-    $quarterlyPlan = $createPlan->execute($invoice, 2, 'quarterly', now()->subMonths(6));
+    $quarterlyInvoice = $createInvoice->execute(['team_id' => $team->id, 'currency' => 'USD', 'number' => 'INV-PLAN-Q']);
+    $addLine->execute($quarterlyInvoice, 'Quarterly License', 1, 10000);
+    $quarterlyInvoice = $finalize->execute($quarterlyInvoice->refresh());
+
+    $quarterlyPlan = $createPlan->execute($quarterlyInvoice, 2, 'quarterly', now()->subMonths(6));
     $qInst = $runPlan->execute($quarterlyPlan, now());
     expect($qInst->status)->toBe(InvoiceStatus::Finalized);
 });
@@ -297,5 +301,5 @@ it('covers invoicing policies and customer reference table guard', function (): 
     // CustomerReference when customers table does not exist
     Schema::shouldReceive('hasTable')->with('customers')->once()->andReturn(false);
     expect(fn () => CustomerReference::assertBelongsToTeam(app('db'), 1, $team->id))
-        ->toThrow(\InvalidArgumentException::class);
+        ->toThrow(InvalidArgumentException::class);
 });

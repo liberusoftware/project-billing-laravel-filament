@@ -4,13 +4,16 @@ declare(strict_types=1);
 
 namespace Liberu\Foundation\Integrations\Tests\Feature;
 
+use App\Models\ConnectedAccount;
 use App\Models\User;
 use App\Services\Marketing\PlatformConfiguration;
 use App\Services\Marketing\WorkspaceAccess;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\Client\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Schema;
@@ -60,6 +63,18 @@ class OAuthAndAccountingControllersTest extends TestCase
             Schema::table('oauth_configurations', function (Blueprint $table): void {
                 $table->string('client_id')->nullable();
             });
+        }
+        if (Schema::hasTable('connected_accounts')) {
+            if (! Schema::hasColumn('connected_accounts', 'token_secret')) {
+                Schema::table('connected_accounts', function (Blueprint $table): void {
+                    $table->string('token_secret')->nullable();
+                });
+            }
+            if (! Schema::hasColumn('connected_accounts', 'metadata')) {
+                Schema::table('connected_accounts', function (Blueprint $table): void {
+                    $table->json('metadata')->nullable();
+                });
+            }
         }
     }
 
@@ -137,18 +152,29 @@ class OAuthAndAccountingControllersTest extends TestCase
         $socialiteUser->refreshToken = 'ref-1';
         $socialiteUser->expiresIn = 3600;
 
+        if (method_exists(ConnectedAccount::class, 'saving')) {
+            ConnectedAccount::saving(function (ConnectedAccount $account): void {
+                $attributes = $account->getAttributes();
+                if (is_array($attributes['metadata'] ?? null)) {
+                    $account->setAttribute('metadata', json_encode($attributes['metadata']));
+                }
+            });
+        }
+
         foreach (['facebook', 'linkedin-openid', 'google'] as $idx => $provider) {
             $socialiteUser->id = 'prov-'.$idx;
+            $socialiteUser->expiresIn = $idx === 0 ? 3600 : null;
             $driver = Mockery::mock();
             $driver->shouldReceive('user')->twice()->andReturn($socialiteUser);
             Socialite::shouldReceive('driver')->with($provider)->twice()->andReturn($driver);
 
-            Http::swap(new \Illuminate\Http\Client\Factory());
+            Http::swap(new Factory());
             Http::fake(fn () => Http::response(['data' => [['id' => 'p1']], 'elements' => [['id' => 'o1']], 'items' => [['id' => 'c1']]], 200));
             $res = $controller->callback($provider);
             $this->assertInstanceOf(RedirectResponse::class, $res);
+            $this->assertNotNull(session('success'));
 
-            Http::swap(new \Illuminate\Http\Client\Factory());
+            Http::swap(new Factory());
             Http::fake(fn () => throw new RuntimeException('network error'));
             $res2 = $controller->callback($provider);
             $this->assertInstanceOf(RedirectResponse::class, $res2);
@@ -167,6 +193,7 @@ class OAuthAndAccountingControllersTest extends TestCase
         $user = User::factory()->create();
         $team = Team::factory()->create(['user_id' => $user->id]);
         $user->forceFill(['current_team_id' => $team->id])->save();
+        $user->setRelation('currentTeam', $team);
         $this->actingAs($user);
 
         $platform = new PlatformConfiguration();
@@ -188,19 +215,32 @@ class OAuthAndAccountingControllersTest extends TestCase
         $controller = new OAuthConfigurationController();
 
         // index & create views (fake view finder via View::addNamespace or temporary blade)
-        $tmpViews = sys_get_temp_dir().'/integrations_views_'.uniqid();
+        $tmpViews = sys_get_temp_dir().'/integrations_views_'.uniqid('', true);
         @mkdir($tmpViews.'/oauth/configurations', 0777, true);
         file_put_contents($tmpViews.'/oauth/configurations/index.blade.php', 'index');
         file_put_contents($tmpViews.'/oauth/configurations/create.blade.php', 'create');
+        $finder = View::getFinder();
+        $originalPaths = $finder->getPaths();
         View::addLocation($tmpViews);
+        $finder->flush();
 
-        $this->assertSame('oauth.configurations.index', $controller->index()->name());
-        $this->assertSame('oauth.configurations.create', $controller->create()->name());
+        try {
+            $this->assertSame('oauth.configurations.index', $controller->index()->name());
+            $this->assertSame('oauth.configurations.create', $controller->create()->name());
+        } finally {
+            $finder->setPaths($originalPaths);
+            $finder->flush();
+            File::deleteDirectory($tmpViews);
+        }
 
         // store (note: sqlite table has client_id/client_secret NOT NULL from base migration, so set defaults via creating event)
         OAuthConfiguration::creating(function (OAuthConfiguration $m): void {
-            $m->client_id ??= 'default-cid';
-            $m->client_secret ??= 'default-csec';
+            if (! array_key_exists('client_id', $m->getAttributes())) {
+                $m->client_id = 'default-cid';
+            }
+            if (! array_key_exists('client_secret', $m->getAttributes())) {
+                $m->client_secret = 'default-csec';
+            }
         });
 
         $storeReq = Request::create('/oauth/configurations', 'POST', [

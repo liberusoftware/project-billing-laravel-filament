@@ -217,7 +217,7 @@ final class DomainController extends Controller
             $model instanceof DomainTld => $model->only(['name', 'registrar_cost', 'base_price', 'markup_type', 'markup_value', 'enabled', 'created_at', 'updated_at']),
             $model instanceof DomainContact => $model->only(['team_id', 'handle', 'name', 'email', 'details', 'created_at', 'updated_at']),
             $model instanceof DnsRecord => $model->only(['team_id', 'domain_id', 'type', 'host', 'value', 'ttl', 'created_at', 'updated_at']),
-            $model instanceof EppOperation => $model->only(['team_id', 'domain_id', 'operation', 'status', 'payload', 'response', 'created_at', 'updated_at']),
+            $model instanceof EppOperation => $model->only(['team_id', 'domain_id', 'operation', 'status', 'epp_code', 'payload', 'created_at', 'updated_at']),
             default => [],
         };
 

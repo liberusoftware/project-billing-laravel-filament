@@ -102,6 +102,7 @@ it('records audit logs when a task or time entry is deleted', function (): void 
 });
 
 it('resolves team id from active Filament tenant or fails closed when no tenant is set', function (): void {
+    $user = User::factory()->create();
     $team = Team::factory()->create();
     Project::factory()->create([
         'team_id' => $team->id,
@@ -113,6 +114,7 @@ it('resolves team id from active Filament tenant or fails closed when no tenant 
     Filament::setTenant(null);
     expect($service->projectCountByStatus())->toBe([]);
 
+    $this->actingAs($user);
     Filament::setTenant($team);
     expect($service->projectCountByStatus())->toBe([ProjectStatus::Open->value => 1]);
 });

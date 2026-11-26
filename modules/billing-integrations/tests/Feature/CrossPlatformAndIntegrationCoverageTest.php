@@ -21,6 +21,7 @@ use App\Services\DomainEventBus;
 use App\Services\Integrations\HttpBusinessConnector;
 use App\Services\IntegrationService;
 use App\Services\IntegrationSyncService;
+use Illuminate\Http\Client\Factory as HttpFactory;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Queue;
@@ -117,6 +118,7 @@ it('covers all CrossPlatformIntegrationController endpoints', function (): void 
         ->assertStatus(500);
 
     // Pull resource (valid & invalid)
+    Http::swap(new HttpFactory());
     Http::fake([
         '*' => Http::response([
             'items' => [['id' => 'ext-1']],
@@ -133,6 +135,7 @@ it('covers all CrossPlatformIntegrationController endpoints', function (): void 
         ->assertNotFound();
 
     // Convert lead
+    Http::swap(new HttpFactory());
     Http::fake(['*' => Http::response(['id' => 'remote-lead-cust'], 201)]);
     $lead = Lead::query()->create([
         'team_id' => $team->id,
@@ -208,16 +211,19 @@ it('covers HttpBusinessConnector error paths', function (): void {
         ->toThrow(RuntimeException::class, 'The connector response did not contain a resource identifier.');
 
     // pull() response not an array
+    Http::swap(new HttpFactory());
     Http::fake(['*' => Http::response('"scalar"', 200, ['Content-Type' => 'application/json'])]);
     expect(fn () => $connector->pull($connection, 'customers'))
         ->toThrow(RuntimeException::class, 'The connector returned an invalid response.');
 
     // pull() items not an array
+    Http::swap(new HttpFactory());
     Http::fake(['*' => Http::response(['items' => 'bad-items'], 200)]);
     expect(fn () => $connector->pull($connection, 'customers'))
         ->toThrow(RuntimeException::class, 'The connector returned an invalid resource collection.');
 
     // send() HTTP 500 failure
+    Http::swap(new HttpFactory());
     Http::fake(['*' => Http::response('Internal Error', 500)]);
     expect(fn () => $connector->pull($connection, 'customers'))
         ->toThrow(RuntimeException::class, 'acme connector operation failed.');

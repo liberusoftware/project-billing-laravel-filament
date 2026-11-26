@@ -20,6 +20,7 @@ use App\Services\Registrars\ResellerClubClient;
 use Exception;
 use Filament\Facades\Filament;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\Client\Factory as HttpFactory;
 use Illuminate\Support\Facades\Http;
 use Livewire\Livewire;
 use Mockery;
@@ -100,17 +101,21 @@ class BillingDomainsCoverageTest extends TestCase
 
     public function test_sync_enom_domains_command_success_and_error(): void
     {
+        $calls = 0;
         $pricing = Mockery::mock(DomainPricingService::class);
-        $pricing->shouldReceive('syncTldsFromEnom')->once();
+        $pricing->shouldReceive('syncTldsFromEnom')
+            ->twice()
+            ->andReturnUsing(function () use (&$calls): void {
+                $calls++;
+                if ($calls === 2) {
+                    throw new Exception('Enom down');
+                }
+            });
         $this->app->instance(DomainPricingService::class, $pricing);
 
         $this->artisan('enom:sync-domains')
             ->expectsOutputToContain('completed successfully')
             ->assertExitCode(0);
-
-        $failingPricing = Mockery::mock(DomainPricingService::class);
-        $failingPricing->shouldReceive('syncTldsFromEnom')->once()->andThrow(new Exception('Enom down'));
-        $this->app->instance(DomainPricingService::class, $failingPricing);
 
         $this->artisan('enom:sync-domains')
             ->expectsOutputToContain('Enom down')
@@ -127,7 +132,7 @@ class BillingDomainsCoverageTest extends TestCase
             'status' => 'pending',
         ]);
 
-        (new RenewDomainOnPayment)->handle(new InvoiceStatusChanged($invoice, 'pending'));
+        (new RenewDomainOnPayment())->handle(new InvoiceStatusChanged($invoice, 'pending'));
 
         $this->assertDatabaseCount('domain_renewals', 0);
     }
@@ -173,7 +178,7 @@ class BillingDomainsCoverageTest extends TestCase
             ),
         ]);
 
-        $client = new EnomClient;
+        $client = new EnomClient();
         $this->assertSame(['.com', '.org'], $client->getAvailableTlds());
         $this->assertSame(11.25, $client->getDomainPrice('.com'));
         $this->assertTrue($client->deleteDnsRecord('example.com', '42'));
@@ -181,6 +186,7 @@ class BillingDomainsCoverageTest extends TestCase
         $this->assertSame('Jane', $contacts['Registrant']['first_name']);
 
         // HTTP failure (line 228)
+        Http::swap(new HttpFactory());
         Http::fake([
             'https://enom.example.test/interface.asp*' => Http::response('Server error', 500),
         ]);
@@ -192,6 +198,7 @@ class BillingDomainsCoverageTest extends TestCase
         }
 
         // DOCTYPE / empty body guard (line 232)
+        Http::swap(new HttpFactory());
         Http::fake([
             'https://enom.example.test/interface.asp*' => Http::response('<!DOCTYPE foo><interface-response/>', 200),
         ]);
@@ -203,6 +210,7 @@ class BillingDomainsCoverageTest extends TestCase
         }
 
         // Invalid XML / wrong root tag guard (line 238)
+        Http::swap(new HttpFactory());
         Http::fake([
             'https://enom.example.test/interface.asp*' => Http::response('<unexpected-root/>', 200),
         ]);
@@ -222,7 +230,7 @@ class BillingDomainsCoverageTest extends TestCase
             'services.resellerclub.api_key' => 'secret',
         ]);
 
-        $client = new ResellerClubClient;
+        $client = new ResellerClubClient();
 
         $this->assertSame(['new_expiration_date' => null], $client->renewDomain('example.com', 1));
         $this->assertSame(['expiration_date' => null], $client->transferDomain('example.com', 'AUTH', 1));

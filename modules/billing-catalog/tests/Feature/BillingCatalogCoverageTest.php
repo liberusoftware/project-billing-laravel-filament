@@ -22,17 +22,24 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Laravel\Sanctum\Sanctum;
+use Liberu\Foundation\RolesPermissions\Models\Permission;
+use Liberu\Foundation\RolesPermissions\Models\Role;
 use Livewire\Livewire;
-use Spatie\Permission\Models\Permission;
-use Spatie\Permission\Models\Role;
 use Tests\TestCase;
 
 class BillingCatalogCoverageTest extends TestCase
 {
     use RefreshDatabase;
 
+    protected function tearDown(): void
+    {
+        setPermissionsTeamId(null);
+        parent::tearDown();
+    }
+
     private function bootAppPanel(User $user): void
     {
+        setPermissionsTeamId($user->currentTeam->id);
         Role::findOrCreate('super_admin', 'web');
         $user->assignRole('super_admin');
         $this->actingAs($user);
@@ -90,8 +97,9 @@ class BillingCatalogCoverageTest extends TestCase
     public function test_products_service_policy_checks_all_permissions(): void
     {
         $user = User::factory()->withPersonalTeam()->create();
+        setPermissionsTeamId($user->currentTeam->id);
         $product = Products_Service::factory()->create(['team_id' => $user->currentTeam->id]);
-        $policy = new Products_ServicePolicy;
+        $policy = new Products_ServicePolicy();
 
         $this->assertFalse($policy->viewAny($user));
         $this->assertFalse($policy->view($user, $product));
@@ -170,32 +178,28 @@ class BillingCatalogCoverageTest extends TestCase
             'name' => 'VPS Basic',
             'code' => 'vps-basic',
             'price' => 10.00,
-            'billing_interval' => 'month',
-            'interval_count' => 1,
         ]);
         $plan2 = SubscriptionPlan::create([
             'name' => 'VPS Pro',
             'code' => 'vps-pro',
             'price' => 25.00,
-            'billing_interval' => 'month',
-            'interval_count' => 1,
         ]);
 
-        $this->postJson("/api/v1/package-groups/{$groupId}/packages", [
+        $this->postJson("/api/package-groups/{$groupId}/packages", [
             'subscription_plan_id' => $plan1->id,
             'sort_order' => 0,
         ])->assertOk();
 
-        $this->postJson("/api/v1/package-groups/{$groupId}/packages", [
+        $this->postJson("/api/package-groups/{$groupId}/packages", [
             'subscription_plan_id' => $plan2->id,
             'sort_order' => 1,
         ])->assertOk();
 
-        $this->postJson("/api/v1/package-groups/{$groupId}/reorder", [
+        $this->postJson("/api/package-groups/{$groupId}/reorder", [
             'plan_ids' => [$plan2->id, $plan1->id],
         ])->assertOk();
 
-        $this->deleteJson("/api/v1/package-groups/{$groupId}/packages/{$plan1->id}")
+        $this->deleteJson("/api/package-groups/{$groupId}/packages/{$plan1->id}")
             ->assertOk();
 
         $this->deleteJson(route('package-groups.destroy', $groupId))
@@ -209,9 +213,10 @@ class BillingCatalogCoverageTest extends TestCase
 
         $tld = Tld::create([
             'name' => '.com',
-            'registration_price' => 12.00,
-            'renewal_price' => 12.00,
-            'transfer_price' => 12.00,
+            'base_price' => 12.00,
+            'enom_cost' => 10.00,
+            'markup_type' => 'fixed',
+            'markup_value' => 2.00,
         ]);
 
         $product = Products_Service::factory()->create([
@@ -237,6 +242,16 @@ class BillingCatalogCoverageTest extends TestCase
                 'tld_id' => $tld->id,
                 'markup_type' => 'percentage',
                 'markup_value' => 10,
+            ])
+            ->assertFormFieldIsVisible('tld_id')
+            ->assertFormFieldIsVisible('markup_type')
+            ->assertFormFieldIsVisible('markup_value')
+            ->fillForm([
+                'name' => 'Tiered Hosting',
+                'description' => 'Tiered hosting plan',
+                'base_price' => 14.99,
+                'type' => 'hosting',
+                'pricing_model' => 'tiered',
             ])
             ->call('create')
             ->assertHasNoFormErrors();

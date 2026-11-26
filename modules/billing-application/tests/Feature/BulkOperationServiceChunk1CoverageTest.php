@@ -315,6 +315,7 @@ it('handles per-recipient and outer exceptions when sending an email campaign', 
     $outerMock = Mockery::mock($outerCampaign)->makePartial();
     $outerMock->shouldReceive('update')
         ->once()
+        ->with(['total_recipients' => 1])
         ->andThrow(new Exception('Database update failure'));
     $outerMock->shouldNotReceive('markAsSent');
 

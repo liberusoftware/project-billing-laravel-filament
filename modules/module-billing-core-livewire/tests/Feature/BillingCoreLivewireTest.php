@@ -200,3 +200,21 @@ it('converts currencies and calculates taxes via Livewire components', function 
         ->assertSet('result.tax', 20.0)
         ->assertSet('result.total', 120.0);
 });
+
+it('aborts currency conversion and tax calculation when no current team is active', function (): void {
+    $user = User::factory()->create();
+    $this->actingAs($user, 'web');
+    Sanctum::actingAs($user, ['billing.billing-core.read']);
+
+    Livewire::test(CurrencyConverter::class)
+        ->set('amount', '100')
+        ->set('from', 'USD')
+        ->set('to', 'EUR')
+        ->call('convert')
+        ->assertForbidden();
+
+    Livewire::test(TaxCalculator::class)
+        ->set('amount', '100')
+        ->call('calculate')
+        ->assertForbidden();
+});

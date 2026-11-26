@@ -13,6 +13,10 @@ use Livewire\Livewire;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\PermissionRegistrar;
 
+afterEach(function (): void {
+    setPermissionsTeamId(null);
+});
+
 it('renders the products services list page and table actions', function (): void {
     $user = User::factory()->withPersonalTeam()->create();
     app(PermissionRegistrar::class)->setPermissionsTeamId($user->currentTeam->id);

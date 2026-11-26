@@ -218,9 +218,6 @@ it('renders refunds list, filters, table actions, forms, and page redirect helpe
         ->assertCanSeeTableRecords([$pPartial])
         ->assertCanNotSeeTableRecords([$pNone, $pFull])
         ->resetTableFilters()
-        // Validation error when amount exceeds remaining refundable amount
-        ->callTableAction('refund', $pNone, data: ['amount' => 250.00, 'reason' => 'Too large'])
-        ->assertHasTableActionErrors(['amount'])
         // Success notification branch
         ->callTableAction('refund', $pNone, data: ['amount' => 20.00, 'reason' => 'Customer request'])
         ->assertNotified('Refund processed successfully')
@@ -229,7 +226,10 @@ it('renders refunds list, filters, table actions, forms, and page redirect helpe
         ->assertNotified('Refund failed')
         // Exception notification branch
         ->callTableAction('refund', $pNone, data: ['amount' => 20.00, 'reason' => 'Error path'])
-        ->assertNotified('Error processing refund');
+        ->assertNotified('Error processing refund')
+        // Validation error when amount exceeds remaining refundable amount
+        ->callTableAction('refund', $pNone, data: ['amount' => 250.00, 'reason' => 'Too large'])
+        ->assertHasTableActionErrors(['amount']);
 
     // CreateRefund form: afterStateUpdated + custom validation rule
     request()->merge(['data' => ['payment_id' => $pNone->id]]);
@@ -259,8 +259,11 @@ it('renders refunds list, filters, table actions, forms, and page redirect helpe
 });
 
 it('builds the payment form component and toggles card fields based on payment method', function (): void {
-    $paypalSchema = Schema::make()
-        ->state(['payment_method' => 'paypal'])
+    $paypalLivewire = new CreateRefund();
+    $paypalLivewire->data = ['payment_method' => 'paypal'];
+
+    $paypalSchema = Schema::make($paypalLivewire)
+        ->statePath('data')
         ->components([PaymentForm::make()]);
 
     $paypalSection = $paypalSchema->getComponents(withHidden: true)[0];
@@ -270,8 +273,11 @@ it('builds the payment form component and toggles card fields based on payment m
         ->and($paypalFields[1]->isHidden())->toBeTrue()
         ->and($paypalFields[2]->isHidden())->toBeTrue();
 
-    $stripeSchema = Schema::make()
-        ->state(['payment_method' => 'stripe'])
+    $stripeLivewire = new CreateRefund();
+    $stripeLivewire->data = ['payment_method' => 'stripe'];
+
+    $stripeSchema = Schema::make($stripeLivewire)
+        ->statePath('data')
         ->components([PaymentForm::make()]);
 
     $stripeSection = $stripeSchema->getComponents(withHidden: true)[0];

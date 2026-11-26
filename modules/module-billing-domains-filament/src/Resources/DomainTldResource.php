@@ -18,6 +18,8 @@ final class DomainTldResource extends Resource
 {
     protected static string|\UnitEnum|null $navigationGroup = 'Service Delivery';
 
+    protected static bool $isScopedToTenant = false;
+
     protected static ?string $model = DomainTld::class;
 
     public static function form(Schema $schema): Schema

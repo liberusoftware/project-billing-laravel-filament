@@ -19,18 +19,30 @@ use App\Models\Subscription;
 use App\Models\User;
 use App\Settings\GeneralSettings;
 use Filament\Facades\Filament;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\View;
+use Liberu\Foundation\RolesPermissions\Models\Role;
 use Livewire\Livewire;
-use Spatie\Permission\Models\Role;
-
-uses(RefreshDatabase::class);
 
 beforeEach(function (): void {
-    Filament::setCurrentPanel(Filament::getPanel('admin'));
-    $role = Role::firstOrCreate(['name' => 'super_admin', 'guard_name' => 'web']);
-    $user = User::factory()->create();
-    $user->assignRole($role);
+    $user = User::factory()->withPersonalTeam()->create();
+    $team = $user->currentTeam;
+
+    setPermissionsTeamId($team->id);
+    Role::firstOrCreate([
+        'name' => 'super_admin',
+        'guard_name' => 'web',
+        'team_id' => $team->id,
+    ]);
+    $user->assignRole('super_admin');
+
     $this->actingAs($user);
+
+    $panel = Filament::getPanel('admin');
+    Filament::setCurrentPanel($panel);
+    $panel->boot();
+    Filament::setTenant($team);
 });
 
 it('renders MenuResource list, create, and edit pages', function (): void {
@@ -77,30 +89,67 @@ it('renders MenuResource list, create, and edit pages', function (): void {
 });
 
 it('renders SocialLinksWidget with configured links and fallback links', function (): void {
-    $settings = app(GeneralSettings::class);
-    $settings->github_url = 'https://github.com/liberu';
-    $settings->facebook_url = 'https://facebook.com/liberu';
-    $settings->twitter_url = 'https://twitter.com/liberu';
-    $settings->youtube_url = 'https://youtube.com/liberu';
-    $settings->save();
+    $tempViewDir = sys_get_temp_dir().'/billing-filament-cov-social-'.uniqid('', true);
+    $viewFile = $tempViewDir.'/filament/app/widgets/social-links-widget.blade.php';
+    File::ensureDirectoryExists(dirname($viewFile));
+    File::put($viewFile, '<div></div>');
 
-    $widget = new SocialLinksWidget();
-    $view = $widget->render();
-    expect($view->getData()['links'])->toBe([
-        'GitHub' => 'https://github.com/liberu',
-        'Facebook' => 'https://facebook.com/liberu',
-        'Twitter' => 'https://twitter.com/liberu',
-        'YouTube' => 'https://youtube.com/liberu',
-    ]);
+    $finder = View::getFinder();
+    $originalPaths = $finder->getPaths();
+    View::addLocation($tempViewDir);
+    $finder->flush();
 
-    $settings->github_url = null;
-    $settings->facebook_url = null;
-    $settings->twitter_url = null;
-    $settings->youtube_url = null;
-    $settings->save();
+    try {
+        foreach ([
+            'site_name' => 'Liberu Billing',
+            'site_email' => 'info@example.com',
+            'site_phone' => '',
+            'site_address' => '',
+            'site_country' => '',
+            'site_currency' => '$',
+            'site_default_language' => 'en',
+            'facebook_url' => null,
+            'twitter_url' => null,
+            'github_url' => null,
+            'youtube_url' => null,
+            'footer_copyright' => '© Liberu Billing',
+        ] as $name => $value) {
+            DB::table('settings')->updateOrInsert(
+                ['group' => 'general', 'name' => $name],
+                ['locked' => false, 'payload' => json_encode($value)]
+            );
+        }
+        app()->forgetInstance(GeneralSettings::class);
 
-    $fallbackView = $widget->render();
-    expect($fallbackView->getData()['links'])->toHaveKeys(['GitHub', 'Facebook Page', 'Facebook Groups']);
+        $settings = app(GeneralSettings::class);
+        $settings->github_url = 'https://github.com/liberu';
+        $settings->facebook_url = 'https://facebook.com/liberu';
+        $settings->twitter_url = 'https://twitter.com/liberu';
+        $settings->youtube_url = 'https://youtube.com/liberu';
+        $settings->save();
+
+        $widget = new SocialLinksWidget();
+        $view = $widget->render();
+        expect($view->getData()['links'])->toBe([
+            'GitHub' => 'https://github.com/liberu',
+            'Facebook' => 'https://facebook.com/liberu',
+            'Twitter' => 'https://twitter.com/liberu',
+            'YouTube' => 'https://youtube.com/liberu',
+        ]);
+
+        $settings->github_url = null;
+        $settings->facebook_url = null;
+        $settings->twitter_url = null;
+        $settings->youtube_url = null;
+        $settings->save();
+
+        $fallbackView = $widget->render();
+        expect($fallbackView->getData()['links'])->toHaveKeys(['GitHub', 'Facebook Page', 'Facebook Groups']);
+    } finally {
+        $finder->setPaths($originalPaths);
+        $finder->flush();
+        File::deleteDirectory($tempViewDir);
+    }
 });
 
 it('returns expected widgets and heading from Client Dashboard', function (): void {
@@ -111,36 +160,59 @@ it('returns expected widgets and heading from Client Dashboard', function (): vo
 });
 
 it('mounts, saves, cancels, and resumes subscriptions on ManageSubscriptionPage', function (): void {
-    $user = auth()->user();
-    $customer = Customer::factory()->create(['user_id' => $user->id]);
-    $product = Products_Service::factory()->create(['price' => 49.99]);
+    $tempViewDir = sys_get_temp_dir().'/billing-filament-cov-sub-'.uniqid('', true);
+    $viewFile = $tempViewDir.'/filament/pages/manage-subscription.blade.php';
+    File::ensureDirectoryExists(dirname($viewFile));
+    File::put($viewFile, '<div>{{ $this->form }}</div>');
 
-    // Mount without existing subscription, create new subscription with Custom cycle
-    Livewire::test(ManageSubscriptionPage::class)
-        ->assertOk()
-        ->set('selectedProduct', $product->id)
-        ->set('renewalPeriod', BillingCycle::Custom->value)
-        ->set('customPeriodDays', 45)
-        ->set('startDate', '2026-07-01')
-        ->set('autoRenew', true)
-        ->call('save')
-        ->assertNotified('Subscription updated successfully');
+    $finder = View::getFinder();
+    $originalPaths = $finder->getPaths();
+    View::addLocation($tempViewDir);
+    $finder->flush();
 
-    $subscription = Subscription::where('customer_id', $customer->id)->first();
-    expect($subscription)->not->toBeNull()
-        ->and($subscription->custom_period_days)->toBe(45)
-        ->and((bool) $subscription->auto_renew)->toBeTrue();
+    try {
+        $user = auth()->user();
+        $customer = Customer::factory()->create(['user_id' => $user->id]);
+        $product = Products_Service::factory()->create(['base_price' => 49.99]);
 
-    // Mount with existing subscription, switch to OneTime, then cancel & resume
-    $user->refresh();
-    Livewire::test(ManageSubscriptionPage::class)
-        ->assertSet('selectedProduct', $product->id)
-        ->set('renewalPeriod', BillingCycle::OneTime->value)
-        ->set('startDate', '2026-07-02')
-        ->call('save')
-        ->assertNotified('Subscription updated successfully')
-        ->call('cancel')
-        ->assertNotified('Subscription cancelled successfully')
-        ->call('resume')
-        ->assertNotified('Subscription resumed successfully');
+        // Mount without existing subscription, create new subscription with Custom cycle
+        Livewire::test(ManageSubscriptionPage::class)
+            ->assertOk()
+            ->set('selectedProduct', $product->id)
+            ->set('renewalPeriod', BillingCycle::Custom->value)
+            ->set('customPeriodDays', 45)
+            ->set('startDate', '2026-07-01')
+            ->set('autoRenew', true)
+            ->call('save')
+            ->assertNotified('Subscription updated successfully');
+
+        $subscription = Subscription::where('customer_id', $customer->id)->first();
+        expect($subscription)->not->toBeNull()
+            ->and($subscription->custom_period_days)->toBe(45)
+            ->and((bool) $subscription->auto_renew)->toBeTrue();
+
+        // Mount with existing subscription, switch to OneTime, then cancel & resume
+        $user->refresh();
+        Livewire::test(ManageSubscriptionPage::class)
+            ->assertSet('selectedProduct', $product->id)
+            ->set('renewalPeriod', BillingCycle::OneTime->value)
+            ->set('startDate', '2026-07-02')
+            ->call('save')
+            ->assertNotified('Subscription updated successfully')
+            ->call('cancel')
+            ->assertNotified('Subscription cancelled successfully');
+
+        $subscription->refresh();
+        $subscription->suspend();
+        $user->refresh();
+
+        Livewire::test(ManageSubscriptionPage::class)
+            ->assertOk()
+            ->call('resume')
+            ->assertNotified('Subscription resumed successfully');
+    } finally {
+        $finder->setPaths($originalPaths);
+        $finder->flush();
+        File::deleteDirectory($tempViewDir);
+    }
 });
