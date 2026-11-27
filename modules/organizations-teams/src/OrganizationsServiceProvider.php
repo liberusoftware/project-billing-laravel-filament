@@ -5,16 +5,23 @@ namespace Liberu\Foundation\Organizations;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Jetstream\Jetstream;
+use Liberu\Foundation\Organizations\Contracts\TeamAuditLogger;
+use Liberu\Foundation\Organizations\Contracts\TeamJobNotifier;
 use Liberu\Foundation\Organizations\Models\Membership;
 use Liberu\Foundation\Organizations\Models\Team;
 use Liberu\Foundation\Organizations\Models\TeamInvitation;
 use Liberu\Foundation\Organizations\Policies\TeamPolicy;
+use Liberu\Foundation\Organizations\Support\NullTeamAuditLogger;
+use Liberu\Foundation\Organizations\Support\NullTeamJobNotifier;
 
 final class OrganizationsServiceProvider extends ServiceProvider
 {
     public function register(): void
     {
         $this->mergeConfigFrom(__DIR__.'/../config/organizations-teams.php', 'organizations-teams');
+
+        $this->app->bindIf(TeamAuditLogger::class, NullTeamAuditLogger::class);
+        $this->app->bindIf(TeamJobNotifier::class, NullTeamJobNotifier::class);
 
         Jetstream::useTeamModel(Team::class);
         Jetstream::useMembershipModel(Membership::class);
